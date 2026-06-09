@@ -1,0 +1,33 @@
+<svg width="400" height="380" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .travel-text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; }
+    </style>
+  </defs>
+  
+  <!-- Dark background preview -->
+  <rect width="400" height="180" fill="#0f2f3f" rx="8"/>
+  
+  <circle cx="80" cy="80" r="75" fill="none" stroke="white" stroke-width="2.2" opacity="0.9"/>
+  <path d="M 35 120 L 55 45 L 68 120 Z" fill="white" opacity="0.95"/>
+  <path d="M 63 120 L 80 20 L 97 120 Z" fill="white" opacity="0.95"/>
+  <path d="M 92 120 L 110 47 L 125 120 Z" fill="white" opacity="0.95"/>
+  <path d="M 30 125 Q 80 132 130 125" fill="none" stroke="white" stroke-width="2" opacity="0.8" stroke-linecap="round"/>
+  <path d="M 38 132 Q 80 138 122 132" fill="none" stroke="white" stroke-width="1" opacity="0.5" stroke-linecap="round"/>
+  <circle cx="80" cy="50" r="3" fill="white" opacity="0.7"/>
+  <text x="175" y="75" class="travel-text" style="font-size: 24px; font-weight: 500; fill: white; letter-spacing: 3px;">TRAVEL</text>
+  <text x="175" y="125" class="travel-text" style="font-size: 48px; font-weight: 300; fill: white;">Vietnam</text>
+  
+  <!-- Light background preview -->
+  <rect y="200" width="400" height="180" fill="white" rx="8" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <circle cx="80" cy="280" r="75" fill="none" stroke="#1a3a3a" stroke-width="2.2" opacity="0.9"/>
+  <path d="M 35 320 L 55 245 L 68 320 Z" fill="#1a3a3a" opacity="0.95"/>
+  <path d="M 63 320 L 80 220 L 97 320 Z" fill="#1a3a3a" opacity="0.95"/>
+  <path d="M 92 320 L 110 247 L 125 320 Z" fill="#1a3a3a" opacity="0.95"/>
+  <path d="M 30 325 Q 80 332 130 325" fill="none" stroke="#1a3a3a" stroke-width="2" opacity="0.75" stroke-linecap="round"/>
+  <path d="M 38 332 Q 80 338 122 332" fill="none" stroke="#1a3a3a" stroke-width="1" opacity="0.45" stroke-linecap="round"/>
+  <circle cx="80" cy="250" r="3" fill="#1a3a3a" opacity="0.65"/>
+  <text x="175" y="275" class="travel-text" style="font-size: 24px; font-weight: 500; fill: #1a3a3a; letter-spacing: 3px;">TRAVEL</text>
+  <text x="175" y="325" class="travel-text" style="font-size: 48px; font-weight: 300; fill: #1a3a3a;">Vietnam</text>
+</svg>
