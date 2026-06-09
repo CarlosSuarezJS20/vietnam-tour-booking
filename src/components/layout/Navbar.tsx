@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { FiChevronDown, FiSearch, FiArrowUpRight, FiShoppingCart } from "react-icons/fi";
+import { FiChevronDown, FiSearch, FiArrowUpRight, FiShoppingCart, FiX } from "react-icons/fi";
 import { navItems } from "@/data/navigation";
 import ToursDropdown from "@/components/navigation/ToursDropdown";
 import DestinationsMegaMenu from "@/components/navigation/DestinationsMegaMenu";
@@ -14,53 +14,138 @@ export default function Navbar() {
   const [toursOpen, setToursOpen] = useState(false);
   const [destinationsOpen, setDestinationsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const destCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openDestinations = () => {
+    if (destCloseTimer.current) clearTimeout(destCloseTimer.current);
+    setDestinationsOpen(true);
+    setToursOpen(false);
+  };
+
+  const scheduleCloseDestinations = () => {
+    destCloseTimer.current = setTimeout(() => setDestinationsOpen(false), 120);
+  };
 
   const closeAll = () => {
     setToursOpen(false);
     setDestinationsOpen(false);
   };
 
+  const openSearch = () => {
+    closeAll();
+    setSearchOpen(true);
+  };
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearchValue("");
+  };
+
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeSearch();
+        setDestinationsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <>
-      <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 md:px-10 py-7">
+      {/*
+        Layer 3 — destinations panel.
+        Outer container is fixed at top-0 with overflow-hidden — clips the panel
+        while it's in the -translate-y-full (hidden) state so it never overlaps
+        the navbar. The 102px spacer is transparent, so the logo always shows
+        through. White background only starts below the navbar.
+      */}
+      <div className="fixed top-[102px] left-0 right-0 z-[40] overflow-hidden pointer-events-none">
+        <div
+          className={`transition-transform duration-300 ease-out ${
+            destinationsOpen ? "translate-y-0 pointer-events-auto" : "-translate-y-full"
+          }`}
+        >
+          <div className="bg-white">
+            <DestinationsMegaMenu
+              onMouseEnter={openDestinations}
+              onMouseLeave={scheduleCloseDestinations}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Layer 4 — navbar, always above everything */}
+      <nav className="absolute top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7">
         <Image src="/travel-vietnam-logo-white.svg" alt="Travel Vietnam" width={155} height={46} priority />
 
         {/* Desktop pill */}
-        <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative">
-          {navItems.map((item, i) => {
-            const isTours = item.label === "Tours & Activities";
-            const isDestinations = item.label === "Destinations";
-            const isActive = (isTours && toursOpen) || (isDestinations && destinationsOpen);
+        <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative" style={{ minWidth: 480 }}>
 
-            return (
-              <div key={item.label} className="flex items-center relative">
-                <button
-                  className={`flex items-center gap-1 px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors font-sans ${
-                    isActive ? "text-brand" : "text-gray-700 hover:text-black"
-                  }`}
-                  onMouseEnter={() => {
-                    if (isTours) { setToursOpen(true); setDestinationsOpen(false); }
-                    if (isDestinations) { setDestinationsOpen(true); setToursOpen(false); }
-                  }}
-                  onClick={() => {
-                    if (isTours) { setToursOpen((o) => !o); setDestinationsOpen(false); }
-                    if (isDestinations) { setDestinationsOpen((o) => !o); setToursOpen(false); }
-                  }}
-                >
-                  {item.label}
-                  {item.chevron && (
-                    <FiChevronDown className={`w-3 h-3 opacity-50 transition-transform duration-200 ${isActive ? "rotate-180" : ""}`} />
-                  )}
-                </button>
-                {i < navItems.length - 1 && <div className="w-px h-4 bg-gray-200" />}
-                {isTours && <ToursDropdown open={toursOpen} onClose={() => setToursOpen(false)} />}
-              </div>
-            );
-          })}
-          <div className="w-px h-4 bg-gray-200 mx-1" />
-          <button className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors">
-            <FiSearch className="w-5 h-5" />
-          </button>
+          {/* Original nav content */}
+          <div className={`flex items-center w-full transition-all duration-200 ${searchOpen ? "opacity-0 -translate-x-2 pointer-events-none" : "opacity-100 translate-x-0"}`}>
+            {navItems.map((item, i) => {
+              const isTours = item.label === "Tours & Activities";
+              const isDestinations = item.label === "Destinations";
+              const isActive = (isTours && toursOpen) || (isDestinations && destinationsOpen);
+
+              return (
+                <div key={item.label} className="flex items-center relative">
+                  <button
+                    className={`flex items-center gap-1 px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors font-sans ${
+                      isActive ? "text-brand" : "text-gray-700 hover:text-brand hover:bg-gray-50 rounded-full"
+                    }`}
+                    onMouseEnter={() => {
+                      if (isTours) { setToursOpen(true); setDestinationsOpen(false); }
+                      if (isDestinations) openDestinations();
+                    }}
+                    onMouseLeave={() => {
+                      if (isDestinations) scheduleCloseDestinations();
+                    }}
+                    onClick={() => {
+                      if (isTours) { setToursOpen((o) => !o); setDestinationsOpen(false); }
+                      if (isDestinations) { setDestinationsOpen((o) => !o); setToursOpen(false); }
+                    }}
+                  >
+                    {item.label}
+                    {item.chevron && (
+                      <FiChevronDown className={`w-3 h-3 opacity-50 transition-transform duration-200 ${isActive ? "rotate-180" : ""}`} />
+                    )}
+                  </button>
+                  {i < navItems.length - 1 && <div className="w-px h-4 bg-gray-200" />}
+                  {isTours && <ToursDropdown open={toursOpen} onClose={() => setToursOpen(false)} />}
+                </div>
+              );
+            })}
+            <div className="w-px h-4 bg-gray-200 mx-1" />
+            <IconButton hoverEffect={false} onClick={openSearch} className="border-0 bg-gray-300 text-gray-600 w-9 h-9 hover:scale-110 transition-transform">
+              <FiSearch className="w-5 h-5" />
+            </IconButton>
+          </div>
+
+          {/* Search bar */}
+          <div className={`absolute inset-0 flex items-center px-4 gap-3 transition-all duration-200 ${searchOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2 pointer-events-none"}`}>
+            <FiSearch className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Search destinations, tours…"
+              className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
+            />
+            <button onClick={closeSearch} className="flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors">
+              <FiX className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Desktop right actions */}
@@ -89,11 +174,10 @@ export default function Navbar() {
         </div>
       </nav>
 
-      <DestinationsMegaMenu open={destinationsOpen} onClose={() => setDestinationsOpen(false)} />
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      {(toursOpen || destinationsOpen) && (
-        <div className="absolute inset-0 z-10" onClick={closeAll} />
+      {toursOpen && (
+        <div className="fixed inset-0 z-[25]" onClick={() => setToursOpen(false)} />
       )}
     </>
   );

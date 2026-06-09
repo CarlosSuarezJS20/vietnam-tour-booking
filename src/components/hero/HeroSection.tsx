@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { TbWorld } from "react-icons/tb";
 import GlobeArcs from "./GlobeArcs";
 
 export default function HeroSection() {
@@ -16,7 +15,7 @@ export default function HeroSection() {
       <GlobeArcs />
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-white text-center px-6">
-        <TbWorld className="w-8 h-8 mb-3 opacity-85" />
+        <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={48} height={48} className="mb-3 opacity-85" />
         <p className="text-2xl tracking-[0.45em] font-medium mb-3 opacity-90">TRAVEL</p>
         <h1 className="text-6xl md:text-8xl font-bold tracking-wide leading-none mb-12 font-display">
           Vietnam
