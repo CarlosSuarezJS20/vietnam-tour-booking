@@ -1,19 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FiMapPin, FiArrowUpRight } from "react-icons/fi";
-import { regions } from "@/data/navigation";
-import { Region } from "@/types";
+
+interface City {
+  id: string;
+  name: string;
+}
+
+interface Region {
+  id: string;
+  key: string;
+  label: string;
+  image: string;
+  cities: City[];
+}
 
 interface Props {
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
 
+const QUERY = `
+  query {
+    regions {
+      id
+      key
+      label
+      image
+      cities {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Props) {
-  const [activeRegion, setActiveRegion] = useState<Region>("north");
-  const current = regions.find((r) => r.key === activeRegion)!;
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [activeKey, setActiveKey] = useState<string>("north");
+
+  useEffect(() => {
+    fetch("/api/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: QUERY }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const fetched: Region[] = data.data.regions;
+        setRegions(fetched);
+        if (fetched.length > 0) setActiveKey(fetched[0].key);
+      });
+  }, []);
+
+  const current = regions.find((r) => r.key === activeKey);
+
+  if (!current) return null;
 
   return (
     <div className="flex h-[420px]" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
@@ -26,9 +70,9 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
           {regions.map((r) => (
             <li key={r.key}>
               <button
-                onClick={() => setActiveRegion(r.key)}
+                onClick={() => setActiveKey(r.key)}
                 className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors border-l-2 font-sans ${
-                  activeRegion === r.key
+                  activeKey === r.key
                     ? "border-brand text-brand bg-white"
                     : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-white/60"
                 }`}
@@ -40,25 +84,25 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
         </ul>
       </div>
 
-      {/* Middle — areas */}
+      {/* Middle — cities */}
       <div className="w-[600px] bg-white px-8 py-10 flex flex-col justify-between flex-shrink-0">
         <div>
-          <p className="text-xs tracking-widest text-gray-400 uppercase mb-5 font-sans">Popular areas</p>
+          <p className="text-xs tracking-widest text-gray-400 uppercase mb-5 font-sans">Popular Cities</p>
           <div className="grid grid-cols-2 gap-x-8 gap-y-3 mb-8">
-            {current.areas.map((area) => (
+            {current.cities.map((city) => (
               <a
-                key={area}
+                key={city.id}
                 href="#"
                 className="text-sm text-gray-700 hover:text-brand font-medium flex items-center gap-2 transition-colors font-sans"
               >
                 <FiMapPin className="w-3.5 h-3.5 text-gray-400" />
-                {area}
+                {city.name}
               </a>
             ))}
           </div>
         </div>
         <a href="#" className="text-sm text-gray-500 hover:text-brand underline underline-offset-2 transition-colors font-sans">
-          Discover all {current.label} tours ({current.count})
+          Discover all {current.label} tours
         </a>
       </div>
 
@@ -67,7 +111,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
         {regions.map((r) => (
           <div
             key={r.key}
-            className={`absolute inset-0 transition-opacity duration-500 ${activeRegion === r.key ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 transition-opacity duration-500 ${activeKey === r.key ? "opacity-100" : "opacity-0"}`}
           >
             <Image src={r.image} alt={r.label} fill className="object-cover object-center" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

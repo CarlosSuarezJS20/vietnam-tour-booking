@@ -1,22 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FiChevronDown, FiX } from "react-icons/fi";
-import { tourLinks, regions } from "@/data/navigation";
-import { Region } from "@/types";
+
+interface TourCategory {
+  id: string;
+  label: string;
+}
+
+interface City {
+  id: string;
+  name: string;
+}
+
+interface Region {
+  id: string;
+  key: string;
+  label: string;
+  cities: City[];
+}
 
 interface MobileMenuProps {
   open: boolean;
   onClose: () => void;
 }
 
-export default function MobileMenu({ open, onClose }: MobileMenuProps) {
-  const [toursOpen, setToursOpen] = useState(false);
-  const [destOpen, setDestOpen] = useState(false);
-  const [openRegions, setOpenRegions] = useState<Record<Region, boolean>>({ north: false, central: false, south: false });
+const QUERY = `
+  query {
+    tourCategories { id label }
+    regions {
+      id key label
+      cities { id name }
+    }
+  }
+`;
 
-  const toggleRegion = (key: Region) =>
+export default function MobileMenu({ open, onClose }: MobileMenuProps) {
+  const [toursOpen, setToursOpen]         = useState(false);
+  const [destOpen, setDestOpen]           = useState(false);
+  const [openRegions, setOpenRegions]     = useState<Record<string, boolean>>({});
+  const [categories, setCategories]       = useState<TourCategory[]>([]);
+  const [regions, setRegions]             = useState<Region[]>([]);
+
+  useEffect(() => {
+    fetch("/api/graphql", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: QUERY }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data.data.tourCategories);
+        setRegions(data.data.regions);
+      });
+  }, []);
+
+  const toggleRegion = (key: string) =>
     setOpenRegions((prev) => ({ ...prev, [key]: !prev[key] }));
 
   return (
@@ -48,9 +88,9 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
             <FiChevronDown className={`w-5 h-5 transition-transform duration-300 ${toursOpen ? "rotate-180" : ""}`} />
           </button>
           <div className={`overflow-hidden transition-all duration-300 ${toursOpen ? "max-h-[600px] mb-4" : "max-h-0"}`}>
-            {tourLinks.map((link) => (
-              <a key={link} href="#" className="block pl-4 py-2.5 text-white/70 hover:text-white text-base transition-colors font-sans">
-                {link}
+            {categories.map((cat) => (
+              <a key={cat.id} href="#" className="block pl-4 py-2.5 text-white/70 hover:text-white text-base transition-colors font-sans">
+                {cat.label}
               </a>
             ))}
           </div>
@@ -76,9 +116,9 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
                   <FiChevronDown className={`w-4 h-4 mr-1 transition-transform duration-300 ${openRegions[r.key] ? "rotate-180" : ""}`} />
                 </button>
                 <div className={`overflow-hidden transition-all duration-300 ${openRegions[r.key] ? "max-h-64" : "max-h-0"}`}>
-                  {r.areas.map((area) => (
-                    <a key={area} href="#" className="block pl-8 py-2 text-white/50 hover:text-white text-sm transition-colors font-sans">
-                      {area}
+                  {r.cities.map((city) => (
+                    <a key={city.id} href="#" className="block pl-8 py-2 text-white/50 hover:text-white text-sm transition-colors font-sans">
+                      {city.name}
                     </a>
                   ))}
                 </div>

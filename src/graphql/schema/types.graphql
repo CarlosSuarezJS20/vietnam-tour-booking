@@ -1,0 +1,26 @@
+type TourCategory {
+  id: ID!
+  slug: String!
+  label: String!
+}
+
+type Region {
+  id: ID!
+  key: String!
+  label: String!
+  image: String!
+  cities: [City!]!
+}
+
+type City {
+  id: ID!
+  name: String!
+  region: Region!
+}
+
+type Query {
+  tourCategories: [TourCategory!]!
+  regions: [Region!]!
+  region(key: String!): Region
+  cities: [City!]!
+}
