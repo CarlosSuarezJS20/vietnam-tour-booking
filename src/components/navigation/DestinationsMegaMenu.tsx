@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { FiMapPin, FiArrowUpRight } from "react-icons/fi";
 import { useGetRegionsQuery } from "@/store/api/graphqlApi";
@@ -12,16 +12,9 @@ interface Props {
 
 export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Props) {
   const { data: regions = [], isLoading, isError } = useGetRegionsQuery();
-  const [activeKey, setActiveKey] = useState<string>("");
+  const [activeKey, setActiveKey] = useState<string | null>(null);
 
-  // Set initial active region once data arrives
-  useEffect(() => {
-    if (regions.length > 0 && activeKey === "") {
-      setActiveKey(regions[0].key);
-    }
-  }, [regions, activeKey]);
-
-  const current = regions.find((r) => r.key === activeKey);
+  const current = regions.find((r) => r.key === activeKey) ?? regions[0];
 
   return (
     <div className="flex h-[420px]" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
@@ -50,7 +43,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
                 <button
                   onClick={() => setActiveKey(r.key)}
                   className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-colors border-l-2 font-sans ${
-                    activeKey === r.key
+                    current?.key === r.key
                       ? "border-brand text-brand bg-white"
                       : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-white/60"
                   }`}
@@ -111,7 +104,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
           <div
             key={r.key}
             className={`absolute inset-0 transition-opacity duration-500 ${
-              activeKey === r.key ? "opacity-100" : "opacity-0"
+              current?.key === r.key ? "opacity-100" : "opacity-0"
             }`}
           >
             <Image src={r.image} alt={r.label} fill className="object-cover object-center" />

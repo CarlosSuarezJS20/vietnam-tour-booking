@@ -18,9 +18,36 @@ type City {
   region: Region!
 }
 
+type Tour {
+  id:           ID!
+  title:        String!
+  description:  String!
+  imageUrl:     String!
+  duration:     String!
+  price:        String!
+  cities:       [City!]!
+  categories:   [TourCategory!]!
+  featuredTour: Boolean!
+}
+
+type Cruise {
+  id:          ID!
+  title:       String!
+  imageUrl:    String!
+  description: String!
+  itinerary:   String!
+  duration:    String!
+  price:       String!
+  sourceUrl:   String!
+}
+
 type Query {
-  tourCategories: [TourCategory!]!
-  regions: [Region!]!
-  region(key: String!): Region
-  cities: [City!]!
+  tourCategories:                  [TourCategory!]!
+  regions:                         [Region!]!
+  region(key: String!):            Region
+  cities:                          [City!]!
+  featuredTour:                    Tour
+  toursByCity(cityId: ID!, limit: Int):         [Tour!]!
+  toursByCategory(categoryId: ID!, limit: Int): [Tour!]!
+  cruises:                         [Cruise!]!
 }

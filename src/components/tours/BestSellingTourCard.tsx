@@ -1,0 +1,71 @@
+"use client";
+
+import { FiUsers, FiArrowDown, FiMapPin } from "react-icons/fi";
+import type { FeaturedTour } from "@/types/graphql";
+
+interface Props {
+  tour: FeaturedTour;
+}
+
+export default function BestSellingTourCard({ tour }: Props) {
+  const [, priceValue] = tour.price.split(": ");
+  const areas = [...new Set(tour.cities.map((c) => c.region.label))];
+
+  return (
+    <div className="bg-gray-900/50 p-6">
+
+      <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-white border border-white/40 px-3 py-1.5 rounded-full font-sans">
+        <FiUsers className="w-3.5 h-3.5" /> Best Seller
+      </span>
+
+      <hr className="border-white/20 my-3" />
+
+      <p className="text-white/75 text-sm font-sans">
+        {tour.duration} — Private tour — Guaranteed departure
+      </p>
+
+      <hr className="border-white/20 my-3" />
+
+      <div className="flex flex-wrap gap-2">
+        {tour.categories.map((cat) => (
+          <span key={cat.id} className="text-xs text-white border border-white/40 px-3 py-1 rounded-full font-sans">
+            {cat.label}
+          </span>
+        ))}
+      </div>
+
+      <hr className="border-white/20 my-3" />
+
+      <div className="flex items-center gap-2 text-white/60 text-xs mb-3 font-sans">
+        <FiMapPin className="w-3.5 h-3.5 flex-shrink-0" />
+        <span>{areas.join(" · ")}</span>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {tour.cities.map((c) => (
+          <span key={c.id} className="text-xs text-white border border-white/40 px-3 py-1 rounded-full font-sans">
+            {c.name}
+          </span>
+        ))}
+      </div>
+
+      <hr className="border-white/20 my-3" />
+
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="flex items-baseline gap-3 mb-1">
+            <span className="text-white/50 text-xs uppercase tracking-wider font-sans">From</span>
+            <span className="text-white text-3xl font-bold leading-none font-sans">
+              {priceValue ?? tour.price}
+            </span>
+          </div>
+          <p className="text-white/40 text-xs font-sans">per person · double occupancy</p>
+        </div>
+
+        <button className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-3.5 transition-colors font-sans">
+          Find more <FiArrowDown className="w-4 h-4" />
+        </button>
+      </div>
+
+    </div>
+  );
+}

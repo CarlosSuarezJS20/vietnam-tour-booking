@@ -68,12 +68,20 @@ export default function Navbar() {
         the navbar. The 102px spacer is transparent, so the logo always shows
         through. White background only starts below the navbar.
       */}
-      <div className="fixed top-[102px] left-0 right-0 z-[40] overflow-hidden pointer-events-none">
+      {/* Backdrop — fades in behind the mega menu */}
+      <div
+        className={`fixed inset-0 z-[35] backdrop-blur-sm bg-black/30 transition-opacity duration-300 pointer-events-none ${
+          destinationsOpen ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      <div className="fixed top-0 left-0 right-0 z-[40] overflow-hidden pointer-events-none">
         <div
           className={`transition-transform duration-300 ease-out ${
             destinationsOpen ? "translate-y-0 pointer-events-auto" : "-translate-y-full"
           }`}
         >
+          <div className="h-[102px] bg-gray-900" />
           <div className="bg-white">
             <DestinationsMegaMenu
               onMouseEnter={openDestinations}
@@ -87,8 +95,8 @@ export default function Navbar() {
       <nav className="absolute top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7">
         <Image src="/travel-vietnam-logo-white.svg" alt="Travel Vietnam" width={155} height={46} priority />
 
-        {/* Desktop pill */}
-        <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative" style={{ minWidth: 480 }}>
+        {/* Desktop pill — pushed to the right */}
+        <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative ml-auto mr-6" style={{ minWidth: 480 }}>
 
           {/* Original nav content */}
           <div className={`flex items-center w-full transition-all duration-200 ${searchOpen ? "opacity-0 -translate-x-2 pointer-events-none" : "opacity-100 translate-x-0"}`}>

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import StoreProvider from "@/store/StoreProvider";
 
-const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const dmSans = DM_Sans({ variable: "--font-inter", subsets: ["latin"] });
 const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} h-full`}>
+    <html lang="en" className={`${dmSans.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full flex flex-col relative">
         <StoreProvider>
           <Navbar />

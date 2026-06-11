@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FiChevronDown, FiX } from "react-icons/fi";
-import { useGetMobileNavDataQuery } from "@/store/api/graphqlApi";
+import { useGetTourCategoriesQuery, useGetRegionsQuery } from "@/store/api/graphqlApi";
 
 interface MobileMenuProps {
   open: boolean;
@@ -15,9 +15,11 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
   const [destOpen, setDestOpen]       = useState(false);
   const [openRegions, setOpenRegions] = useState<Record<string, boolean>>({});
 
-  const { data, isLoading, isError } = useGetMobileNavDataQuery();
-  const categories = data?.tourCategories ?? [];
-  const regions    = data?.regions ?? [];
+  const { data: categories = [], isLoading: catsLoading, isError: catsError } = useGetTourCategoriesQuery();
+  const { data: regions = [],    isLoading: regsLoading, isError: regsError } = useGetRegionsQuery();
+
+  const isLoading = catsLoading || regsLoading;
+  const isError   = catsError   || regsError;
 
   const toggleRegion = (key: string) =>
     setOpenRegions((prev) => ({ ...prev, [key]: !prev[key] }));

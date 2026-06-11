@@ -3,7 +3,7 @@
 
 export const tourCategories = [
   { id: "1", slug: "private-tours", label: "Private Tours" },
-  { id: "2", slug: "seniors",       label: "Tours for Seniors" },
+  { id: "2", slug: "mature-travellers", label: "Mature Travellers" },
   { id: "3", slug: "luxury",        label: "Luxury Tours" },
   { id: "4", slug: "beach",         label: "Beach Holidays" },
   { id: "5", slug: "honeymoon",     label: "Honeymoon Tours" },
@@ -51,13 +51,13 @@ export const cities = [
   { id: "26", name: "Cai Be",           regionId: "3" },
   { id: "27", name: "Cu Chi Tunnels",   regionId: "3" },
   { id: "28", name: "Nha Trang",        regionId: "3" },
-  { id: "29", name: "Con Dao",          regionId: "3" },
+  { id: "29", name: "Con Dao",          regionId: "3" }
 ];
 
 export const tours = [
   {
     id:          "1",
-    title:       "15 Days Vietnam Highlights Journey for Seniors",
+    title:       "15 Days Vietnam Highlights Journey for Mature Travellers",
     imageUrl:    "https://asiaeyestravel.com/uploads/source/nhung/15/lang.webp",
     description: `15 Days Vietnam Highlights Journey for Seniors is specially designed for senior travelers seeking comfort, culture, and unforgettable experiences. From Ho Chi Minh City and the peaceful Mekong Delta to Hoi An, Hue, Hanoi, Halong Bay, and Ninh Binh, every destination offers a perfect blend of scenery, history, and relaxation. ravel with Asia Eyes Travel and stay in carefully selected 4 or 5-star hotels, enjoy private guided tours, relaxed sightseeing, and a completely stress-free journey tailored for senior comfort.`,
     itinerary:   `Day 1:  Arrival in Ho Chi Minh City
@@ -165,8 +165,9 @@ On behalf of Asia Eyes Travel , thank you for choosing us to accompany you on th
 Includes : Breakfast and private airport transfer Excludes : Late check out, personal expenses.`,
     duration:    "15 Days/ 14 Nights",
     price:       "From: $2,180",
-    categoryIds: ["1", "2"],
-    cityIds:     ["2", "3", "1", "13", "12", "20"],
+    categoryIds:  ["1", "2"],
+    cityIds:      ["2", "3", "1", "13", "12", "20"],
+    featuredTour: true,
   },
   {
     id:          "2",
@@ -235,6 +236,7 @@ Note: If you would like to extend your trip to Central or Southern Vietnam, plea
     price:       "From: $680",
     categoryIds: ["1"],
     cityIds:     ["5", "2", "3", "1"],
+    featuredTour: false,
   },
   {
     id:          "3",
@@ -283,6 +285,7 @@ Includes : Breakfast at hotel and private transfer to airport Excludes : Late ch
     price:       "From: $680",
     categoryIds: ["1"],
     cityIds:     ["6", "5", "2", "3", "1"],
+    featuredTour: false,
   },
   {
     id:          "4",
@@ -339,6 +342,7 @@ P.S. We would be delighted to continue being your trusted travel companion if yo
     price:       "From: $560",
     categoryIds: ["1"],
     cityIds:     ["8", "6", "2", "3", "1"],
+    featuredTour: false,
   },
   {
     id:          "5",
@@ -375,6 +379,7 @@ Inclusions: Accommodation with breakfast and private airport transfer. Exclusion
     price:       "From: $450",
     categoryIds: ["1"],
     cityIds:     ["27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "6",
@@ -408,10 +413,11 @@ Inclusions: Accommodation with breakfast and private airport transfer. Exclusion
     price:       "From: $330",
     categoryIds: ["1"],
     cityIds:     ["27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "7",
-    title:       "15 Days Vietnam Private Tour for Seniors",
+    title:       "15 Days Vietnam Private Tour for Mature Travellers",
     imageUrl:    "https://asiaeyestravel.com/uploads/source/blog/phuquoc/970x650/vietnam-beach-holiday-deals.webp",
     description: `With private transfers, quality hotels, and gentle sightseeing, this tour is ideal for Vietnam tours for seniors , retiree travel packages , and slow travel Vietnam itineraries , offering a safe and relaxing journey across Vietnam.`,
     itinerary:   `Day 1:  Xin Chao Hanoi, Vietnam Arrival
@@ -493,10 +499,11 @@ Includes : Breakfast and private airport transfer. Excludes: Late check-out`,
     price:       "From: $1,680",
     categoryIds: ["1", "2"],
     cityIds:     ["2", "3", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "8",
-    title:       "Luxury Vietnam Tour 10 Days for Seniors",
+    title:       "Luxury Vietnam Tour 10 Days for Mature Travellers",
     imageUrl:    "https://asiaeyestravel.com/uploads/source/blog/halong/cruise/seastars/sea-stars-cruise-halong.webp",
     description: `Asia Eyes Travel offers a Luxury Vietnam Tour 10 Days for Seniors, a private and slow-paced journey designed for comfort and relaxation. Explore Hanoi , peaceful Ninh Binh , enjoy a luxury overnight cruise in Ha Long Bay , then continue to Hue and the charming town of Hoi An . A highlight is the Heritage Train from Hue to Da Nang with stunning coastal views. The tour includes 5-star hotels , private transfers, and gentle sightseeing for a safe Vietnam experience.`,
     itinerary:   `Day 1:  Xin Chao Hanoi, Vietnam Arrival
@@ -571,6 +578,7 @@ Note: If you wish to enjoy more time in the charming town of Hoi An or continue 
     price:       "From: $1,680",
     categoryIds: ["1", "2", "3"],
     cityIds:     ["2", "3", "1", "14", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "9",
@@ -633,6 +641,7 @@ Enjoy free time until your private transfer to Phu Quoc Airport for your departu
     price:       "From: $2,680",
     categoryIds: ["4"],
     cityIds:     ["2", "3", "1", "13", "22"],
+    featuredTour: false,
   },
   {
     id:          "10",
@@ -667,6 +676,7 @@ Includes: Transfer, breakfast Excludes: Late check-out`,
     price:       "From: $450",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1"],
+    featuredTour: false,
   },
   {
     id:          "11",
@@ -730,6 +740,7 @@ Includes: Breakfast Excludes: Late check-out`,
     price:       "From: $980",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "12",
@@ -823,6 +834,7 @@ Inclusions: Breakfast and private airport transfer Exclusions: Late check-out.`,
     price:       "From: $1,980",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "12", "23", "27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "13",
@@ -872,6 +884,7 @@ Includes: Breakfast, private transfer to airport Excludes: Late check-out`,
     price:       "From: $1,250",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "14",
@@ -919,6 +932,7 @@ Includes: Breakfast, private transfer to airport Excludes: Late check-out`,
     price:       "From: $1,590",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "15",
@@ -1024,6 +1038,7 @@ Includes: Breakfast and private transfer to airport Excludes: Late check-out`,
     price:       "From: $1,890",
     categoryIds: ["1"],
     cityIds:     ["3", "4", "1", "15", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "16",
@@ -1107,6 +1122,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam!`,
     price:       "From: $1,890",
     categoryIds: ["1"],
     cityIds:     ["22", "23", "24", "25", "27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "17",
@@ -1118,6 +1134,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam!`,
     price:       "From: $45",
     categoryIds: ["9"],
     cityIds:     ["13"],
+    featuredTour: false,
   },
   {
     id:          "18",
@@ -1129,6 +1146,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam!`,
     price:       "From: $65",
     categoryIds: ["9"],
     cityIds:     ["18", "12"],
+    featuredTour: false,
   },
   {
     id:          "19",
@@ -1140,6 +1158,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam!`,
     price:       "From: $55",
     categoryIds: ["9"],
     cityIds:     ["12"],
+    featuredTour: false,
   },
   {
     id:          "20",
@@ -1245,6 +1264,7 @@ Excludes: Late check-out and personal expenses`,
     price:       "From: $690",
     categoryIds: ["1", "7"],
     cityIds:     ["2", "3", "4", "1"],
+    featuredTour: false,
   },
   {
     id:          "21",
@@ -1352,6 +1372,7 @@ Excludes: Late check out`,
     price:       "From: $890",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13"],
+    featuredTour: false,
   },
   {
     id:          "22",
@@ -1530,6 +1551,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,450",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "23",
@@ -1541,6 +1563,7 @@ Note: Late check-out upon request.`,
     price:       "From: $890",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "24",
@@ -1682,6 +1705,7 @@ Note: Late check-out upon request.`,
     price:       "From: $960",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "25",
@@ -1850,6 +1874,7 @@ Excludes: Late check-out`,
     price:       "From: $1,980",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "1", "13", "22", "20"],
+    featuredTour: false,
   },
   {
     id:          "26",
@@ -1937,6 +1962,7 @@ Excludes: Drinks, dinner and personal expense`,
     price:       "From: $650",
     categoryIds: ["1", "7"],
     cityIds:     ["9", "11", "4", "1"],
+    featuredTour: false,
   },
   {
     id:          "27",
@@ -2166,6 +2192,7 @@ Accomodation: Late check-out upon request.`,
     price:       "From: $1,350",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "28",
@@ -2334,6 +2361,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,460",
     categoryIds: ["1"],
     cityIds:     ["5", "2", "3", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "29",
@@ -2568,6 +2596,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,568",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "30",
@@ -2779,6 +2808,7 @@ Note: Late check-out upon request.`,
     price:       "From: $2,890",
     categoryIds: ["1", "7"],
     cityIds:     ["2", "3", "1", "17", "16", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "31",
@@ -3076,10 +3106,11 @@ Note: Late check-out upon request.`,
     price:       "From: $4,712",
     categoryIds: ["1", "7"],
     cityIds:     ["2", "3", "1", "17", "16", "13", "12", "20"],
+    featuredTour: false,
   },
   {
     id:          "32",
-    title:       "Vietnam Tour for Seniors 12 Days",
+    title:       "Vietnam Tour for Mature Travellers 12 Days",
     imageUrl:    "https://asiaeyestravel.com/uploads/source/tours/cai-be/cai-be-mekong-delta.jpg",
     description: `This Vietnam tour for seniors 12 days by Asia Eyes Travel is designed for elderly travelers seeking a relaxing and comfortable journey through Vietnam. The itinerary includes Hanoi , Halong Bay cruise , Ninh Binh , Hue , and Hoi An Ancient Town , combining culture, nature, and leisure at a gentle pace.
 Enjoy highlights such as Hoan Kiem Lake , Temple of Literature , scenic Halong Bay , peaceful Tam Coc in Ninh Binh , and the historic charm of Hue Imperial City and lantern-lit Hoi An .
@@ -3207,6 +3238,7 @@ Includes: Breakfast, private transfer to airport Excludes: Late check-out`,
     price:       "From: $1,321",
     categoryIds: ["1", "2"],
     cityIds:     ["7", "3", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "33",
@@ -3434,6 +3466,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,177",
     categoryIds: ["6"],
     cityIds:     ["2", "3", "4", "1", "14", "13", "12", "27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "34",
@@ -3642,6 +3675,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,536",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "35",
@@ -3843,6 +3877,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,379",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "27", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "36",
@@ -4086,6 +4121,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,728",
     categoryIds: ["1", "7"],
     cityIds:     ["2", "3", "4", "1", "14", "13", "12", "23", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "37",
@@ -4280,6 +4316,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,450",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "15", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "38",
@@ -4348,6 +4385,7 @@ Excludes: Late check-out at hotels.`,
     price:       "From: $1,950",
     categoryIds: ["1"],
     cityIds:     ["22", "24", "25", "26", "20"],
+    featuredTour: false,
   },
   {
     id:          "39",
@@ -4481,6 +4519,7 @@ Excludes: Drinks, lunch, dinner and personal expense`,
     price:       "From: $950",
     categoryIds: ["1"],
     cityIds:     ["10", "2", "3", "4", "1"],
+    featuredTour: false,
   },
   {
     id:          "40",
@@ -4596,6 +4635,7 @@ Thank you very much for choosing Asia Eyes Travel`,
     price:       "From: $2,112",
     categoryIds: ["4"],
     cityIds:     ["2", "3", "1", "13", "12", "29", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "41",
@@ -4667,6 +4707,7 @@ On behalf of Asia Eyes Travel , I, Thuc Nguyen , sincerely thank you for traveli
     price:       "From: $1,530",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "19", "15", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "42",
@@ -4740,6 +4781,7 @@ On behalf of Asia Eyes Travel, I am Thuc Nguyen. I would like to sincerely thank
     price:       "From: $576",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1"],
+    featuredTour: false,
   },
   {
     id:          "43",
@@ -4845,6 +4887,7 @@ Thank you for traveling with Asia Eyes Travel . We look forward to welcoming you
     price:       "From: $1,680",
     categoryIds: ["1", "7"],
     cityIds:     ["2", "1", "16", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "44",
@@ -4856,6 +4899,7 @@ Thank you for traveling with Asia Eyes Travel . We look forward to welcoming you
     price:       "From: $35",
     categoryIds: ["9"],
     cityIds:     ["20"],
+    featuredTour: false,
   },
   {
     id:          "45",
@@ -4979,6 +5023,7 @@ Should you wish to spend more time in Hoi An or any other destination, we can or
     price:       "From: $1,970",
     categoryIds: ["5"],
     cityIds:     ["2", "3", "4", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "46",
@@ -5091,6 +5136,7 @@ Thank you very much for choosing Asia Eyes Travel Vietnam DMC`,
     price:       "From: $1,230",
     categoryIds: ["5"],
     cityIds:     ["2", "3", "4", "1"],
+    featuredTour: false,
   },
   {
     id:          "47",
@@ -5214,6 +5260,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam`,
     price:       "From: $1,845",
     categoryIds: ["1", "3", "5"],
     cityIds:     ["2", "3", "4", "1", "13"],
+    featuredTour: false,
   },
   {
     id:          "48",
@@ -5343,6 +5390,7 @@ Thank you very much for choosing Asia Eyes Travel DMC Vietnam!`,
     price:       "From: $2,350",
     categoryIds: ["4"],
     cityIds:     ["2", "3", "1", "13", "12", "28", "20"],
+    featuredTour: false,
   },
   {
     id:          "49",
@@ -5446,6 +5494,7 @@ Thank you for choosing Asia Eyes Travel DMC Vietnam`,
     price:       "From: $1,920",
     categoryIds: ["1", "3", "4"],
     cityIds:     ["2", "3", "1", "22", "20"],
+    featuredTour: false,
   },
   {
     id:          "50",
@@ -5457,6 +5506,7 @@ Thank you for choosing Asia Eyes Travel DMC Vietnam`,
     price:       "From: $1,056",
     categoryIds: ["8"],
     cityIds:     ["2", "3", "1", "13", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "51",
@@ -5648,6 +5698,7 @@ Note: Late check-out upon request.`,
     price:       "From: $1,560",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "52",
@@ -5795,6 +5846,7 @@ Thank you very much for choosing Asia Eyes Travel Vietnam DMC`,
     price:       "From: $2,820",
     categoryIds: ["1", "3", "4"],
     cityIds:     ["2", "3", "4", "1", "13", "12", "22", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "53",
@@ -5806,6 +5858,7 @@ Thank you very much for choosing Asia Eyes Travel Vietnam DMC`,
     price:       "From: $1,275",
     categoryIds: ["7", "8"],
     cityIds:     ["2", "3", "4", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "54",
@@ -5925,6 +5978,7 @@ Note: Late check-out available upon request.`,
     price:       "From: $1,520",
     categoryIds: ["1"],
     cityIds:     ["5", "2", "3", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "55",
@@ -6047,6 +6101,7 @@ Note: Late check-out available upon request.`,
     price:       "From: $1,450",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12", "21", "20"],
+    featuredTour: false,
   },
   {
     id:          "56",
@@ -6060,6 +6115,7 @@ For more details about the 14-day tour package, please contact us for more infor
     price:       "From: $1,345",
     categoryIds: ["1"],
     cityIds:     ["2", "3", "4", "1", "13", "12"],
+    featuredTour: false,
   },
   {
     id:          "57",
@@ -6161,7 +6217,844 @@ On behalf of Asia Eyes Travel, I am Thuc Nguyen. I would like to sincerely thank
     price:       "From: $2,370",
     categoryIds: ["1", "3", "4"],
     cityIds:     ["2", "3", "1", "13", "28"],
+    featuredTour: false,
   },
 ];
 
-export default { tourCategories, regions, cities, tours };
+
+export const cruises = [
+  {
+    id: "c1",
+    title: "Heritage Luxury Day Cruise",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/heritage-cruise-day/overview-anh-tau.webp",
+    description: `Halong Heritage Luxury Day Cruise is designed for travelers who appreciate a classic heritage travel style inspired by the European Renaissance . This elegant yacht offers a relaxing Ha Long Bay day tour (6–8 hours) with spacious lounges, a luxury restaurant, and premium interiors. Guests enjoy top-class amenities including an outdoor Jacuzzi , a wide panoramic sundeck , and complimentary towels. The itinerary departs from Tuan Chau International Marina , passing iconic islets before visiting Sung Sot Cave , Luon Cave by kayak or bamboo boat , and Titop Island for swimming or panoramic trekking. The experience is completed with a gentle sunset tea party cruise and a premium seafood buffet lunch , ideal for families, couples, and culture-loving travelers seeking a timeless 5-star Ha Long Bay cruise experience .`,
+    itinerary: `FULL DAY From Hanoi to the Wonders of Ha Long Bay
+07:45 – 08:15
+: Hotel pick-up in Hanoi Old Quarter by limousine. Our tour guide and driver welcome you and begin a comfortable journey to Ha Long Bay.
+10:30 – 10:45
+: Short break en route for 20–25 minutes to stretch your legs, use restroom facilities, or enjoy a light snack.
+11:30 – 11:45
+: Welcome aboard Heritage Cruise at Tuan Chau International Port. Complete onboard check-in and enjoy a refreshing welcome drink while the crew introduces the itinerary.
+12:00 – 13:15
+: Lunch on board. Savor a luxurious buffet featuring fresh Ha Long seafood while cruising past iconic landmarks such as Stone Dog Islet, Stone Incense Burner, and the famous Kissing Rocks.
+13:30 – 14:15
+: Visit Surprising Cave (Sung Sot Cave), one of the largest and most beautiful caves in Ha Long Bay, admired for its magnificent stalactites and stalagmites.
+14:30 – 15:15
+: Explore Luon Cave by kayaking or bamboo boat rowed by local residents, gliding through a tranquil lagoon surrounded by towering limestone cliffs.
+15:30 – 16:30
+: Visit Titov Island. Swim at the sandy beach, hike to the summit for breathtaking panoramic views of Ha Long Bay, or relax in the onboard Jacuzzi.
+16:45
+: Sunset party onboard. Enjoy complimentary fruits, cakes, juices, and tea while watching the sun set as the cruise heads back to Tuan Chau Port.
+17:45 – 18:00
+: Disembark at the harbor and transfer back to Hanoi by comfortable limousine.
+20:30 – 20:45
+: Hotel drop-off in Hanoi Old Quarter. End of services.`,
+    duration: "Full Day",
+    price: "From: $65",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/halong-heritage-luxury-day-cruise",
+  },
+  {
+    id: "c2",
+    title: "Leona day cruise Halong Bay",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/leona-cruise-day-trip/da-cat-anh.webp",
+    description: `Leona Day Cruise Halong Bay is one of the most luxurious day cruises in Ha Long Bay , designed in a refined boutique yacht style for upscale travelers. Featuring a modern white steel hull , elegant neutral interiors, and hotel-like comfort , Leona delivers a premium experience for those seeking exclusivity and style. This luxury Ha Long Bay day tour (7–8 hours) departs from Ha Long International Cruise Port , visiting iconic highlights such as Sung Sot Cave and Titop Island , where guests can enjoy swimming or light trekking . The journey also includes immersive activities like kayaking in Halong Bay or a bamboo boat at Luon Cave , along with time to relax at the outdoor swimming pool or unwind in private balcony cabins . Curated by Asia Eyes Travel , the experience is elevated with an international seafood buffet and a vibrant sunset party cruise featuring DJ or live music , making it perfect for luxury travelers , VIP guests , and those seeking a truly unforgettable Ha Long Bay luxury cruise experience .`,
+    itinerary: `FULL DAY From Hanoi to the Wonders of Ha Long Bay
+07:00
+: Meet our driver at your hotel in Hanoi Old Quarter.
+07:15
+: Depart Hanoi for Quang Ninh Province via the new expressway aboard an ultra-luxurious chauffeur-driven limousine.
+10:00
+: Arrive at Ha Long International Cruise Port and complete express check-in for a smooth and seamless boarding experience.
+10:30
+: Enjoy a refreshing welcome drink while admiring the breathtaking scenery of Ha Long Bay, with majestic limestone mountains rising from emerald waters.
+11:15
+: Savor a delightful lunch at the 5-star restaurant onboard Leona Cruise while cruising past thousands of spectacular limestone karsts in this UNESCO World Heritage Site.
+12:15
+: Begin the first excursion to Luon Cave, known for its arched entrance, ancient rock formations, and natural habitat of golden monkeys. Experience kayaking or a bamboo boat ride in this peaceful setting.
+13:30
+: Explore Sung Sot Cave (Surprising Cave), the largest and most impressive cave in Ha Long Bay, featuring magnificent stalactites and stalagmites formed over millions of years.
+14:15
+: Visit Titov Island, famous for its crescent-shaped beach and crystal-clear waters. Swim, relax on the shore, or hike to the summit for a stunning panoramic view of Ha Long Bay.
+15:30
+: Unwind at a sunset party with music and light refreshments while cruising through the most picturesque areas of the bay as the sun gently sets.
+17:30
+: Disembark at the harbor. Farewell and thank you for traveling with us—we look forward to welcoming you again on your next journey.`,
+    duration: "Full Day",
+    price: "From: $65",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/leona-day-cruise-halong-bay",
+  },
+  {
+    id: "c3",
+    title: "Lan Ha Bay Serenity Grandeur Day Cruise",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/serenity-grandeur-day-cruise/serenity-grandeur-cruises-(3).webp",
+    description: `Lan Ha Bay Serenity Grandeur Day Cruise is the most advanced 6-star luxury day cruise in Lan Ha Bay – Cat Ba , officially launched in June 2025 and setting new standards for luxury cruises in Vietnam through 2026 . Designed in a stunning European-style super yacht concept , this iconic vessel delivers an unforgettable 8-hour Lan Ha Bay day tour for luxury travelers and high-end groups . The cruise features exceptional onboard facilities, including three water relaxation zones , a Jacuzzi , a swimming pool onboard , and a unique floating sea pool , along with an exciting water slide into the bay . Guests can explore top attractions such as Cai Beo Ancient Fishing Village , Viet Hai Village in Cat Ba National Park , and hidden lagoons through kayaking in Lan Ha Bay or swimming at Ba Trai Dao Beach and Turtle Islet . Curated by Asia Eyes Travel , the journey is enhanced with a premium seafood buffet (100+ Asian–European dishes) and a stylish sunset party cruise , making it the perfect choice for luxury seekers , VIP travelers , and those looking for an exclusive Lan Ha Bay luxury cruise experience .`,
+    itinerary: `FULL DAY Hanoi - Cat Ba Island - Lan Ha bay
+7:00 – 7:30
+: Pick up guests from hotels in Hanoi Old Quarter and depart for Cat Ba Island.
+10:15 – 10:30
+: Arrive on Cat Ba Island and enjoy a scenic coastal drive from Cai Vieng Port to Ben Beo Harbor.
+11:00
+: Warm welcome aboard
+Serenity Cruises
+. Enjoy a refreshing welcome drink while the tour guide provides key information about the cruise, itinerary, and important notes.
+11:30 – 12:20
+: Enjoy a delicious lunch onboard. A buffet lunch will be served for groups of over 40 guests.
+13:00
+: Visit Viet Hai Port. Disembark and transfer by electric tram or bicycle to Viet Hai Village. Experience a fish foot massage, stroll through traditional houses, or interact with local residents for an authentic cultural encounter.
+14:30
+: Kayaking and swimming in the tranquil waters of Lan Ha Bay.
+15:40
+: Cruise back toward Beo Pier. Relax on the sundeck with refreshing drinks while enjoying the peaceful bay scenery.
+16:15
+: Enjoy a small sunset party with fresh fruits, cookies, and tea served onboard.
+16:45
+: Return to Ben Beo Harbor, say goodbye to Lan Ha Bay and the Serenity Cruises team, then transfer back to Hanoi by shuttle bus.
+20:30
+: Arrive in Hanoi Old Quarter, concluding an unforgettable journey.`,
+    duration: "Full Day",
+    price: "From: $69",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/lan-ha-bay-serenity-grandeur-day-cruise",
+  },
+  {
+    id: "c4",
+    title: "Jade Sails Day Cruise Lan Ha Bay",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/jade-sails/cruise.webp",
+    description: `Jade Sails Day Cruise is a luxury 5-star day cruise in Lan Ha Bay , offering a quieter and more elegant alternative to traditional cruises in Ha Long Bay. This modern yacht provides an unforgettable 8-hour Lan Ha Bay day tour , perfect for travelers seeking comfort, scenery, and relaxation. Many visitors search for the Jade Sails Day Cruise price before booking this premium experience. The cruise departs from Tuan Chau Marina and sails past the scenic Da Chong Islet. Guests can kayak or take a bamboo boat at Dark and Bright Cave, swim in clear waters, or relax on the sundeck. The trip includes a gourmet lunch and sunset party, making it ideal for couples and families. Contact Asia Eyes Travel for the best Jade Sails Day Cruise price and deals.`,
+    itinerary: `FULL DAY Hanoi - Lan Ha bay
+07:00
+: Meet our driver at your hotel in Hanoi Old Quarter.
+07:15
+: Depart Hanoi for Quang Ninh Province via the new expressway aboard an ultra-luxurious chauffeur-driven limousine. A short stop will be made at a Pearl Farm for restrooms and refreshments, ensuring a comfortable journey.
+10:00
+: Welcome aboard
+JadeSails Cruise
+with a warm greeting from the professional crew.
+11:30
+: Enjoy a freshly prepared lunch served onboard while cruising through stunning seascapes and limestone islands.
+12:45
+: Take a local rowing boat to explore the enchanting
+Dark & Bright Caves
+, surrounded by dramatic limestone formations and serene lagoons.
+14:30
+: Kayaking and swimming at
+Ao Ech area
+in Lan Ha Bay, famous for its tranquil waters and untouched natural beauty.
+15:30
+: Participate in a fun and informative Vietnamese cooking demonstration onboard.
+16:00
+: Relax at a sunset party while the cruise gently sails back toward Tuan Chau Marina, enjoying light refreshments and scenic views.
+17:30
+: Disembark and return to Hanoi comfortably by limousine via the expressway.
+19:30
+: Drop-off at your hotel doorstep. End of services.`,
+    duration: "Full Day",
+    price: "From: $70",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/jade-sails-day-cruise",
+  },
+  {
+    id: "c5",
+    title: "Catamaran Premium Day Cruise",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/catamaran-premium/cataraman-cruise.webp",
+    description: `The Halong Catamaran Premium is a 5-star luxury day cruise in Ha Long Bay and Lan Ha Bay , proudly operated by one of Vietnam’s leading cruise providers. Designed for premium travelers, partners, and international guests, this elegant one-day catamaran cruise uniquely combines Ha Long Bay and Lan Ha Bay in one itinerary . Guests explore the untouched beauty of Ba Trai Dao and Ao Ech , available exclusively on this cruise. Exciting activities include kayaking, optional water motor sports, speedboat village discovery , water slides, and relaxing hammock nets. Onboard experiences feature a refined sunset tea party , breathtaking seascape views, and an engaging Vietnamese cooking class . With strong partnerships across global travel agencies, The Halong Catamaran Premium is an ideal choice for families, couples, and luxury seekers looking for a dynamic yet relaxing 5-star day cruise experience .`,
+    itinerary: `FULL DAY: Hanoi - Lan Ha bay - Hanoi
+07:45 – 08:30
+: Hotel pick-up in Hanoi Old Quarter by our English-speaking tour guide. Pick-up time is approximate due to morning traffic and multiple hotels. Please be ready at your hotel lobby to help expedite the process.
+10:00 – 10:15
+: Short lavatory break en route. Stretch your legs, use the facilities, or grab a quick snack (and a coffee break for our driver) before continuing the journey.
+11:30 – 11:45
+: Arrive at Tuan Chau Marina and board the cruise. Our friendly crew will welcome you onboard with a complimentary drink and a short safety briefing as the cruise sets sail.
+12:00 – 13:00
+: Lunch on board. Enjoy exquisite dishes prepared by our award-winning chef, perfectly paired with cocktails, fine wines, and beers. Drinking water is provided throughout the journey; other beverages are chargeable.
+14:00 – 15:00
+: Kayaking or bamboo boat excursion to Bright & Dark Cave. Paddle through a hidden grotto into a peaceful private lagoon surrounded by dramatic limestone walls, while listening to local legends shared by your guide.
+15:15 – 15:45
+: Frog Pond area – swimming and water activities in Lan Ha Bay. Enjoy the trampoline, water slide, swimming, or simply relax onboard and soak in the natural beauty of this serene bay.
+16:00
+: Cooking demonstration. Learn about one of Vietnam’s most famous traditional dishes and try making fresh Vietnamese summer rolls yourself—an informative and fun cultural experience.
+16:30
+: Sunset ceremony with tea and cakes. Complimentary Vietnamese tea, fresh fruits, and pastries are served as the cruise sails back amid stunning sunset colors across the bay.
+17:45 – 18:00
+: Disembark and transfer back to Hanoi by limousine. A short stop will be made along the way before continuing on the highway.
+20:00 – 20:30
+: Hotel drop-off in Hanoi Old Quarter. Thank you for choosing
+Catamaran Premium Day Cruise
+for a once-in-a-lifetime experience.
+Note: On weekends, some streets in the Old Quarter are closed for walking zones. In such cases, guests will be dropped off at the nearest convenient point.`,
+    duration: "Full Day",
+    price: "From: $75",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/catamaran-premium-day-cruise",
+  },
+  {
+    id: "c6",
+    title: "Luna Day Cruise Halong Bay",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/luna-cruise-day-cruise/luna-cruise.webp",
+    description: `Luna Halong Cruise is the largest cruise in Ha Long Bay , accommodating up to 550 guests and offering a premium luxury cruise experience . Featuring a unique glass-bottom swimming pool , elegant design, and diverse Asian and European cuisine , it delivers comfort and style for modern travelers. With Asia Eyes Travel , guests can enjoy a well-curated Ha Long Bay cruise with vibrant onboard entertainment and world-class service. Ideal for luxury travelers , groups , and corporate events , Luna Halong Cruise stands as a symbol of elegance in Ha Long Bay tourism .`,
+    itinerary: `FULL DAY: Hanoi - Halong Bay -Hanoi
+6:00 AM – 6:30 AM
+: Our limousine bus picks up guests from hotels in Hanoi Old Quarter.
+Note: Due to specific traffic conditions in the Old Quarter (especially weekend walking streets), pick-up times may vary slightly. Kindly wait at your hotel lobby from 6:30 AM.
+08:30
+: Check in at Ha Long International Cruise Port, Bai Chay Ward, Ha Long City, then transfer to Luna Ha Long Cruise.
+09:30
+: The cruise sets sail, officially beginning the journey to explore the breathtaking beauty of Ha Long Bay.
+10:45
+: Visit Surprising Cave (Sung Sot Cave), a spectacular limestone cave ranked among the top 10 most beautiful caves in the world by the Czech Association of Travel Agents and Brokers.
+11:45
+: Explore Titop Island, where guests can swim in crystal-clear turquoise waters or climb to the summit for a stunning panoramic view of Ha Long Bay.
+12:30
+: Enjoy a premium lunch at Luna Ha Long Cruise’s luxurious restaurant, featuring nearly 100 refined Asian and European dishes.
+13:45
+: Optional visit to Luon Cave, one of the most unique caves in Ha Long Bay. Experience a peaceful bamboo boat ride rowed by locals or enjoy kayaking through the tranquil lagoon.
+15:00
+: Relax with a sunset teabreak and live music party on the 4th-floor sundeck, surrounded by magnificent bay views.
+16:30
+: Disembark at the port. End of the tour with unforgettable memories of Ha Long Bay.`,
+    duration: "Full Day",
+    price: "From: $70",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/luna-day-cruise",
+  },
+  {
+    id: "c7",
+    title: "Dolphin Day Cruise Halong Bay",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/dolphin-cruise---day-cruise/dolpin-cruise.webp",
+    description: `Dolphin Day Cruise Halong Bay is the newest 6-star luxury day cruise in Ha Long Bay , officially launched in September 2025 , designed as a floating Beach Club cruise and an all-in-one entertainment complex. This premium Ha Long Bay day tour (7–8 hours) offers record-breaking amenities, including the largest four-season saltwater swimming pool (268m²) on the bay, an outdoor Jacuzzi , and a spectacular Domestage for DJ parties and live music. The 5-deck yacht features a 360-degree panoramic lounge , a restaurant serving international buffet lunch with over 100 Asian–European dishes , and 16 private bungalows. The itinerary includes Sung Sot Cave , Titop Island , kayaking or bamboo boat at Luon Cave , and a stylish sunset party cruise , perfect for luxury travelers, events, and high-end leisure seekers.`,
+    itinerary: `FULL DAY Hanoi - Halong Bay
+7:00 AM – 7:30 AM
+: Our limousine bus will pick up guests from hotels located in Hanoi Old Quarter.
+Note: Due to specific traffic conditions in the Old Quarter (especially weekend walking streets), pick-up times may vary slightly. Kindly wait at your hotel lobby from 7:00 AM.
+9:30 AM – 10:30 AM
+: Warm welcome at Ha Long International Cruise Port, where our team assists with check-in procedures.
+10:30 AM – 11:00 AM
+: Transfer by electric car to Dolphin Cruise. Embark the vessel and begin a scenic journey into the bay.
+11:00 AM – 12:30 PM
+: Enjoy a refreshing welcome drink while listening to safety briefings, cruise regulations, and an overview of the Ha Long Bay itinerary.
+12:30 PM – 2:00 PM
+: Visit the magnificent Surprise Cave, famous for its spectacular formations of thousands of stalactites and stalagmites.
+2:00 PM – 3:15 PM
+: Return onboard and continue cruising toward Luon Cave. Explore the tranquil lagoon by gliding through a natural water tunnel, surrounded by serene landscapes and rich wildlife.
+3:15 PM – 4:30 PM
+: The final highlight of the journey: Titop Island, offering panoramic views or time to relax on the beach.
+4:30 PM – 5:30 PM
+: Cruise back to the harbor while savoring light snacks, enjoying romantic live music at sunset, or unwinding in Vietnam’s largest luxury pool onboard.
+5:30 PM – 5:45 PM
+: Arrive back at the harbor and disembark, concluding a memorable Ha Long Bay experience.`,
+    duration: "Full Day",
+    price: "From: $73",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/dolphin-day-cruise-halong-bay",
+  },
+  {
+    id: "c8",
+    title: "Aqua Of The Seas 3 days 2 nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/aqua-of-the-sea-5-star/aqua-of-the-sea.webp",
+    description: `Aqua Of The Seas is a meticulously engineered 5-star metal super-yacht , launched in 2023 and designed to set a new benchmark for luxury cruising in Ha Long Bay and Lan Ha Bay . The yacht features 32 spacious luxury cabins ranging from 38m² to 160m², all equipped with private balconies , floor-to-ceiling windows , and refined ocean-view bathtubs . The 3 Days 2 Nights itinerary is thoughtfully curated, combining kayaking and swimming at Tra Bau , a hands-on Vietnamese cooking class , exploration of Dark & Bright Cave by bamboo boat , and night squid fishing , delivering a balanced journey of sophistication, immersion, and authentic bay exploration. To secure the best available offer and exclusive privileges , travelers are advised to contact the Asia Eyes Travel team for tailored assistance and preferred rates.`,
+    itinerary: `Day 1: From Hanoi to Tuan Chau – Begin Your Lan Ha Bay Cruise
+08:15–08:35:
+Pick-up from Hanoi Old Quarter via modern expressway transfer.
+11:30:
+Arrive at
+27B – Tuan Chau International Port
+and complete check-in procedures at the waiting lounge.
+12:00:
+Transfer by speedboat to
+Aqua Of The Seas Cruise
+. Guests are warmly welcomed onboard with a refreshing welcome drink and a brief introduction to the cruise itinerary and safety guidelines.
+13:00:
+Enjoy a buffet lunch while cruising through the magnificent
+Ha Long Bay
+and
+Lan Ha Bay
+, admiring spectacular limestone formations rising from emerald waters.
+15:00:
+Aqua Of The Seas Cruise arrives at
+Tra Bau area
+in Lan Ha Bay. Guests can enjoy kayaking and swimming in the calm, crystal-clear sea.
+17:00:
+Relax onboard or head to the sundeck to witness a stunning sunset, join the
+Sunset Party
+, and participate in a Vietnamese cooking class featuring authentic local dishes.
+19:30:
+Dinner is served with a refined set menu in the elegant onboard restaurant.
+20:30:
+Cheerful evening activities including card games, chess, karaoke, and squid fishing.
+Overnight:
+Stay overnight on
+Aqua Of The Seas Cruise
+.
+Day 2: A Gentle Morning of Tai Chi, Viet Hai Village Visit & Bay Activities
+06:00:
+Start your day with a peaceful Tai Chi session on the sundeck, breathing in the fresh morning air and embracing the serene beauty of Lan Ha Bay.
+07:00:
+Enjoy breakfast onboard as the cruise glides gently past a spectacular maze of large and small limestone islands.
+08:00:
+Transfer to the day cruise and begin the journey south of Lan Ha Bay toward the tranquil Viet Hai Village.
+08:30:
+Arrive at Viet Hai Village and enjoy a 5 km cycling excursion through lush jungle paths and picturesque countryside, discovering a secluded village nestled deep within Cat Ba National Park and surrounded by towering mountains. Electric cars are available for guests who prefer not to cycle.
+12:30:
+Return to the day cruise and savor a traditional Vietnamese lunch served onboard.
+14:00:
+Kayaking adventure in Lan Ha Bay at Tai Keo Islet, exploring nearby fishing villages by kayak, or relax with swimming at the pristine Ba Trai Dao natural beach with crystal-clear waters.
+16:00:
+Return to Aqua Of The Seas Cruise and enjoy leisure time, join the sunset party at the outdoor bar, or unwind on the sundeck while admiring the breathtaking bay scenery.
+19:15:
+Dinner is served with a flavorful set menu at the elegant onboard restaurant.
+21:30:
+Evening leisure time to enjoy the magical night view of Lan Ha Bay at the bar, relax on the sundeck, sing karaoke, or experience squid fishing.
+Overnight:
+Stay overnight on Aqua Of The Seas Cruise.
+Day 3: Tai Chi at Sunrise, Cat Ba Military Hospital Cave & Leisure Cruise to Tuan Chau - Hanoi
+06:00:
+Start your day with a peaceful Tai Chi session on the sundeck, an ideal way to embrace the tranquil beauty of the bay. Early risers may wake up from 05:30 to admire the sunrise.
+06:30:
+Enjoy breakfast onboard while the cruise gently sails through the bay.
+07:15:
+Transfer to Cat Ba Island to visit the Military Hospital Cave, one of the most remarkable historical sites on the island. Beyond its impressive natural formations, the cave once served as a secret field hospital built deep inside a limestone mountain during the resistance war against the United States.
+09:30:
+Return to the cruise and prepare for check-out procedures.
+09:45:
+Relish a delightful brunch buffet at the onboard restaurant.
+10:45:
+Leave the cruise and transfer by tender boat back to Tuan Chau Marina.
+11:15:
+Disembark at Tuan Chau Marina, bid farewell, and conclude your memorable journey.`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $280",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/aqua-of-the-seas-3-days-2-nights",
+  },
+  {
+    id: "c9",
+    title: "Aqua Of The Seas 2 days 1 night",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/aqua-of-the-sea-5-star/aqua-of-the-sea.webp",
+    description: `Aqua Of The Seas is a premium 5-star metal super-yacht launched in 2023, offering an upscale 2 Days 1 Night luxury cruise across Ha Long Bay and Lan Ha Bay . The yacht features 32 luxury cabins ranging from 38m² to 160m², all designed with private balconies , floor-to-ceiling windows, and ocean-view bathtubs, including the exclusive President Cabin with a private living area. Departing from Tuan Chau Marina , the itinerary highlights Tra Bau with kayaking , swimming, and relaxation at the outdoor infinity pool . Guests enjoy a sunset party, Vietnamese cooking class , fine dining, and night squid fishing . Day two includes sunrise Tai Chi , a bamboo boat visit to the iconic Dark & Bright Cave , and a leisurely brunch before disembarkation.`,
+    itinerary: `Day 1: From Hanoi to Tuan Chau – Begin Your Lan Ha Bay Cruise
+08:15–08:35:
+Pick-up from Hanoi Old Quarter via modern expressway transfer.
+11:30:
+Arrive at
+27B – Tuan Chau International Port
+and complete check-in procedures at the waiting lounge.
+12:00:
+Transfer by speedboat to
+Aqua Of The Seas Cruise
+. Guests are warmly welcomed onboard with a refreshing welcome drink and a brief introduction to the cruise itinerary and safety guidelines.
+13:00:
+Enjoy a buffet lunch while cruising through the magnificent
+Ha Long Bay
+and
+Lan Ha Bay
+, admiring spectacular limestone formations rising from emerald waters.
+15:00:
+Aqua Of The Seas Cruise arrives at
+Tra Bau area
+in Lan Ha Bay. Guests can enjoy kayaking and swimming in the calm, crystal-clear sea.
+17:00:
+Relax onboard or head to the sundeck to witness a stunning sunset, join the
+Sunset Party
+, and participate in a Vietnamese cooking class featuring authentic local dishes.
+19:30:
+Dinner is served with a refined set menu in the elegant onboard restaurant.
+20:30:
+Cheerful evening activities including card games, chess, karaoke, and squid fishing.
+Overnight:
+Stay overnight on
+Aqua Of The Seas Cruise
+.
+Day 2: Tai Chi Session – Cat Ba Military Hospital Cave – Tuan Chau Island – Hanoi
+06:00:
+Begin your day with a gentle
+Tai Chi session on the sundeck
+, a perfect way to embrace the tranquil beauty of the bay. Early risers may wake up from
+05:30
+to admire the peaceful sunrise.
+06:30:
+Enjoy breakfast onboard as the cruise glides through calm and scenic waters.
+07:15:
+Transfer to
+Cat Ba Island
+to explore
+Military Hospital Cave
+, one of the island’s most remarkable historical sites. Beyond its impressive natural formations, the cave once served as a secret field hospital hidden deep inside a limestone mountain during the resistance war against the United States.
+09:30:
+Return to
+Aqua Of The Seas Cruise
+and prepare for check-out.
+09:45:
+Delight in a flavorful
+brunch buffet
+served at the onboard restaurant.
+10:45:
+Disembark from the cruise and transfer by tender boat back to
+Tuan Chau Port
+.
+11:15:
+Arrive at Tuan Chau Port, bid farewell, and conclude your memorable cruise journey.`,
+    duration: "2 Days/ 1 Night",
+    price: "From: $140",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/aqua-of-the-seas-2-days-1-night",
+  },
+  {
+    id: "c10",
+    title: "Aqua Legend Cruise 3 Days 2 Nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/aqua-legend-5star-cruise/aqualegend-cruise.webp",
+    description: `Aqua Legend Cruise is a newly launched 5-star boutique cruise (2025–2026), delivering an intimate and refined 3 Days 2 Nights luxury cruise across Lan Ha Bay and Ha Long Bay . With only 22 luxury cabins featuring private balconies , floor-to-ceiling windows, and marble bathrooms, the cruise ensures privacy and comfort throughout the journey. The extended itinerary allows deeper exploration, from kayaking in Ao Ech or Tra Bau , sunset parties and Happy Hour deals on Day 1, to discovering Viet Hai Village in Cat Ba Island and swimming at the secluded Ba Trai Dao Beach on Day 2. Guests also enjoy a hands-on Vietnamese cooking class , bamboo boat visits to the iconic Dark & Bright Cave , sunrise Tai Chi , and a relaxing brunch before returning to Tuan Chau Marina .`,
+    itinerary: `Day 1: From Hanoi to Tuan Chau – Begin Your Lan Ha Bay Cruise
+08:15–08:35:
+Pick-up in Hanoi Old Quarter via expressway, ensuring a smooth and comfortable journey.
+11:45–12:00:
+Check-in procedures at
+Lot 27B – Tuan Chau International Marina
+waiting lounge.
+12:00:
+Transfer by tender boat to the cruise. Guests are warmly welcomed onboard with a complimentary drink, complete cabin check-in, and enjoy free time to relax while lunch is being prepared.
+13:15:
+Enjoy a refined lunch at the restaurant as the cruise gently sails through
+Lan Ha Bay
+, passing spectacular limestone islands surrounded by emerald waters.
+15:00:
+Swimming time at one of the most beautiful and unspoiled areas of the bay, immersed in pristine nature.
+16:30:
+Relax on the sundeck and take in panoramic bay views — an ideal moment for photography.
+17:00:
+Join a
+Vietnamese cooking class
+on the sundeck, guided by the cruise’s professional staff.
+17:45:
+Enjoy the
+Sunset Party
+with fresh fruits, soft music, and a tranquil atmosphere as the sun sets over the bay.
+19:00:
+Delight in an elegant dinner featuring beautifully presented dishes crafted by the onboard chef.
+20:30:
+Free time to unwind and enjoy the peaceful ambiance of the bay.
+Overnight on board.
+Day 2: Viet Hai Village – Lan Ha Bay
+05:45:
+Tai Chi session on the sundeck while watching the sunrise over the bay.
+06:15:
+Breakfast at the restaurant, preparing for a full day of exploration.
+08:00 – 08:30:
+Pick-up at Tra Bau area, one of the most tranquil locations in Lan Ha Bay.
+08:30 – 09:00:
+Travel by small day boat through limestone formations toward Viet Hai Village.
+10:00:
+Viet Hai Village discovery with a cycling tour of approximately 5 km through an ancient village hidden deep within Cat Ba National Park. Electric cars are available for guests who prefer not to cycle.
+11:30:
+Continue exploring remote areas of Lan Ha Bay by small boat.
+12:00:
+Lunch at a quiet and scenic spot surrounded by pristine natural landscapes.
+13:00 – 14:00:
+Kayaking excursion to explore Tai Queo Cave, a tunnel-like cave leading to a secluded lagoon known as the “Dragon Eye” of Lan Ha Bay.
+14:00 – 14:30:
+Free time for swimming and relaxation in crystal-clear waters.
+16:00 – 16:30:
+Relax on the sundeck with fresh fruit while cruising through the Tra Bau area.
+17:00 – 18:00:
+Return to the overnight cruise and enjoy private leisure time onboard.
+19:00:
+Deluxe dinner served with expertly crafted dishes by the cruise chef.
+20:30:
+Free time to unwind and enjoy the serene nighttime scenery. Overnight on board.
+Day 3: Explore Bright Cave & Dark Cave – Ha Long Bay – Hanoi
+05:45:
+Sunrise Tai Chi session on the sundeck.
+06:30:
+Light breakfast at the restaurant.
+07:30:
+Explore Bright Cave and Dark Cave by bamboo boat or kayak, admiring the mystical beauty of this World Natural Heritage Site.
+09:00 – 09:30:
+Check-out procedures and settle personal expenses.
+09:45:
+Early lunch served while the cruise sails back toward the harbor.
+11:00:
+Transfer by tender boat back to Tuan Chau Marina.
+12:00:
+Goodbye and end of the program.`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $250",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/aqua-legend-cruise-3-days-2-nights",
+  },
+  {
+    id: "c11",
+    title: "Velar of the Sea 3 days 2 nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/velar-of-the-sea/anh-tau.webp",
+    description: `Velar of the Sea embodies timeless elegance — a 5-star super-yacht crafted for an exclusive Lan Ha Bay cruise . Its intimate collection of 29 luxury cabins , each graced with private balconies and refined amenities, offers a sanctuary of calm and privacy. The 3 Days 2 Nights itinerary unfolds like a gentle poem: from the mystical Dark & Bright Cave by bamboo boat , to emerald swims in Tra Bau , sunrise Tai Chi on deck, sunset parties , authentic Vietnamese cooking classes , and starlit night squid fishing . Day by day — from Viet Hai Village cycling to the secluded Ba Trai Dao Beach lagoon — every moment harmonizes understated opulence with soulful discovery, creating an unforgettable premium Lan Ha Bay luxury cruise .`,
+    itinerary: `Day 1: From Hanoi to Lan Ha Bay – A Journey into Tranquil Beauty
+08:00:
+Pick up at the meeting point in Hanoi and depart to Halong bay
+12:15 – 13:00:
+Transfer by tender boat to Velar of the Seas Cruise.
+13:15:
+Enjoy a fabulous lunch at the onboard restaurant. During lunch, the cruise begins sailing through the magnificent Lan Ha Bay — a peaceful geological extension of Ha Long Bay, less visited and wonderfully tranquil.
+14:45 – 16:10:
+Visit Bright Cave (the tunnel cave) by bamboo boat rowed by local fishermen or enjoy kayaking on your own. Discover a serene round lake surrounded by lush greenery and towering limestone cliffs.
+16:45 – 17:30:
+Enjoy swimming in the emerald waters of the Tra Bau area or relax at the swimming pool on the first deck.
+17:30:
+Join the Sunset Party at Velar Sky Bar with fresh fruits and snacks. Happy Hour offers attractive drink prices as you watch the sun slowly set into the sea — creating unforgettable memories.
+18:00:
+Participate in a Vietnamese cooking demonstration and learn how to prepare delicious traditional appetizers guided by our chef.
+19:00:
+Indulge in a unique Signature Dinner served at our distinctive restaurant.
+20:30 – 22:30:
+Evening leisure time. Relax with exotic cocktails at the bar, enjoy spa services, try squid fishing, play games, sing karaoke, or unwind on the rooftop deck under the illuminated night sky.
+Overnight on board.
+Day 2: Viet Hai Village & Ba Trai Dao Beach – Culture Meets Secluded Paradise
+06:00:
+Be an early riser and join a refreshing Tai Chi session on the sundeck. Sunrise photography is highly recommended.
+07:00:
+Enjoy breakfast at the restaurant.
+08:00:
+Join a day cruise and transfer to Viet Hai Village, a small village nestled deep in the jungle and surrounded by high mountains in the heart of Cat Ba National Park.
+10:30:
+Upon arrival, enjoy a bicycle ride or electric car journey along forest paths through lush rainforest scenery. Pass rice fields, visit an ancient local house made of straw, mud, and bamboo, and learn about the culture, customs, and daily life of the local people in Viet Hai Village.
+12:00:
+Return to the day cruise to continue exploring Lan Ha Bay. Lunch is served onboard.
+13:30:
+The cruise heads to the pristine Ba Trai Dao Beach — the most beautiful beach in Lan Ha Bay, known for its white sand, crystal-clear water, and peaceful atmosphere. Guests are free to swim or kayak (activities depend on tidal conditions).
+14:45:
+Board the day cruise for transfer back to Velar of the Seas Cruise.
+15:30:
+Return to Velar of the Seas Cruise and relax on board. Enjoy leisure time on the sundeck, take in panoramic bay views, or participate in onboard activities.
+19:00:
+Enjoy another exquisite Signature Dinner at the restaurant.
+20:30:
+Evening relaxation continues with cocktails at the bar, spa treatments, squid fishing, games, karaoke, or quiet moments under the starry sky.
+Overnight on board.
+Day 3: Lan Ha Bay – Tuan Chau Marina Disembarkation - Hanoi
+06:00 – 06:25:
+Greet the first light of the day on the sundeck with a Tai Chi session, or enjoy tea, coffee, or juice while admiring the stunning morning scenery.
+06:30 – 07:30:
+Light breakfast is served at the restaurant, including pastries, tea, and coffee.
+07:30 – 08:15:
+Transfer by tender to explore the Tra Bau area — a famous filming location for
+Kong: Skull Island
+(2018).
+09:00 – 09:30:
+Prepare for check-out. Please pack your luggage and place it outside your cabin by 09:00 for collection. Return room keys and settle any outstanding bills.
+09:30 – 10:20:
+Enjoy brunch at the restaurant on the 4th deck while the cruise gently sails back toward the harbor.
+10:20:
+Transfer by tender boat back to the dock.
+11:15:
+Arrival at Tuan Chau Marina. End of the journey.`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $280",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/velar-of-the-sea-3-days-2-nights",
+  },
+  {
+    id: "c12",
+    title: "Velar of the Sea 2 days 1 night",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/velar-of-the-sea/anh-tau.webp",
+    description: `Velar of the Sea invites you to a peaceful escape aboard a 5-star super-yacht crafted for mindful luxury in Lan Ha Bay . Its 29 luxury cabins , each with private balconies and thoughtful amenities, create a sanctuary of calm and privacy. The gentle 2 Days 1 Night journey flows with intention, unveiling the quiet beauty of Lan Ha Bay . Drift through Tra Bau for serene kayaking and swimming , glide into the ethereal Dark & Bright Cave by bamboo boat , greet the day with sunrise Tai Chi , unwind at sunset gatherings , immerse in Vietnamese cooking classes , and connect with the night through tranquil squid fishing . Every moment on Velar of the Sea nurtures balance, presence, and deep relaxation — the essence of a premium Lan Ha Bay luxury cruise .`,
+    itinerary: `Day 1: From Hanoi to Lan Ha Bay – A Journey into Tranquil Beauty
+08:00:
+Pick up at the meeting point in Hanoi and depart to Halong bay
+12:15:
+Transfer by tender boat to Velar of the Seas Cruise.
+13:15:
+Enjoy a fabulous lunch at the onboard restaurant. During lunch, the cruise begins sailing through the magnificent Lan Ha Bay — a tranquil geological extension of Ha Long Bay, less visited and wonderfully peaceful.
+14:45 – 16:10:
+Visit Bright Cave (the tunnel cave) by bamboo boat rowed by local fishermen or kayak on your own. Discover a serene round lake surrounded by lush greenery and towering limestone cliffs.
+16:45 – 17:30:
+Enjoy swimming in the emerald waters of the Tra Bau area or relax at the swimming pool on the first deck.
+17:30:
+Join the Sunset Party at Velar Sky Bar with fresh fruits and snacks. Happy Hour offers attractive drink prices as you watch the sun gently sink into the sea — an unforgettable moment for every traveler on board.
+18:00:
+Participate in a Vietnamese cooking demonstration and learn how to prepare delicious traditional appetizers under the guidance of our chef.
+19:00:
+Indulge in a unique Signature Dinner served at our distinctive restaurant.
+20:30 – 22:30:
+Evening leisure time. Relax with exotic cocktails at the bar, enjoy spa services, try squid fishing, play games, sing karaoke, or unwind on the rooftop deck beneath the illuminated night sky.
+Overnight on board.
+Day 2: Lan Ha Bay – Tuan Chau Marina – Return to Hanoi
+06:00 – 06:25:
+Greet the first light of the day on the sundeck with a Tai Chi session, or enjoy an early cup of tea, coffee, or juice while admiring the breathtaking scenery.
+06:30 – 07:30:
+Light breakfast is served at the restaurant, including pastries, tea, and coffee.
+07:30 – 08:15:
+Transfer by tender to explore the Tra Bau area — a famous filming location for
+Kong: Skull Island
+(2018).
+09:00 – 09:30:
+Pack your luggage and prepare for check-out. Please place your luggage outside your cabin by 09:00 for collection, return your room key, and settle any outstanding bills.
+09:30 – 10:20:
+Enjoy brunch at the restaurant on the 4th deck while the cruise gently sails back toward the harbor.
+10:20:
+Transfer by tender boat back to the dock.
+11:15:
+Arrival at Tuan Chau Marina. End of the journey.`,
+    duration: "2 Days/ 1 Night",
+    price: "From: $140",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/velar-of-the-sea-2-days-1-night",
+  },
+  {
+    id: "c13",
+    title: "Dragon Bay Premium Cruise 3 days 2 nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/dragon-bay-premium-cruise/anh-tau-moi.webp",
+    description: `Dragon Bay Premium Cruise is a distinguished 5-star boutique cruise, delivering a refined luxury experience across Ha Long Bay and Lan Ha Bay . The vessel features 26 elegantly appointed cabins , designed in a timeless Indochine style, each offering a private balcony and floor-to-ceiling windows that provide generous space, refined comfort, and uninterrupted panoramic views of the bay. The 3 Days 2 Nights itinerary is thoughtfully crafted to explore tranquil and less-crowded areas, allowing guests to discover iconic destinations such as Bright and Dark Cave , the traditional Viet Hai Village on Cat Ba Island , and the serene Tra Bau area . A carefully curated selection of activities, including kayaking , cycling , swimming , morning Tai Chi , sunset gatherings , and night squid fishing , ensures a balanced and memorable luxury cruising experience.`,
+    itinerary: `Day 1: Hanoi - Tuan Chau Harbor - Lan Ha Bay - Dark & Bright Cave
+08:00 - 08:30
+You will be picked up from your hotel in Hanoi Old Quarter Streets and transfer to Tuan Chau harbor by shuttle bus
+11:45
+Arrive at Tuan Chau harbor.
+11:45 - 12:30
+Transfer by tender boat to Dragonbay Premium Cruise.
+12:30
+The Cruise Manager and crew member welcome you onboard with guiding information and safety briefing. Enjoy a fabulous lunch in our restaurant.
+During lunch time, our cruise starts to sail through the magnificent Lan Ha Bay, a geological extension of Halong Bay which is less visited, less inhabited and therefore has the extra appeal of being a more peaceful place.
+Check in your cabin.
+14:30 - 16:00
+Visit Bright Cave by bamboo boat rowed by the local fishermen, a serene round lake surrounded by lush trees and high stone cliffs.
+16:00 - 17:00
+Explore Lan Ha bay by doing kayaking around Tra Bau or enjoy swimming in the emerald water.
+17:00
+We return to Dragonbay Premium Cruise and join some interesting activities such as cooking demonstration, sunset party and relaxing on the sundeck to catch the daily spectacular of a gorgeous panorama.
+Don’t miss the Happy Hour at our bar as well.
+After that, the captain will let the cruise stop at a quiet area of the bay.
+19:00
+A special dinner of fresh seafood and an assortment of appetizing delicacies will be served.
+20:45
+In the late evening, take your leisure time to chat at the bar, playing games, squid fishing, singing karaoke …
+Overnight onboard.
+Day 2: Visit Viet Hai village - Kayak in Lan Ha Bay
+06:00
+Be an early riser and attend healthy Tai Chi practice on the sundeck. Sunrise photography is awesome.
+06:45 - 07:30
+Enjoy breakfast in the restaurant.
+08:00 - 08:15
+You will join a day cruise and transfer to Viet Hai, a small village in the midst of jungles, covered by high mountains. The village is located in the heart of Cat Ba National Park, which belongs to Cat Hai district of Hai Phong city.
+10:00
+Upon arrival, take a bike ride along the small path through the rain forests. Enjoy stunning scenery of rice fields on the way, stop at the village to relax, and visit an ancient local house. Meet the culture, customs and daily life of the local people.
+12:00
+Back to the day cruise for a visit to Lan Ha Bay. Lunch will be served on board.
+13:30
+The cruise takes you to the pristine beach area - Ba Trai Dao beach. This is the most beautiful beach in Lan Ha Bay with nature's amazing white sand, very quiet and less touristic, you are free to swim or participate in kayaking activity.
+15:15
+Get on the day cruise for a transfer back to Dragonbay Premium Cruise.
+16:30
+We return to Dragonbay Premium Cruise and join some interesting activities such as cooking demonstration, sunset party and relax on the sundeck to catch the daily spectacular of a gorgeous panorama.
+Don’t miss the Happy Hour at our bar as well.
+After that, the captain will let the cruise stop at a quiet area of the bay.
+19:00
+A special dinner of fresh seafood and an assortment of appetizing delicacies will be served.
+20:45
+In the late evening, take your leisure time to chat at the bar, playing games, squid fishing, singing karaoke …
+Overnight onboard.
+Day 3: Lan Ha bay - Tuan Chau Harbor - Hanoi
+06:00
+Be an early riser and attend healthy Tai Chi practice on the sundeck. Sunrise photography is awesome.
+06:30 - 07:15
+Enjoy breakfast in the restaurant.
+07:20 - 08:20
+Hop on Tender cruise, we’ll take you on a sightseeing tour for the scenery of Lan Ha Bay you may have missed.
+09:00 - 09:30
+It’s time to pack your things, do the check-out procedure. Make sure not to forget your belongings.
+10:00
+Enjoy brunch on the cruise.
+10:45
+Travel on a tender boat back to Tuan Chau Harbor. Make your farewell to the crew.
+11:45 - 12:00
+Get into the shuttle bus for a return to Hanoi.
+15:00 - 15:30
+Drop off at your hotel in Hanoi Old Quarter (If the transfer is booked with Dragonbay Premium Cruise).`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $260",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/dragon-bay-premium-cruise-3-days-2-nights",
+  },
+  {
+    id: "c14",
+    title: "Dragon Bay Premium Cruise 2 days 1 night",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/dragon-bay-premium-cruise/anh-tau-moi.webp",
+    description: `Dragon Bay Premium Cruise is a refined 5-star luxury cruise offering a boutique experience across Ha Long Bay and Lan Ha Bay . The cruise features 26 luxury cabins with elegant Indochine design , each equipped with private balconies and floor-to-ceiling windows for panoramic bay views. The 2 Days 1 Night itinerary focuses on tranquil routes, visiting peaceful areas such as Ao Ech or Tra Bau , and includes a bamboo boat journey through the iconic Dark & Bright Cave . Guests can enjoy a variety of curated activities including kayaking , swimming , morning Tai Chi , sunset parties , and exciting night squid fishing . With premium facilities, attentive service, and recognition from the TripAdvisor Travelers’ Choice 2025 , Dragon Bay Premium Cruise delivers a memorable and well-balanced luxury cruise experience in the bay.`,
+    itinerary: `Day 1: Hanoi - Tuan Chau Harbor - Lan Ha Bay - Dark & Bright Cave
+08:00 - 08:30
+You will be picked up from your hotel in Hanoi Old Quarter Streets and transfer to Tuan Chau harbor by shuttle bus
+(If the transfer is booked with Dragonbay Premium Cruise).
+11:45
+Arrive at Tuan Chau harbor.
+11:45 - 12:30
+Transfer by tender boat to Dragonbay Premium Cruise.
+12:30
+The Cruise Manager and crew member welcome you onboard with guiding information and safety briefing. Enjoy a fabulous lunch in our restaurant.
+During lunch time, our cruise starts to sail through the magnificent Lan Ha Bay, a geological extension of Halong Bay which is less visited, less inhabited and therefore has the extra appeal of being a more peaceful place.
+Check in your cabin.
+14:30 - 16:00
+Visit Bright Cave by bamboo boat rowed by the local fishermen, a serene round lake surrounded by lush trees and high stone cliffs.
+16:00 - 17:00
+Explore Lan Ha bay by doing kayaking around Tra Bau or enjoy swimming in the emerald water.
+17:00
+We return to Dragonbay Premium Cruise and join some interesting activities such as cooking demonstration, sunset party and relaxing on the sundeck to catch the daily spectacular of a gorgeous panorama.
+Don’t miss the Happy Hour at our bar as well.
+After that, the captain will let the cruise stop at a quiet area of the bay.
+19:00
+A special dinner of fresh seafood and an assortment of appetizing delicacies will be served.
+20:45
+In the late evening, take your leisure time to chat at the bar, playing games, squid fishing, singing karaoke …
+Overnight onboard.
+Day 2: Lan Ha bay - Tuan Chau Harbor - Hanoi
+06:00
+Be an early riser and attend healthy Tai Chi practice on the sundeck. Sunrise photography is awesome.
+06:30 - 07:15
+Enjoy breakfast in the restaurant.
+07:20 - 08:20
+Hop on Tender cruise, we’ll take you on a sightseeing tour for the scenery of Lan Ha Bay you may have missed.
+09:00 - 09:30
+It’s time to pack your things, do the check-out procedure. Make sure not to forget your belongings.
+10:00
+Enjoy brunch on the cruise.
+10:45
+Travel on a tender boat back to Tuan Chau Harbor. Make your farewell to the crew.
+11:45 - 12:00
+Get into the shuttle bus for a return to Hanoi.
+15:00 - 15:30
+Drop off at your hotel in Hanoi Old Quarter (If the transfer is booked with Dragonbay Premium Cruise).
+End of services.`,
+    duration: "2 Days/ 1 Night",
+    price: "From: $130",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/dragon-bay-premium-cruise-2-days-1-night",
+  },
+  {
+    id: "c15",
+    title: "Halora Nova Cruise 3 Days 2 nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/halora-nova-cruise/haloranovacruisesss.webp",
+    description: `Halora Nova Cruise features 40 premium cabins , each from 35 sqm , thoughtfully designed in an elegant Indochine–modern style. Every cabin includes a private sea-view balcony , providing generous space, refined comfort, and panoramic views of Lan Ha Bay for a truly relaxing stay. The 3 Days 2 Nights Lan Ha Bay itinerary departs from Tuan Chau Marina with a smooth speedboat transfer to the main cruise. This extended journey allows deeper exploration of tranquil highlights such as Tra Bau lagoons , the enchanting Dark & Bright Cave , and the traditional Viet Hai Village on Cat Ba Island , offering a perfect blend of nature and local culture. Activities are carefully curated to balance active exploration and relaxation , including kayaking in Tra Bau , cycling through Viet Hai Village , sunrise Tai Chi , Vietnamese cooking classes , sunset parties on the sundeck , and exciting night squid fishing , creating a refined and immersive Lan Ha Bay luxury cruise experience .`,
+    itinerary: `Day 1: Hanoi - Lan Ha bay
+08:00 – 08:30:
+Pick-up in Hanoi – Shuttle bus picks up guests at hotels in Hanoi Old Quarter or in front of Hanoi Opera House (No. 1 Trang Tien Street, Hoan Kiem District) and transfers to Ha Long Bay.
+11:15
+The guest has been received at the Halora Nova Lounge. Please finalize the check-in and enjoy the complimentary welcome drink.
+12:00 – 12:15
+The Halora high-speed ferry is prepared to convey our patrons across the crystalline, cerulean waters to the mother vessel.
+12:45
+We warmly welcome our esteemed guests aboard the Halora Nova yacht. You are invited to listen to a comprehensive introduction of the itinerary and safety guidelines, presented by our dedicated and amiable team.
+13:00
+Indulge in a sumptuous midday meal at our opulent restaurant, as the yacht gracefully cruises through the magnificent limestone karsts of Lan Ha Bay.
+15:00
+Discover the serene landscapes of the Ao Ech or Tra Bau areas. Guests may choose to enjoy a refreshing swim or paddle a kayak, immersing themselves in the tranquil beauty of Lan Ha Bay.
+17:30 – 19:00
+Join either the Tea Mixing Workshop or the traditional
+To He
+Making Session. Thereafter, relax and admire the breathtaking sunset over Lan Ha Bay.
+Our esteemed guests will then savour a lavish dinner at the Halora Restaurant in an especially romantic setting.
+21:00
+After dinner, guests are invited to unwind with spa and massage services, enjoy a glass of fine wine, or participate in night squid fishing beneath the star-filled sky.
+Day 2: Awakening with Nature & Viet Hai Village Experience
+05:45 – 06:15
+: Wake up early to watch the sunrise on the ship’s deck, admiring the first golden rays painting the sea in a peaceful and magical atmosphere.
+06:15 – 06:35
+: Join a morning meditation class to rediscover tranquility, inner balance, and renewed energy for the day.
+06:45 – 07:30
+: Enjoy a light breakfast in a calm and serene setting while taking in the surrounding views.
+09:30 – 09:45
+: Transfer by shuttle boat to begin the day’s exploration.
+09:45
+: Discover Viet Hai Village, a pristine village hidden deep within the Cat Ba rainforest. Cycle through forest paths, embrace pure tranquility, and recharge your energy on an inspiring journey.
+11:30
+: Enjoy a fresh seafood lunch at a local restaurant.
+14:00 – 14:15
+: Return to Halora Nova Cruise and relax at leisure, unwind by the pool, enjoy spa treatments, or indulge in afternoon tea while admiring the tranquil bay scenery.
+Day 3: Farewell to Lan Ha Bay & Return to Hanoi
+05:45 – 06:15
+: Wake up to watch the sunrise on the ship’s deck, admiring the first golden rays painting the sea in a peaceful and magical atmosphere.
+06:15 – 06:35
+: Join a morning meditation class to rediscover tranquility, balance, and renewed energy for the day.
+06:45 – 07:30
+: Enjoy a light breakfast in a calm and peaceful setting.
+07:30
+: Discover the Bright–Dark Cave, a pristine space where light, water, and magical rock formations blend together to create a pure natural masterpiece.
+09:30 – 09:45
+: Guests complete check-out procedures.
+09:45
+: Enjoy a light lunch at the restaurant while the cruise returns to port.
+10:45
+: Transfer by speedboat from Halora Nova Cruise to Tuan Chau International Passenger Port.
+11:15 – 11:20
+: Arrival at Tuan Chau International Passenger Port, marking the end of the cruise itinerary.`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $360",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/halora-nova-cruise-3-days-2-nights",
+  },
+  {
+    id: "c16",
+    title: "Paradise Legacy cruise 3 Days 2 Nights",
+    imageUrl: "https://asiaeyestravel.com/uploads/source/nhung/paradise-legacy/anhtau.webp",
+    description: `Paradise Legacy Cruise offers 42 luxury cabins , including 36 connecting rooms , making it ideal for families and large groups . On the 3 Days 2 Nights itinerary in Halong Bay , guests can explore impressive caves such as Sung Sot Cave , the largest cave in Halong Bay , or Me Cung Cave , famous for thousand-year-old stalactites and panoramic views overlooking a peaceful lake surrounded by limestone mountains . Guests may enjoy kayaking in the Tung Sau pearl farming area or experience a traditional bamboo boat ride rowed by locals at Cua Van floating village , one of the oldest villages in the bay . The journey also includes hiking Titov Island for panoramic Halong Bay views , relaxing on white sandy beaches , and visiting Tung Sau village to learn about the traditional pearl cultivation process .`,
+    itinerary: `Day 1: From Hanoi to Ha Long: The Journey Begins
+08:00 – 08:30:
+Pick-up in Hanoi – Shuttle bus picks up guests at hotels in Hanoi Old Quarter or in front of Hanoi Opera House (No. 1 Trang Tien Street, Hoan Kiem District) and transfers to Ha Long Bay.
+12:00 – 12:30
+: Arrival & check-in – Arrive at Tuan Chau Island and begin the cruise check-in process. Guests receive a short briefing about the itinerary and safety regulations while enjoying a welcome drink aboard Paradise Legacy.
+13:00 – 14:30
+: Lunch – Enjoy lunch at Elegance Restaurant while Paradise Legacy cruises past the beautiful islets of Ha Long Bay.
+14:30 – 15:30
+: Titov island excursion – Visit Titov Island, named after Russian cosmonaut Gherman Stepanovich Titov. Guests may hike to the summit for a panoramic view of Ha Long Bay or swim at the island’s beach.
+16:00 – 17:00
+: Tung Sau pearl farm – Visit Tung Sau Pearl Farm to explore the pearl cultivation process or enjoy kayaking experience.
+17:15 – 19:00
+: Sunset activities – At sunset, Paradise Legacy anchors overnight. This is the perfect time to enjoy afternoon tea, happy hour (buy one get one free from 17:15 to 18:45), and a cooking demonstration featuring a notable Vietnamese dish at the Grand Sundeck or Delight Lounge.
+19:00 – 20:30
+: Dinner – Savor a premium à la carte dinner served by staff in traditional Vietnamese five-piece Ao Dai at Elegance Restaurant, and capture memorable moments with the onboard manager.
+20:30 – 23:00
+: Evening activities – After dinner, enjoy drinks and a spectacular live band performance or relax with board games at Delight Lounge. Guests may also join squid fishing at the back of the boat.
+Day 2: Exploration the Bay
+06:30
+: Tai chi session – Boost your energy for the new day with a Tai Chi session at the Grand Sundeck.
+07:45
+: Breakfast – Enjoy a buffet breakfast at Elegance Restaurant.
+09:00 – 09:30
+: Transfer to Paradise Explorer – Transfer to Paradise Explorer Cruise to immerse yourself in a magnificent excursion in Ha Long Bay.
+10:00 – 11:00
+: Scenic cruising – Enjoy splendid panoramic views aboard Paradise Explorer as the cruise passes iconic sites of Ha Long Bay such as Ho Dong Tien Cave, Trong Cave, Trinh Nu Cave, Hang Dau Islet, and Hang Than Islet.
+11:00 – 12:00
+: Tien Ong cave excursion – Visit Tien Ong Cave, a magnificent cave with primitive charm and a system of stalactites and stalagmites formed thousands of years ago. Archaeologists have discovered human bones and artifacts dating back to 10,000 BC – 8,000 BC.
+12:30
+: Lunch on Paradise Explorer – Savour a delightful lunch as Paradise Explorer anchors in a tranquil and scenic area of Ha Long Bay.
+13:30
+: Cua Van fishing village – Visit Cua Van Fishing Village, the first floating cultural village for fishers in Vietnam. Enjoy kayaking or a bamboo boat experience.
+14:30 – 15:30
+: Afternoon tea – Enjoy afternoon tea onboard Paradise Explorer while admiring spectacular views of Ha Long Bay.
+15:15 – 15:30
+: Return to Paradise Legacy – Transfer back to Paradise Legacy Cruise and continue the incredible voyage aboard this masterpiece cruise.
+17:00
+: Overnight anchoring – At sunset, Paradise Legacy anchors overnight in the bay.
+17:15 – 19:00
+: Sunset activities – Join a cooking class featuring a renowned Vietnamese dish at the Grand Sundeck or Delight Lounge. This is also the perfect time to enjoy happy hour (buy one get one free from 17:15 to 18:45) while immersing yourself in live music performances.
+19:00
+: Dinner – Savour a scrumptious dinner featuring delightful dishes prepared by the talented onboard chef.
+20:30 – 23:00
+: Evening activities – After dinner, enjoy drinks and live music at Delight Lounge, join squid fishing at the back of the cruise, watch movies in your cabin, or relax with natural treatments at Le Parfum Spa.
+Day 3: Morning Cave Adventure in Ha Long Bay & Hanoi Transfer
+06:30
+: Tai chi session – Boost your energy for the new day with a Tai Chi session at the Grand Sundeck.
+07:00
+: Light breakfast – Enjoy a light breakfast with freshly baked pastries, coffee, and tea at Elegance Restaurant.
+07:45 – 08:45
+: Me Cung cave excursion – Visit Me Cung Cave, a site rich in historical and cultural significance. Inside, the cave opens into an ancient world, leading visitors through a magnificent underground palace.
+08:50
+: Breakfast on board – Breakfast is served at Elegance Restaurant while the cruise passes Thien Cung Cave, Dau Go Cave, and the iconic Fighting Cock Islet.
+09:40 – 10:15
+: Check-out & leisure time – Settle bills and return room keys at the reception area, then enjoy remaining moments at Delight Lounge or on the sundeck while admiring the stunning views of Ha Long Bay.
+10:15 – 10:30
+: Disembarkation – Paradise Legacy returns to Tuan Chau Marina. Guests disembark and conclude their journey.`,
+    duration: "3 Days/ 2 Nights",
+    price: "From: $380",
+    cityIds: ["2"],
+    sourceUrl: "https://asiaeyestravel.com/paradise-legacy-cruise-3-days-2-nights",
+  },
+];
+
+export default { tourCategories, regions, cities, tours, cruises };

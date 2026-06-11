@@ -8,7 +8,7 @@ interface ToursDropdownProps {
 }
 
 export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
-  const { data: categories, isLoading, isError } = useGetTourCategoriesQuery();
+  const { data: categories = [], isLoading, isError } = useGetTourCategoriesQuery();
 
   const itemClass =
     "block px-5 py-2 text-sm font-sans transition-colors";
@@ -36,7 +36,7 @@ export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
         </p>
       )}
 
-      {categories?.map((cat) => (
+      {categories.map((cat) => (
         <a
           key={cat.id}
           href="#"
