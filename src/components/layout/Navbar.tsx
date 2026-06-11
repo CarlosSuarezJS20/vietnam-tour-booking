@@ -93,7 +93,8 @@ export default function Navbar() {
 
       {/* Layer 4 — navbar, always above everything */}
       <nav className="absolute top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7">
-        <Image src="/travel-vietnam-logo-white.svg" alt="Travel Vietnam" width={155} height={46} priority />
+        <Image src="/travel-vietnam-logo-white.svg" alt="Travel Vietnam" width={155} height={46} priority className="hidden md:block" />
+        <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam" width={36} height={36} priority className="md:hidden" />
 
         {/* Desktop pill — pushed to the right */}
         <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative ml-auto mr-6" style={{ minWidth: 480 }}>

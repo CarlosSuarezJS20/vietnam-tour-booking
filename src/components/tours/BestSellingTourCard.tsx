@@ -2,6 +2,7 @@
 
 import { FiUsers, FiArrowDown, FiMapPin } from "react-icons/fi";
 import type { FeaturedTour } from "@/types/graphql";
+import PillTag from "@/components/ui/PillTag";
 
 interface Props {
   tour: FeaturedTour;
@@ -14,9 +15,7 @@ export default function BestSellingTourCard({ tour }: Props) {
   return (
     <div className="bg-gray-900/50 p-6">
 
-      <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.15em] uppercase text-white border border-white/40 px-3 py-1.5 rounded-full font-sans">
-        <FiUsers className="w-3.5 h-3.5" /> Best Seller
-      </span>
+      <PillTag variant="outline-white" size="md"><FiUsers className="w-3.5 h-3.5" /> Best Seller</PillTag>
 
       <hr className="border-white/20 my-3" />
 
@@ -28,9 +27,7 @@ export default function BestSellingTourCard({ tour }: Props) {
 
       <div className="flex flex-wrap gap-2">
         {tour.categories.map((cat) => (
-          <span key={cat.id} className="text-xs text-white border border-white/40 px-3 py-1 rounded-full font-sans">
-            {cat.label}
-          </span>
+          <PillTag key={cat.id} variant="outline-white">{cat.label}</PillTag>
         ))}
       </div>
 
@@ -42,9 +39,7 @@ export default function BestSellingTourCard({ tour }: Props) {
       </div>
       <div className="flex flex-wrap gap-2">
         {tour.cities.map((c) => (
-          <span key={c.id} className="text-xs text-white border border-white/40 px-3 py-1 rounded-full font-sans">
-            {c.name}
-          </span>
+          <PillTag key={c.id} variant="outline-white">{c.name}</PillTag>
         ))}
       </div>
 

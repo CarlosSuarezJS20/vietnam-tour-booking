@@ -3,7 +3,7 @@
 import HeroSection from "@/components/hero/HeroSection";
 import BestSellingTourCard from "@/components/tours/BestSellingTourCard";
 import CruisesCarousel from "@/components/tours/CruisesCarousel";
-import DestinationsCarousel from "@/components/tours/DestinationsCarousel";
+import CategoriesCarousel from "@/components/tours/CategoriesCarousel";
 import { useGetFeaturedTourQuery } from "@/store/api/graphqlApi";
 
 function FeaturedTourSection() {
@@ -32,8 +32,8 @@ export default function Home() {
           <FeaturedTourSection />
         </HeroSection>
       </div>
-      <DestinationsCarousel />
-      <div className="flex justify-center py-2">
+      <CategoriesCarousel />
+      <div className="flex justify-center">
         <div className="w-24 h-px bg-gray-900" />
       </div>
       <CruisesCarousel />
