@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FiChevronDown, FiX } from "react-icons/fi";
-import { useGetTourCategoriesQuery, useGetRegionsQuery } from "@/store/api/graphqlApi";
+import { useGetTourCategoriesQuery, useGetRegionsQuery } from "@/graphql/hooks";
 
 interface MobileMenuProps {
   open: boolean;
@@ -15,11 +15,11 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
   const [destOpen, setDestOpen]       = useState(false);
   const [openRegions, setOpenRegions] = useState<Record<string, boolean>>({});
 
-  const { data: categories = [], isLoading: catsLoading, isError: catsError } = useGetTourCategoriesQuery();
-  const { data: regions = [],    isLoading: regsLoading, isError: regsError } = useGetRegionsQuery();
+  const { data: categories = [], loading: catsLoading, error: catsError } = useGetTourCategoriesQuery();
+  const { data: regions = [],    loading: regsLoading, error: regsError } = useGetRegionsQuery();
 
-  const isLoading = catsLoading || regsLoading;
-  const isError   = catsError   || regsError;
+  const loading = catsLoading || regsLoading;
+  const error   = catsError   || regsError;
 
   const toggleRegion = (key: string) =>
     setOpenRegions((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -60,7 +60,7 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
         </a>
 
         {/* Loading skeleton */}
-        {isLoading && (
+        {loading && (
           <div className="space-y-4 py-4">
             {[1, 2, 3].map((n) => (
               <div key={n} className="h-8 bg-white/10 rounded animate-pulse" />
@@ -69,14 +69,14 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
         )}
 
         {/* Error state */}
-        {isError && (
+        {error && (
           <p className="py-4 text-white/60 text-sm font-sans">
             Failed to load navigation. Please refresh.
           </p>
         )}
 
         {/* Tours accordion */}
-        {!isLoading && !isError && (
+        {!loading && !error && (
           <div className="border-b border-white/10">
             <button
               className="w-full flex items-center justify-between text-white text-3xl font-semibold py-4 font-display"
@@ -108,7 +108,7 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
         )}
 
         {/* Destinations accordion */}
-        {!isLoading && !isError && (
+        {!loading && !error && (
           <div className="border-b border-white/10">
             <button
               className="w-full flex items-center justify-between text-white text-3xl font-semibold py-4 font-display"
