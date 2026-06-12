@@ -4,7 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useGetCruisesQuery } from "@/store/api/graphqlApi";
+import { useGetCruisesQuery } from "@/graphql/hooks";
 import type { Cruise } from "@/types/graphql";
 
 function CruiseCard({ cruise, isActive }: { cruise: Cruise; isActive: boolean }) {
@@ -62,7 +62,7 @@ export default function CruisesCarousel() {
     containScroll: false,
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const { data: cruises = [], isLoading, isError } = useGetCruisesQuery();
+  const { data: cruises = [], loading, error } = useGetCruisesQuery();
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -91,7 +91,7 @@ export default function CruisesCarousel() {
         </div>
       </div>
 
-      {isError ? (
+      {error ? (
         <div className="max-w-7xl mx-auto px-10 md:px-20 flex items-center justify-center h-48 text-sm text-gray-400 font-sans">
           Failed to load cruises. Please refresh.
         </div>
@@ -103,7 +103,7 @@ export default function CruisesCarousel() {
 
           <div ref={emblaRef} className="overflow-hidden flex-1">
             <div className="flex">
-              {isLoading
+              {loading
                 ? [...Array(4)].map((_, i) => (
                     <div key={i} className={`flex-none w-[85vw] md:w-[60vw] max-w-[780px] relative ${i === 0 ? "z-10" : "z-0"}`}>
                       <CardSkeleton isActive={i === 0} />

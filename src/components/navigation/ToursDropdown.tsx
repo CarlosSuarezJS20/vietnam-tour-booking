@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetTourCategoriesQuery } from "@/store/api/graphqlApi";
+import { useGetTourCategoriesQuery } from "@/graphql/hooks";
 
 interface ToursDropdownProps {
   open: boolean;
@@ -8,7 +8,7 @@ interface ToursDropdownProps {
 }
 
 export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
-  const { data: categories = [], isLoading, isError } = useGetTourCategoriesQuery();
+  const { data: categories = [], loading, error } = useGetTourCategoriesQuery();
 
   const itemClass =
     "block px-5 py-2 text-sm font-sans transition-colors";
@@ -22,7 +22,7 @@ export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
       }`}
       onMouseLeave={onClose}
     >
-      {isLoading && (
+      {loading && (
         <div className="px-5 py-3 space-y-2">
           {[1, 2, 3, 4].map((n) => (
             <div key={n} className="h-4 bg-gray-100 rounded animate-pulse" />
@@ -30,7 +30,7 @@ export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
         </div>
       )}
 
-      {isError && (
+      {error && (
         <p className={`${itemClass} text-red-500`}>
           Failed to load tours.
         </p>

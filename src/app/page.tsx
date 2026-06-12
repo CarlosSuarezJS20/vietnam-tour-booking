@@ -4,18 +4,18 @@ import HeroSection from "@/components/hero/HeroSection";
 import BestSellingTourCard from "@/components/tours/BestSellingTourCard";
 import CruisesCarousel from "@/components/tours/CruisesCarousel";
 import CategoriesCarousel from "@/components/tours/CategoriesCarousel";
-import { useGetFeaturedTourQuery } from "@/store/api/graphqlApi";
+import { useGetFeaturedTourQuery } from "@/graphql/hooks";
 
 function FeaturedTourSection() {
-  const { data: tour, isLoading, isError } = useGetFeaturedTourQuery();
+  const { data: tour, loading, error } = useGetFeaturedTourQuery();
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="h-72 rounded-2xl bg-gray-100 animate-pulse" />
     );
   }
 
-  if (isError || !tour) {
+  if (error || !tour) {
     return (
       <p className="text-sm text-gray-400 font-sans">Failed to load featured tour.</p>
     );

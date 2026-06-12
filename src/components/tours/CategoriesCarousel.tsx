@@ -4,7 +4,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { useCallback, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import { useGetToursByCategoryQuery } from "@/store/api/graphqlApi";
+import { useGetToursByCategoryQuery } from "@/graphql/hooks";
 import type { CarouselTour } from "@/types/graphql";
 import PillTag from "@/components/ui/PillTag";
 
@@ -58,7 +58,7 @@ export default function CategoriesCarousel() {
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
   const [activeKey, setActiveKey] = useState<CategoryKey>("Luxury");
 
-  const { data: tours = [], isLoading, isError } = useGetToursByCategoryQuery({
+  const { data: tours = [], loading, error } = useGetToursByCategoryQuery({
     categoryId: CATEGORIES[activeKey].categoryId,
     limit: 8,
   });
@@ -97,7 +97,7 @@ export default function CategoriesCarousel() {
 
         {/* Right — carousel + arrows */}
         <div className="flex-1 min-w-0">
-          {isError ? (
+          {error ? (
             <div className="flex items-center justify-center h-64 text-sm text-gray-400 font-sans">
               Failed to load tours. Please refresh.
             </div>
@@ -110,7 +110,7 @@ export default function CategoriesCarousel() {
 
                 <div key={activeKey} ref={emblaRef} className="overflow-hidden flex-1">
                   <div className="flex">
-                    {isLoading
+                    {loading
                       ? [...Array(4)].map((_, i) => <CardSkeleton key={i} />)
                       : tours.map((tour) => (
                           <div key={tour.id} className="flex-none w-[260px] mr-5">

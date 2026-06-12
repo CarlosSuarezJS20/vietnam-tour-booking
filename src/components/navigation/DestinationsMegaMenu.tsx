@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FiMapPin, FiArrowUpRight } from "react-icons/fi";
-import { useGetRegionsQuery } from "@/store/api/graphqlApi";
+import { useGetRegionsQuery } from "@/graphql/hooks";
 
 interface Props {
   onMouseEnter: () => void;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Props) {
-  const { data: regions = [], isLoading, isError } = useGetRegionsQuery();
+  const { data: regions = [], loading, error } = useGetRegionsQuery();
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const current = regions.find((r) => r.key === activeKey) ?? regions[0];
@@ -24,11 +24,11 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
           Where are you<br />traveling?
         </h2>
 
-        {isError && (
+        {error && (
           <p className="text-sm text-red-500 font-sans">Failed to load destinations.</p>
         )}
 
-        {isLoading && (
+        {loading && (
           <ul className="flex flex-col gap-1">
             {[1, 2, 3].map((n) => (
               <li key={n} className="h-9 bg-gray-100 rounded animate-pulse" />
@@ -36,7 +36,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
           </ul>
         )}
 
-        {!isLoading && !isError && (
+        {!loading && !error && (
           <ul className="flex flex-col gap-1">
             {regions.map((r) => (
               <li key={r.key}>
@@ -58,7 +58,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
 
       {/* Middle — cities */}
       <div className="w-[600px] bg-white px-8 py-10 flex flex-col justify-between flex-shrink-0">
-        {isLoading && (
+        {loading && (
           <div className="space-y-3">
             <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
             <div className="grid grid-cols-2 gap-x-8 gap-y-3">
@@ -98,7 +98,7 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
 
       {/* Right — image */}
       <div className="flex-1 relative overflow-hidden bg-gray-100">
-        {isLoading && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
+        {loading && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
 
         {regions.map((r) => (
           <div
