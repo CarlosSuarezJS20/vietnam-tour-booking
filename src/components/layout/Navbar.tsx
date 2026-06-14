@@ -9,6 +9,7 @@ import DestinationsMegaMenu from "@/components/navigation/DestinationsMegaMenu";
 import MobileMenu from "@/components/navigation/MobileMenu";
 import IconButton from "@/components/ui/IconButton";
 import PillButton from "@/components/ui/PillButton";
+import SearchDropdown from "@/components/search/SearchDropdown";
 
 export default function Navbar() {
   const [toursOpen, setToursOpen] = useState(false);
@@ -98,6 +99,10 @@ export default function Navbar() {
 
         {/* Desktop pill — pushed to the right */}
         <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative ml-auto mr-6" style={{ minWidth: 480 }}>
+          {/* Search dropdown — slides down from below the pill */}
+          {searchOpen && (
+            <SearchDropdown query={searchValue} onClose={closeSearch} />
+          )}
 
           {/* Original nav content */}
           <div className={`flex items-center w-full transition-all duration-200 ${searchOpen ? "opacity-0 -translate-x-2 pointer-events-none" : "opacity-100 translate-x-0"}`}>

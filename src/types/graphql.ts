@@ -37,6 +37,44 @@ export interface Cruise {
   sourceUrl:   string;
 }
 
+export interface SearchTour {
+  id:           string;
+  title:        string;
+  description:  string;
+  itinerary:    string;
+  imageUrl:     string;
+  duration:     string;
+  price:        string;
+  featuredTour: boolean;
+  cities:       (City & { region: { id: string; key: string; label: string } })[];
+  categories:   TourCategory[];
+  _type:        "tour";
+  cityNames?:   string;
+}
+
+export interface SearchCruise {
+  id:          string;
+  title:       string;
+  description: string;
+  itinerary:   string;
+  imageUrl:    string;
+  duration:    string;
+  price:       string;
+  sourceUrl:   string;
+  _type:       "cruise";
+}
+
+export type SearchItem = SearchTour | SearchCruise;
+
+export interface SearchFilters {
+  type:       "all" | "tour" | "cruise";
+  categories: string[];
+  region:     string;
+  minPrice:   number;
+  maxPrice:   number;
+  duration:   string;
+}
+
 export interface FeaturedTour {
   id:           string;
   title:        string;

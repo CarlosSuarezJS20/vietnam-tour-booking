@@ -12,6 +12,8 @@ export const resolvers = {
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
                        tours.filter(t => t.categoryIds.includes(categoryId)).slice(0, limit),
     cruises:        () => cruises,
+    allTours:       () => tours,
+    allCruises:     () => cruises,
   },
   Tour: {
     cities:     (tour: { cityIds: string[] }) => cities.filter(c => tour.cityIds.includes(c.id)),
