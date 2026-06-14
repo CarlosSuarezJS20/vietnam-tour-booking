@@ -22,6 +22,7 @@ type Tour {
   id:           ID!
   title:        String!
   description:  String!
+  itinerary:    String!
   imageUrl:     String!
   duration:     String!
   price:        String!
@@ -50,4 +51,6 @@ type Query {
   toursByCity(cityId: ID!, limit: Int):         [Tour!]!
   toursByCategory(categoryId: ID!, limit: Int): [Tour!]!
   cruises:                         [Cruise!]!
+  allTours:                        [Tour!]!
+  allCruises:                      [Cruise!]!
 }

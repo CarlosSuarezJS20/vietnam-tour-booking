@@ -8,8 +8,10 @@ import {
   TOURS_BY_CATEGORY_QUERY,
   CRUISES_QUERY,
   TOURS_BY_CITY_QUERY,
+  ALL_TOURS_QUERY,
+  ALL_CRUISES_QUERY,
 } from "./queries";
-import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise } from "@/types/graphql";
+import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise } from "@/types/graphql";
 
 export function useGetTourCategoriesQuery() {
   const { data, loading, error } = useQuery<{ tourCategories: TourCategory[] }>(
@@ -49,4 +51,18 @@ export function useGetToursByCityQuery(variables: { cityId: string; limit?: numb
     { variables }
   );
   return { data: data?.toursByCity ?? [], loading, error };
+}
+
+export function useGetAllToursQuery() {
+  const { data, loading, error } = useQuery<{ allTours: Omit<SearchTour, "_type" | "cityNames">[] }>(
+    ALL_TOURS_QUERY
+  );
+  return { data: data?.allTours ?? [], loading, error };
+}
+
+export function useGetAllCruisesQuery() {
+  const { data, loading, error } = useQuery<{ allCruises: Omit<SearchCruise, "_type">[] }>(
+    ALL_CRUISES_QUERY
+  );
+  return { data: data?.allCruises ?? [], loading, error };
 }

@@ -47,3 +47,21 @@ export const TOURS_BY_CITY_QUERY = gql`
     }
   }
 `;
+
+export const ALL_TOURS_QUERY = gql`
+  query AllTours {
+    allTours {
+      id title description itinerary imageUrl duration price featuredTour
+      cities     { id name region { id key label } }
+      categories { id slug label }
+    }
+  }
+`;
+
+export const ALL_CRUISES_QUERY = gql`
+  query AllCruises {
+    allCruises {
+      id title description itinerary imageUrl duration price sourceUrl
+    }
+  }
+`;
