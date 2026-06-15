@@ -4,6 +4,9 @@ import HeroSection from "@/components/hero/HeroSection";
 import BestSellingTourCard from "@/components/tours/BestSellingTourCard";
 import CruisesCarousel from "@/components/tours/CruisesCarousel";
 import CategoriesCarousel from "@/components/tours/CategoriesCarousel";
+import Credentials from "@/components/sections/Credentials";
+import AboutSection from "@/components/about/AboutSection";
+import BookingForm from "@/components/booking/BookingForm";
 import { useGetFeaturedTourQuery } from "@/graphql/hooks";
 
 function FeaturedTourSection() {
@@ -32,11 +35,21 @@ export default function Home() {
           <FeaturedTourSection />
         </HeroSection>
       </div>
+      <AboutSection />
+      <div className="flex justify-center">
+        <div className="w-24 h-px bg-gray-900" />
+      </div>
       <CategoriesCarousel />
       <div className="flex justify-center">
         <div className="w-24 h-px bg-gray-900" />
       </div>
       <CruisesCarousel />
+       <div className="flex justify-center">
+        <div className="w-24 h-px bg-gray-900" />
+      </div>
+      <BookingForm />
+      <Credentials />
+
     </main>
   );
 }

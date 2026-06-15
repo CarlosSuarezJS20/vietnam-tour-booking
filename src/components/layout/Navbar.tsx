@@ -10,6 +10,7 @@ import MobileMenu from "@/components/navigation/MobileMenu";
 import IconButton from "@/components/ui/IconButton";
 import PillButton from "@/components/ui/PillButton";
 import SearchDropdown from "@/components/search/SearchDropdown";
+import { useStickyNav } from "@/hooks/useStickyNav";
 
 export default function Navbar() {
   const [toursOpen, setToursOpen] = useState(false);
@@ -18,7 +19,10 @@ export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+  const mobileSearchBarRef = useRef<HTMLDivElement>(null);
   const destCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { pastHero, atAbout } = useStickyNav();
 
   const openDestinations = () => {
     if (destCloseTimer.current) clearTimeout(destCloseTimer.current);
@@ -60,6 +64,26 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    if (!searchOpen) return;
+    const handleMouseDown = (e: MouseEvent) => {
+      const inPill = pillRef.current?.contains(e.target as Node);
+      const inMobile = mobileSearchBarRef.current?.contains(e.target as Node);
+      if (!inPill && !inMobile) closeSearch();
+    };
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (toursOpen) setToursOpen(false);
+      if (destinationsOpen) setDestinationsOpen(false);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [toursOpen, destinationsOpen]);
+
   return (
     <>
       {/*
@@ -93,12 +117,12 @@ export default function Navbar() {
       </div>
 
       {/* Layer 4 — navbar, always above everything */}
-      <nav className="absolute top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7">
-        <Image src="/travel-vietnam-logo-white.svg" alt="Travel Vietnam" width={155} height={46} priority className="hidden md:block" />
-        <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam" width={36} height={36} priority className="md:hidden" />
+      <nav className={`fixed top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7 transition-all duration-200 ${atAbout ? "-translate-y-full" : "translate-y-0"}`}>
+        <Image src={pastHero ? "/travel-vietnam-logo-dark.svg" : "/travel-vietnam-logo-white.svg"} alt="Travel Vietnam" width={155} height={46} priority className="hidden md:block" />
+        <Image src={pastHero ? "/travel-vietnam-icon-dark.svg" : "/travel-vietnam-icon-white.svg"} alt="Travel Vietnam" width={36} height={36} priority className="md:hidden" />
 
         {/* Desktop pill — pushed to the right */}
-        <div className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative ml-auto mr-6" style={{ minWidth: 480 }}>
+        <div ref={pillRef} className="hidden md:flex items-center bg-white rounded-full shadow-lg px-1.5 py-1.5 relative ml-auto mr-6" style={{ minWidth: 480 }}>
           {/* Search dropdown — slides down from below the pill */}
           {searchOpen && (
             <SearchDropdown query={searchValue} onClose={closeSearch} />
@@ -165,14 +189,14 @@ export default function Navbar() {
         {/* Desktop right actions */}
         <div className="hidden md:flex items-center gap-3">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <span className="text-white text-sm font-medium transition-all group-hover:opacity-70 group-hover:tracking-wider font-sans">
+            <span className={`text-sm font-medium transition-all group-hover:opacity-70 group-hover:tracking-wider font-sans ${pastHero ? "text-gray-800" : "text-white"}`}>
               Contact Us
             </span>
-            <IconButton className="group-hover:bg-white/20 group-hover:border-white">
+            <IconButton className={pastHero ? "border-gray-300 text-gray-700 hover:bg-gray-100" : "group-hover:bg-white/20 group-hover:border-white"}>
               <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:scale-110" />
             </IconButton>
           </div>
-          <IconButton>
+          <IconButton className={pastHero ? "border-gray-300 text-gray-700 hover:bg-gray-100" : ""}>
             <FiShoppingCart className="w-5 h-5" />
           </IconButton>
           <PillButton variant="brand">My Bookings</PillButton>
@@ -180,13 +204,39 @@ export default function Navbar() {
 
         {/* Mobile right actions */}
         <div className="md:hidden flex items-center gap-2">
-          <IconButton hoverEffect={false}>
+          <IconButton hoverEffect={false} onClick={openSearch} className={pastHero ? "border-gray-300 text-gray-700" : ""}>
+            <FiSearch className="w-5 h-5" />
+          </IconButton>
+          <IconButton hoverEffect={false} className={pastHero ? "border-gray-300 text-gray-700" : ""}>
             <FiShoppingCart className="w-5 h-5" />
           </IconButton>
           <PillButton variant="brand">My Bookings</PillButton>
           <PillButton variant="white" onClick={() => setMobileOpen(true)}>Menu</PillButton>
         </div>
       </nav>
+
+      {/* Mobile search overlay */}
+      {searchOpen && (
+        <div className="md:hidden fixed top-[92px] left-0 right-0 z-[45] px-4">
+          <div ref={mobileSearchBarRef} className="relative">
+            <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-xl border border-gray-100">
+              <FiSearch className="w-4 h-4 text-gray-400 flex-shrink-0" />
+              <input
+                autoFocus
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Search destinations, tours…"
+                className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
+              />
+              <button onClick={closeSearch} className="flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors">
+                <FiX className="w-5 h-5" />
+              </button>
+            </div>
+            <SearchDropdown query={searchValue} onClose={closeSearch} />
+          </div>
+        </div>
+      )}
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />
 

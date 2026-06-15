@@ -7,7 +7,16 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetCruisesQuery } from "@/graphql/hooks";
 import type { Cruise } from "@/types/graphql";
 
-function CruiseCard({ cruise, isActive }: { cruise: Cruise; isActive: boolean }) {
+interface CruiseCardProps {
+  cruise: Cruise;
+  isActive: boolean;
+}
+
+interface CardSkeletonProps {
+  isActive: boolean;
+}
+
+function CruiseCard({ cruise, isActive }: CruiseCardProps) {
   const [, priceValue] = cruise.price.split(": ");
 
   return (
@@ -23,7 +32,7 @@ function CruiseCard({ cruise, isActive }: { cruise: Cruise; isActive: boolean })
         sizes="(max-width: 780px) 60vw, 780px"
         className="object-cover"
       />
-      <div className="absolute inset-0 bg-black/45 md:bg-gradient-to-t md:from-black/80 md:via-black/20 md:to-transparent" />
+      <div className="absolute inset-0 bg-black/20 md:bg-gradient-to-t md:from-black/60 md:via-black/10 md:to-transparent" />
 
       <div className="absolute top-3 right-3 md:top-5 md:right-5">
         <span className="inline-flex items-center gap-1.5 text-[10px] md:text-[11px] font-semibold tracking-[0.15em] uppercase text-white border border-white/40 px-2.5 py-1 md:px-3 md:py-1.5 rounded-full font-sans">
@@ -45,7 +54,7 @@ function CruiseCard({ cruise, isActive }: { cruise: Cruise; isActive: boolean })
   );
 }
 
-function CardSkeleton({ isActive }: { isActive: boolean }) {
+function CardSkeleton({ isActive }: CardSkeletonProps) {
   return (
     <div
       className={`aspect-[4/3] md:aspect-[16/10] bg-gray-200 animate-pulse transition-all duration-500 ${
@@ -104,12 +113,12 @@ export default function CruisesCarousel() {
           <div ref={emblaRef} className="overflow-hidden flex-1">
             <div className="flex">
               {loading
-                ? [...Array(4)].map((_, i) => (
+                ? [...Array(4)].map((_: unknown, i: number) => (
                     <div key={i} className={`flex-none w-[85vw] md:w-[60vw] max-w-[780px] relative ${i === 0 ? "z-10" : "z-0"}`}>
                       <CardSkeleton isActive={i === 0} />
                     </div>
                   ))
-                : cruises.map((cruise, index) => (
+                : cruises.map((cruise: Cruise, index: number) => (
                     <div
                       key={cruise.id}
                       className={`flex-none w-[85vw] md:w-[60vw] max-w-[780px] relative transition-all duration-500 ${

@@ -44,9 +44,8 @@ export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FI
   }), [allItems]);
 
   const results = useMemo<SearchItem[]>(() => {
-    let pool: SearchItem[] = query.trim()
-      ? fuse.search(query).map(r => r.item)
-      : [...allItems];
+    if (!query.trim()) return [];
+    let pool: SearchItem[] = fuse.search(query).map(r => r.item);
 
     if (filters.type !== "all") {
       pool = pool.filter(i => i._type === filters.type);

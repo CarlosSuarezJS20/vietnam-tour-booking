@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useTourSearch, DEFAULT_FILTERS } from "@/hooks/useTourSearch";
 import SearchFiltersBar from "./SearchFilters";
@@ -28,28 +28,16 @@ function SkeletonRow() {
 export default function SearchDropdown({ query, onClose }: Props) {
   const [filters, setFilters] = useState<SearchFilters>(DEFAULT_FILTERS);
   const { tours, cruises, total, loading } = useTourSearch(query, filters);
-  const panelRef = useRef<HTMLDivElement>(null);
 
   const updateFilters = (partial: Partial<SearchFilters>) =>
     setFilters(prev => ({ ...prev, ...partial }));
-
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [onClose]);
 
   const hasQuery   = query.trim().length >= 2;
   const hasResults = tours.length > 0 || cruises.length > 0;
 
   return (
     <div
-      ref={panelRef}
-      className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60]"
+      className="absolute top-full left-0 right-0 mt-0 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60]"
       style={{ maxHeight: 520 }}
     >
       <div className="overflow-y-auto" style={{ maxHeight: 520 }}>
