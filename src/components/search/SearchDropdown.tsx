@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useTourSearch, DEFAULT_FILTERS } from "@/hooks/useTourSearch";
-import SearchFiltersBar from "./SearchFilters";
 import SearchResultSection from "./SearchResultSection";
-import type { SearchFilters } from "@/types/graphql";
 
 interface Props {
   query:   string;
@@ -26,13 +23,9 @@ function SkeletonRow() {
 }
 
 export default function SearchDropdown({ query, onClose }: Props) {
-  const [filters, setFilters] = useState<SearchFilters>(DEFAULT_FILTERS);
-  const { tours, cruises, total, loading } = useTourSearch(query, filters);
+  const { tours, cruises, total, loading } = useTourSearch(query, DEFAULT_FILTERS);
 
-  const updateFilters = (partial: Partial<SearchFilters>) =>
-    setFilters(prev => ({ ...prev, ...partial }));
-
-  const hasQuery   = query.trim().length >= 2;
+  const isEmpty    = query.trim().length === 0;
   const hasResults = tours.length > 0 || cruises.length > 0;
 
   return (
@@ -40,61 +33,50 @@ export default function SearchDropdown({ query, onClose }: Props) {
       className="absolute top-full left-0 right-0 mt-0 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-[60]"
       style={{ maxHeight: 520 }}
     >
-      <div className="overflow-y-auto" style={{ maxHeight: 520 }}>
-        <SearchFiltersBar filters={filters} onChange={updateFilters} />
-
+      <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: isEmpty ? 520 : 472 }}>
         {loading && (
           <div className="divide-y divide-gray-50">
             {[1, 2, 3].map(n => <SkeletonRow key={n} />)}
           </div>
         )}
 
-        {!loading && !hasQuery && (
+        {!loading && isEmpty && (
           <div className="flex flex-col items-center justify-center py-10 text-center px-6">
             <FiSearch className="w-8 h-8 text-gray-200 mb-3" />
             <p className="text-sm text-gray-400 font-sans">
-              Start typing to search {" "}
+              Start typing to search{" "}
               <span className="font-semibold text-gray-600">tours and cruises</span>
             </p>
           </div>
         )}
 
-        {!loading && hasQuery && !hasResults && (
+        {!loading && !isEmpty && !hasResults && (
           <div className="flex flex-col items-center justify-center py-10 text-center px-6">
             <p className="text-sm text-gray-500 font-sans">
               No results for <span className="font-semibold text-gray-700">&ldquo;{query}&rdquo;</span>
             </p>
-            <button
-              onClick={() => setFilters(DEFAULT_FILTERS)}
-              className="mt-3 text-xs text-brand hover:underline font-sans"
-            >
-              Clear filters
-            </button>
           </div>
         )}
 
         {!loading && hasResults && (
           <div className="divide-y divide-gray-50">
-            {filters.type !== "cruise" && (
-              <SearchResultSection label="Tours" items={tours} onClose={onClose} />
-            )}
-            {filters.type !== "tour" && (
-              <SearchResultSection label="Cruises" items={cruises} onClose={onClose} />
-            )}
-          </div>
-        )}
-
-        {!loading && hasResults && hasQuery && (
-          <div className="border-t border-gray-100 px-4 py-3 text-center">
-            <button
-              onClick={onClose}
-              className="text-xs font-semibold text-brand hover:underline font-sans"
-            >
-              See all {total} result{total !== 1 ? "s" : ""} →
-            </button>
+            <SearchResultSection label="Tours" items={tours} onClose={onClose} />
+            <SearchResultSection label="Cruises" items={cruises} onClose={onClose} />
           </div>
         )}
       </div>
+
+      {!loading && !isEmpty && (
+        <div className="border-t border-gray-100 px-4 py-3 text-center bg-white">
+          <a
+            href="/tours"
+            onClick={onClose}
+            className="text-xs font-semibold text-brand hover:underline font-sans"
+          >
+            See all {total} result{total !== 1 ? "s" : ""} →
+          </a>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useGetTourCategoriesQuery } from "@/graphql/hooks";
 
 interface ToursDropdownProps {
@@ -37,13 +38,13 @@ export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
       )}
 
       {categories.map((cat) => (
-        <a
+        <Link
           key={cat.id}
-          href="#"
+          href={`/tours?categories=${cat.slug}`}
           className={`${itemClass} text-gray-600 hover:text-brand hover:bg-gray-50`}
         >
           {cat.label}
-        </a>
+        </Link>
       ))}
     </div>
   );

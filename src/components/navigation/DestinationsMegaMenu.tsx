@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { FiMapPin, FiArrowUpRight } from "react-icons/fi";
 import { useGetRegionsQuery } from "@/graphql/hooks";
 
@@ -76,22 +77,22 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
             </p>
             <div className="grid grid-cols-2 gap-x-8 gap-y-3 mb-8">
               {current.cities.map((city) => (
-                <a
+                <Link
                   key={city.id}
-                  href="#"
+                  href={`/tours?cities=${city.id}`}
                   className="text-sm text-gray-700 hover:text-brand font-medium flex items-center gap-2 transition-colors font-sans"
                 >
                   <FiMapPin className="w-3.5 h-3.5 text-gray-400" />
                   {city.name}
-                </a>
+                </Link>
               ))}
             </div>
-            <a
-              href="#"
+            <Link
+              href={`/tours?regions=${current.key}`}
               className="text-sm text-gray-500 hover:text-brand underline underline-offset-2 transition-colors font-sans"
             >
               Discover all {current.label} tours
-            </a>
+            </Link>
           </div>
         )}
       </div>
@@ -113,9 +114,12 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
               <h3 className="text-white text-2xl font-bold mb-3 leading-tight font-display">
                 {r.label}
               </h3>
-              <button className="flex items-center gap-1.5 text-white text-xs font-medium border border-white/60 px-3 py-1.5 hover:bg-white/10 transition-colors font-sans">
+              <Link
+                href={`/tours?regions=${r.key}`}
+                className="flex items-center gap-1.5 text-white text-xs font-medium border border-white/60 px-3 py-1.5 hover:bg-white/10 transition-colors font-sans"
+              >
                 Explore all regions <FiArrowUpRight className="w-3 h-3" />
-              </button>
+              </Link>
             </div>
           </div>
         ))}

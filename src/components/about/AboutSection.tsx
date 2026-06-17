@@ -70,8 +70,8 @@ export default function AboutSection() {
 
                 {aboutItems.map((item, i) => {
                   const rad = (item.angle * Math.PI) / 180;
-                  const x = RADIUS * Math.cos(rad);
-                  const y = RADIUS * Math.sin(rad);
+                  const x = parseFloat((RADIUS * Math.cos(rad)).toFixed(3));
+                  const y = parseFloat((RADIUS * Math.sin(rad)).toFixed(3));
                   const isActive = active === i;
 
                   return (

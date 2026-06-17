@@ -75,6 +75,79 @@ export interface SearchFilters {
   duration:   string;
 }
 
+export interface ListingTour {
+  __typename: "Tour";
+  id:          string;
+  title:       string;
+  imageUrl:    string;
+  duration:    string;
+  price:       string;
+  featuredTour: boolean;
+  cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
+  categories:  { id: string; slug: string; label: string }[];
+}
+
+export interface ListingCruise {
+  __typename: "Cruise";
+  id:          string;
+  title:       string;
+  imageUrl:    string;
+  duration:    string;
+  price:       string;
+  description: string;
+  sourceUrl:   string;
+}
+
+export type ListingProduct = ListingTour | ListingCruise;
+
+export interface ProductPageInfo {
+  hasNextPage:     boolean;
+  hasPreviousPage: boolean;
+  startCursor:     string | null;
+  endCursor:       string | null;
+}
+
+export interface ProductEdge {
+  cursor: string;
+  node:   ListingProduct;
+}
+
+export interface ProductConnection {
+  edges:    ProductEdge[];
+  pageInfo: ProductPageInfo;
+  total:    number;
+}
+
+export interface ListingFilters {
+  types:      string[];
+  categories: string[];
+  regions:    string[];
+  cities:     string[];
+  minPrice:   number | null;
+  maxPrice:   number | null;
+  deals:      boolean;
+}
+
+export interface GqlProductFilters {
+  types?:      string[];
+  categories?: string[];
+  regions?:    string[];
+  cities?:     string[];
+  minPrice?:   number;
+  maxPrice?:   number;
+  deals?:      boolean;
+}
+
+export const DEFAULT_LISTING_FILTERS: ListingFilters = {
+  types:      [],
+  categories: [],
+  regions:    [],
+  cities:     [],
+  minPrice:   null,
+  maxPrice:   null,
+  deals:      false,
+};
+
 export interface FeaturedTour {
   id:           string;
   title:        string;

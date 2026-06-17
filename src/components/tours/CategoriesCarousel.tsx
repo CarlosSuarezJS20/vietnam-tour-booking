@@ -2,6 +2,7 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetToursByCategoryQuery } from "@/graphql/hooks";
@@ -9,10 +10,10 @@ import type { CarouselTour } from "@/types/graphql";
 import PillTag from "@/components/ui/PillTag";
 
 const CATEGORIES = {
-  "Luxury":           { categoryId: "3"  },
-  "Beach Holidays":   { categoryId: "4"  },
-  "Honeymoon":        { categoryId: "5"  },
-  "Mature Travellers":{ categoryId: "2"  },
+  "Luxury":           { categoryId: "3", slug: "luxury"            },
+  "Beach Holidays":   { categoryId: "4", slug: "beach"             },
+  "Honeymoon":        { categoryId: "5", slug: "honeymoon"         },
+  "Mature Travellers":{ categoryId: "2", slug: "mature-travellers" },
 } as const;
 
 type CategoryKey = keyof typeof CATEGORIES;
@@ -127,9 +128,12 @@ export default function CategoriesCarousel() {
               </div>
 
               <div className="flex justify-end mt-6">
-                <button className="text-sm font-semibold text-gray-900 underline underline-offset-4 hover:text-brand transition-colors font-sans">
+                <Link
+                  href={`/tours?categories=${CATEGORIES[activeKey].slug}`}
+                  className="text-sm font-semibold text-gray-900 underline underline-offset-4 hover:text-brand transition-colors font-sans"
+                >
                   Find more tours
-                </button>
+                </Link>
               </div>
             </>
           )}

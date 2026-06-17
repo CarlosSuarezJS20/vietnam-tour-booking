@@ -65,3 +65,31 @@ export const ALL_CRUISES_QUERY = gql`
     }
   }
 `;
+
+export const SEARCH_PRODUCTS_QUERY = gql`
+  query SearchProducts($filters: ProductFilters, $first: Int, $after: String) {
+    searchProducts(filters: $filters, first: $first, after: $after) {
+      total
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        cursor
+        node {
+          __typename
+          ... on Tour {
+            id title imageUrl duration price featuredTour
+            cities     { id name region { id key label } }
+            categories { id slug label }
+          }
+          ... on Cruise {
+            id title imageUrl duration price description sourceUrl
+          }
+        }
+      }
+    }
+  }
+`;

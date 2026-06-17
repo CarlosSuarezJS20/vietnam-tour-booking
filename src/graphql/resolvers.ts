@@ -1,7 +1,119 @@
 import { tourCategories, regions, cities, tours, cruises } from "@/data/db";
+import { parsePriceValue } from "@/lib/tourParsers";
+
+const PAGE_SIZE = 12;
+
+function encodeCursor(id: string): string {
+  return Buffer.from(id).toString("base64");
+}
+
+function decodeCursor(cursor: string): string {
+  return Buffer.from(cursor, "base64").toString("utf8");
+}
 
 export const resolvers = {
+  Product: {
+    __resolveType(obj: { __typename: string }) {
+      return obj.__typename === "Tour" ? "Tour" : "Cruise";
+    },
+  },
+
   Query: {
+    searchProducts: (
+      _: unknown,
+      {
+        filters = {},
+        first = PAGE_SIZE,
+        after,
+      }: {
+        filters?: {
+          types?:      string[];
+          categories?: string[];
+          regions?:    string[];
+          cities?:     string[];
+          minPrice?:   number;
+          maxPrice?:   number;
+          deals?:      boolean;
+        };
+        first?: number;
+        after?: string | null;
+      }
+    ) => {
+      type RawTour   = (typeof tours)[0]   & { __typename: "Tour" };
+      type RawCruise = (typeof cruises)[0] & { __typename: "Cruise" };
+      type RawProduct = RawTour | RawCruise;
+
+      let pool: RawProduct[] = [
+        ...tours.map(t => ({ ...t, __typename: "Tour" as const })),
+        ...cruises.map(c => ({ ...c, __typename: "Cruise" as const })),
+      ];
+
+      if (filters.types?.length) {
+        pool = pool.filter(i => filters.types!.includes(i.__typename.toLowerCase()));
+      }
+
+      if (filters.categories?.length) {
+        const catIds = tourCategories
+          .filter(c => filters.categories!.includes(c.slug))
+          .map(c => c.id);
+        pool = pool.filter(i =>
+          i.__typename !== "Tour" ||
+          (i as RawTour).categoryIds.some(id => catIds.includes(id))
+        );
+      }
+
+      if (filters.regions?.length || filters.cities?.length) {
+        const regionIds = regions
+          .filter(r => (filters.regions ?? []).includes(r.key))
+          .map(r => r.id);
+        const cityIdsFromRegions = cities
+          .filter(c => regionIds.includes(c.regionId))
+          .map(c => c.id);
+        const allMatchingCityIds = new Set([
+          ...cityIdsFromRegions,
+          ...(filters.cities ?? []),
+        ]);
+        pool = pool.filter(i =>
+          i.__typename !== "Tour" ||
+          (i as RawTour).cityIds.some(id => allMatchingCityIds.has(id))
+        );
+      }
+
+      if (filters.minPrice != null) {
+        pool = pool.filter(i => parsePriceValue(i.price) >= filters.minPrice!);
+      }
+
+      if (filters.maxPrice != null) {
+        pool = pool.filter(i => parsePriceValue(i.price) <= filters.maxPrice!);
+      }
+
+      const total = pool.length;
+
+      let startIndex = 0;
+      if (after) {
+        const afterId = decodeCursor(after);
+        const pos = pool.findIndex(i => i.id === afterId);
+        startIndex = pos >= 0 ? pos + 1 : 0;
+      }
+
+      const slice = pool.slice(startIndex, startIndex + first);
+
+      const edges = slice.map(item => ({
+        cursor: encodeCursor(item.id),
+        node:   item,
+      }));
+
+      return {
+        edges,
+        pageInfo: {
+          hasNextPage:     startIndex + first < total,
+          hasPreviousPage: startIndex > 0,
+          startCursor:     edges[0]?.cursor ?? null,
+          endCursor:       edges[edges.length - 1]?.cursor ?? null,
+        },
+        total,
+      };
+    },
     tourCategories: () => tourCategories,
     regions:        () => regions,
     region:         (_: unknown, { key }: { key: string }) => regions.find(r => r.key === key),

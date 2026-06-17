@@ -1,0 +1,33 @@
+input ProductFilters {
+  types:      [String!]
+  categories: [String!]
+  regions:    [String!]
+  cities:     [ID!]
+  minPrice:   Int
+  maxPrice:   Int
+  deals:      Boolean
+}
+
+union Product = Tour | Cruise
+
+type ProductEdge {
+  cursor: String!
+  node:   Product!
+}
+
+type PageInfo {
+  hasNextPage:     Boolean!
+  hasPreviousPage: Boolean!
+  startCursor:     String
+  endCursor:       String
+}
+
+type ProductConnection {
+  edges:    [ProductEdge!]!
+  pageInfo: PageInfo!
+  total:    Int!
+}
+
+extend type Query {
+  searchProducts(filters: ProductFilters, first: Int, after: String): ProductConnection!
+}
