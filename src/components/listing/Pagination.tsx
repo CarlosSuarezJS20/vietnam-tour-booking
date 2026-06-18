@@ -8,7 +8,7 @@ interface Props {
   onPage:     (p: number) => void;
 }
 
-function getPageNumbers(current: number, total: number): (number | "...")[] {
+const getPageNumbers = (current: number, total: number): (number | "...")[] => {
   if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
   const pages: (number | "...")[] = [1];
@@ -25,7 +25,7 @@ function getPageNumbers(current: number, total: number): (number | "...")[] {
   return pages;
 }
 
-export default function Pagination({ page, totalPages, onPage }: Props) {
+const Pagination = ({ page, totalPages, onPage }: Props) => {
   if (totalPages <= 1) return null;
 
   const numbers = getPageNumbers(page, totalPages);
@@ -74,3 +74,5 @@ export default function Pagination({ page, totalPages, onPage }: Props) {
     </div>
   );
 }
+
+export default Pagination;

@@ -11,12 +11,12 @@ interface Props {
   onToggleCity:    (id: string) => void;
 }
 
-export default function DestinationsFilter({
+const DestinationsFilter = ({
   selectedRegions,
   selectedCities,
   onToggleRegion,
   onToggleCity,
-}: Props) {
+}: Props) => {
   const { data: regions = [], loading } = useGetRegionsQuery();
   const [expandedRegions, setExpandedRegions] = useState<Set<string>>(new Set());
 
@@ -101,3 +101,5 @@ export default function DestinationsFilter({
     </div>
   );
 }
+
+export default DestinationsFilter;

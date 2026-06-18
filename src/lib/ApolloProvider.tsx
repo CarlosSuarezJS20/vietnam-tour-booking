@@ -4,7 +4,7 @@ import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { ApolloProvider } from "@apollo/client/react";
 import { useMemo } from "react";
 
-function makeClient() {
+const makeClient = () => {
   return new ApolloClient({
     link: new HttpLink({ uri: "/api/graphql" }),
     cache: new InMemoryCache({
@@ -15,7 +15,9 @@ function makeClient() {
   });
 }
 
-export default function ApolloClientProvider({ children }: { children: React.ReactNode }) {
+const ApolloClientProvider = ({ children }: { children: React.ReactNode }) => {
   const client = useMemo(() => makeClient(), []);
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }
+
+export default ApolloClientProvider;

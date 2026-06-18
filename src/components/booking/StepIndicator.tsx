@@ -3,7 +3,7 @@ import { FiCheck } from "react-icons/fi";
 interface Step { label: string }
 interface Props { step: number; steps: Step[] }
 
-export default function StepIndicator({ step, steps }: Props) {
+const StepIndicator = ({ step, steps }: Props) => {
   return (
     <div className="flex items-start">
       {steps.map((s, i) => {
@@ -41,3 +41,5 @@ export default function StepIndicator({ step, steps }: Props) {
     </div>
   );
 }
+
+export default StepIndicator;

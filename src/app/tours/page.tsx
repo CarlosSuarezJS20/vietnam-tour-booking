@@ -6,7 +6,7 @@ import ResultsGrid from "@/components/listing/ResultsGrid";
 import { useListingFilter } from "@/hooks/useListingFilter";
 import { useProductSearch } from "@/hooks/useProductSearch";
 
-function ToursListing() {
+const ToursListing = () => {
   const { filters, page, activeCount, setFilter, toggleArrayFilter, setPage, clearAll } =
     useListingFilter();
 
@@ -41,10 +41,12 @@ function ToursListing() {
   );
 }
 
-export default function ToursPage() {
+const ToursPage = () => {
   return (
     <Suspense>
       <ToursListing />
     </Suspense>
   );
 }
+
+export default ToursPage;

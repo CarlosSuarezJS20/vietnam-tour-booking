@@ -1,0 +1,34 @@
+type CartItem {
+  uid:         ID!
+  product:     Product!
+  productType: String!
+  date:        String!
+  time:        String!
+  partySize:   Int!
+  price:       Int!
+}
+
+type Cart {
+  items:      [CartItem!]!
+  itemCount:  Int!
+  totalPrice: Int!
+}
+
+input CartItemInput {
+  productId:   String!
+  productType: String!
+  date:        String!
+  time:        String!
+  partySize:   Int!
+  price:       Int!
+}
+
+extend type Query {
+  cart: Cart!
+}
+
+type Mutation {
+  addToCart(input: CartItemInput!): Cart!
+  removeFromCart(uid: ID!):        Cart!
+  clearCart:                       Cart!
+}

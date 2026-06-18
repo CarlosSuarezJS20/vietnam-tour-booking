@@ -1,6 +1,25 @@
 import { tourCategories, regions, cities, tours, cruises } from "@/data/db";
 import { parsePriceValue } from "@/lib/tourParsers";
 
+interface CartItem {
+  uid:         string;
+  productId:   string;
+  productType: string;
+  date:        string;
+  time:        string;
+  partySize:   number;
+  price:       number;
+}
+
+// In-memory cart — dummy data until a real backend is wired up
+let cartItems: CartItem[] = [];
+
+const buildCart = () => ({
+  items:      cartItems,
+  itemCount:  cartItems.length,
+  totalPrice: cartItems.reduce((sum, i) => sum + i.price, 0),
+});
+
 const PAGE_SIZE = 12;
 
 function encodeCursor(id: string): string {
@@ -87,6 +106,10 @@ export const resolvers = {
         pool = pool.filter(i => parsePriceValue(i.price) <= filters.maxPrice!);
       }
 
+      if (filters.deals) {
+        pool = pool.filter(i => (i as { onSale: boolean }).onSale === true);
+      }
+
       const total = pool.length;
 
       let startIndex = 0;
@@ -126,7 +149,37 @@ export const resolvers = {
     cruises:        () => cruises,
     allTours:       () => tours,
     allCruises:     () => cruises,
+    tour:           (_: unknown, { id }: { id: string }) => tours.find(t => t.id === id) ?? null,
+    cruise:         (_: unknown, { id }: { id: string }) => cruises.find(c => c.id === id) ?? null,
+    cart:           () => buildCart(),
   },
+  CartItem: {
+    product: (item: CartItem) => {
+      if (item.productType === "cruise") {
+        const cruise = cruises.find(c => c.id === item.productId);
+        return cruise ? { ...cruise, __typename: "Cruise" } : null;
+      }
+      const tour = tours.find(t => t.id === item.productId);
+      return tour ? { ...tour, __typename: "Tour" } : null;
+    },
+  },
+
+  Mutation: {
+    addToCart: (_: unknown, { input }: { input: Omit<CartItem, "uid"> }) => {
+      const item: CartItem = { ...input, uid: `${input.productId}-${Date.now()}` };
+      cartItems = [...cartItems, item];
+      return buildCart();
+    },
+    removeFromCart: (_: unknown, { uid }: { uid: string }) => {
+      cartItems = cartItems.filter(i => i.uid !== uid);
+      return buildCart();
+    },
+    clearCart: () => {
+      cartItems = [];
+      return buildCart();
+    },
+  },
+
   Tour: {
     cities:     (tour: { cityIds: string[] }) => cities.filter(c => tour.cityIds.includes(c.id)),
     categories: (tour: { categoryIds: string[] }) => tourCategories.filter(c => tour.categoryIds.includes(c.id)),

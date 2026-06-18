@@ -18,7 +18,7 @@ const CATEGORIES = {
 
 type CategoryKey = keyof typeof CATEGORIES;
 
-function TourCard({ tour }: { tour: CarouselTour }) {
+const TourCard = ({ tour }: { tour: CarouselTour }) => {
   const [, priceValue] = tour.price.split(": ");
 
   return (
@@ -43,7 +43,7 @@ function TourCard({ tour }: { tour: CarouselTour }) {
   );
 }
 
-function CardSkeleton() {
+const CardSkeleton = () => {
   return (
     <div className="flex-none w-[260px] mr-5">
       <div className="aspect-[3/4] bg-gray-200 animate-pulse rounded" />
@@ -53,7 +53,7 @@ function CardSkeleton() {
   );
 }
 
-export default function CategoriesCarousel() {
+const CategoriesCarousel = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" });
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -143,3 +143,5 @@ export default function CategoriesCarousel() {
     </section>
   );
 }
+
+export default CategoriesCarousel;

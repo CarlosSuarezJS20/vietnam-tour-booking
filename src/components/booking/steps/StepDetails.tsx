@@ -5,7 +5,7 @@ interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void }
 const inputCls = "w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 text-sm font-sans placeholder-gray-300 focus:outline-none focus:border-brand transition-colors";
 const labelCls = "block text-gray-500 text-xs uppercase tracking-wider font-sans mb-2";
 
-export default function StepDetails({ formData, onChange }: Props) {
+const StepDetails = ({ formData, onChange }: Props) => {
   return (
     <div>
       <h3 className="text-gray-900 text-xl font-semibold font-sans mb-1">Your details</h3>
@@ -64,3 +64,5 @@ export default function StepDetails({ formData, onChange }: Props) {
     </div>
   );
 }
+
+export default StepDetails;

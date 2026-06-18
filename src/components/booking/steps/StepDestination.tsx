@@ -4,7 +4,7 @@ import type { FormData } from "../BookingForm";
 
 interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void }
 
-export default function StepDestination({ formData, onChange }: Props) {
+const StepDestination = ({ formData, onChange }: Props) => {
   const { data: regions = [], loading } = useGetRegionsQuery();
   const [activeRegion, setActiveRegion] = useState(formData.region || regions[0]?.key || "");
 
@@ -75,3 +75,5 @@ export default function StepDestination({ formData, onChange }: Props) {
     </div>
   );
 }
+
+export default StepDestination;

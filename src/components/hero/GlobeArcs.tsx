@@ -1,4 +1,4 @@
-export default function GlobeArcs() {
+const GlobeArcs = () => {
   return (
     <svg
       className="absolute inset-0 w-full h-full pointer-events-none"
@@ -14,3 +14,5 @@ export default function GlobeArcs() {
     </svg>
   );
 }
+
+export default GlobeArcs;

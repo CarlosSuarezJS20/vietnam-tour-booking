@@ -14,7 +14,7 @@ interface Props {
   onClear:    () => void;
 }
 
-export default function ResultsGrid({
+const ResultsGrid = ({
   items,
   total,
   totalPages,
@@ -22,7 +22,7 @@ export default function ResultsGrid({
   loading,
   onPage,
   onClear,
-}: Props) {
+}: Props) => {
   return (
     <div className="flex-1 px-6 py-8">
       {/* Count */}
@@ -66,3 +66,5 @@ export default function ResultsGrid({
     </div>
   );
 }
+
+export default ResultsGrid;

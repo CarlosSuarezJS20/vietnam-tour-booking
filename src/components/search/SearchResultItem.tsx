@@ -8,7 +8,7 @@ interface Props {
   onClick?: () => void;
 }
 
-export default function SearchResultItem({ item, onClick }: Props) {
+const SearchResultItem = ({ item, onClick }: Props) => {
   return (
     <button
       onClick={onClick}
@@ -51,3 +51,5 @@ export default function SearchResultItem({ item, onClick }: Props) {
     </button>
   );
 }
+
+export default SearchResultItem;

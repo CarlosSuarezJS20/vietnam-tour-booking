@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "react-day-picker/style.css";
 
 :root {
   --background: #ffffff;
@@ -36,4 +37,56 @@ body {
 
 .animate-fadeIn {
   animation: fadeIn 0.35s ease-out;
+}
+
+/* react-day-picker overrides */
+.rdp-root {
+  --rdp-accent-color: #111827;
+  --rdp-today-color: #DC143C;
+  --rdp-selected-border: 2px solid #111827;
+  --rdp-day_button-border-radius: 4px;
+  --rdp-day-height: 34px;
+  --rdp-day-width: 34px;
+  --rdp-day_button-height: 32px;
+  --rdp-day_button-width: 32px;
+  --rdp-disabled-opacity: 0.3;
+  --rdp-nav_button-width: 2rem;
+  --rdp-nav_button-height: 2rem;
+  width: 100%;
+}
+
+.rdp-months {
+  max-width: 100%;
+  width: 100%;
+}
+
+.rdp-month {
+  width: 100%;
+}
+
+.rdp-month_grid {
+  width: 100%;
+}
+
+.rdp-selected .rdp-day_button {
+  background-color: #111827;
+  color: white;
+}
+
+.rdp-caption_label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: var(--font-inter);
+}
+
+.rdp-weekday {
+  font-size: 0.625rem;
+  font-weight: 600;
+  font-family: var(--font-inter);
+}
+
+.rdp-day_button {
+  font-size: 0.75rem;
+  font-family: var(--font-inter);
+  color: #374151;
 }

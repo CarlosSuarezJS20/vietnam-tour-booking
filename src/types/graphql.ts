@@ -83,6 +83,8 @@ export interface ListingTour {
   duration:    string;
   price:       string;
   featuredTour: boolean;
+  onSale:      boolean;
+  saleDiscountPercentage: number | null;
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
 }
@@ -96,6 +98,8 @@ export interface ListingCruise {
   price:       string;
   description: string;
   sourceUrl:   string;
+  onSale:      boolean;
+  saleDiscountPercentage: number | null;
 }
 
 export type ListingProduct = ListingTour | ListingCruise;
@@ -147,6 +151,63 @@ export const DEFAULT_LISTING_FILTERS: ListingFilters = {
   maxPrice:   null,
   deals:      false,
 };
+
+export interface GqlCartItem {
+  uid:         string;
+  productType: string;
+  date:        string;
+  time:        string;
+  partySize:   number;
+  price:       number;
+  product:     ListingTour | ListingCruise;
+}
+
+export interface GqlCart {
+  items:      GqlCartItem[];
+  itemCount:  number;
+  totalPrice: number;
+}
+
+export interface CartItemInput {
+  productId:   string;
+  productType: string;
+  date:        string;
+  time:        string;
+  partySize:   number;
+  price:       number;
+}
+
+export interface ProductDetailTour {
+  __typename?: "Tour";
+  id:          string;
+  title:       string;
+  description: string;
+  itinerary:   string;
+  imageUrl:    string;
+  duration:    string;
+  price:       string;
+  featuredTour: boolean;
+  onSale:      boolean;
+  saleDiscountPercentage: number | null;
+  cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
+  categories:  { id: string; slug: string; label: string }[];
+}
+
+export interface ProductDetailCruise {
+  __typename?: "Cruise";
+  id:          string;
+  title:       string;
+  description: string;
+  itinerary:   string;
+  imageUrl:    string;
+  duration:    string;
+  price:       string;
+  sourceUrl:   string;
+  onSale:      boolean;
+  saleDiscountPercentage: number | null;
+}
+
+export type ProductDetail = ProductDetailTour | ProductDetailCruise;
 
 export interface FeaturedTour {
   id:           string;

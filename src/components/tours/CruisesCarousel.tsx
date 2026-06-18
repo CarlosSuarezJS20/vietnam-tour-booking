@@ -16,7 +16,7 @@ interface CardSkeletonProps {
   isActive: boolean;
 }
 
-function CruiseCard({ cruise, isActive }: CruiseCardProps) {
+const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
   const [, priceValue] = cruise.price.split(": ");
 
   return (
@@ -54,7 +54,7 @@ function CruiseCard({ cruise, isActive }: CruiseCardProps) {
   );
 }
 
-function CardSkeleton({ isActive }: CardSkeletonProps) {
+const CardSkeleton = ({ isActive }: CardSkeletonProps) => {
   return (
     <div
       className={`aspect-[4/3] md:aspect-[16/10] bg-gray-200 animate-pulse transition-all duration-500 ${
@@ -64,7 +64,7 @@ function CardSkeleton({ isActive }: CardSkeletonProps) {
   );
 }
 
-export default function CruisesCarousel() {
+const CruisesCarousel = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
@@ -140,3 +140,5 @@ export default function CruisesCarousel() {
     </section>
   );
 }
+
+export default CruisesCarousel;

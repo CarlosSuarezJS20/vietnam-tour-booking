@@ -11,7 +11,7 @@ interface Props {
   onMouseLeave: () => void;
 }
 
-export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Props) {
+const DestinationsMegaMenu = ({ onMouseEnter, onMouseLeave }: Props) => {
   const { data: regions = [], loading, error } = useGetRegionsQuery();
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
@@ -127,3 +127,5 @@ export default function DestinationsMegaMenu({ onMouseEnter, onMouseLeave }: Pro
     </div>
   );
 }
+
+export default DestinationsMegaMenu;

@@ -9,7 +9,7 @@ import AboutSection from "@/components/about/AboutSection";
 import BookingForm from "@/components/booking/BookingForm";
 import { useGetFeaturedTourQuery } from "@/graphql/hooks";
 
-function FeaturedTourSection() {
+const FeaturedTourSection = () => {
   const { data: tour, loading, error } = useGetFeaturedTourQuery();
 
   if (loading) {
@@ -27,7 +27,7 @@ function FeaturedTourSection() {
   return <BestSellingTourCard tour={tour} />;
 }
 
-export default function Home() {
+const Home = () => {
   return (
     <main>
       <div className="relative h-screen w-full overflow-hidden">
@@ -56,3 +56,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;

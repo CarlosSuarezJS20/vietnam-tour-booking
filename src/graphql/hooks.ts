@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@apollo/client/react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import {
   TOUR_CATEGORIES_QUERY,
   REGIONS_QUERY,
@@ -11,8 +11,13 @@ import {
   ALL_TOURS_QUERY,
   ALL_CRUISES_QUERY,
   SEARCH_PRODUCTS_QUERY,
+  GET_TOUR_BY_ID_QUERY,
+  GET_CRUISE_BY_ID_QUERY,
+  GET_CART_QUERY,
+  ADD_TO_CART_MUTATION,
+  REMOVE_FROM_CART_MUTATION,
 } from "./queries";
-import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise, ProductConnection, GqlProductFilters } from "@/types/graphql";
+import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise, ProductConnection, GqlProductFilters, ProductDetailTour, ProductDetailCruise, GqlCart, CartItemInput } from "@/types/graphql";
 
 export function useGetTourCategoriesQuery() {
   const { data, loading, error } = useQuery<{ tourCategories: TourCategory[] }>(
@@ -67,6 +72,43 @@ export function useGetAllCruisesQuery() {
   );
   return { data: data?.allCruises ?? [], loading, error };
 }
+
+export const useGetCartQuery = () => {
+  const { data, loading, error } = useQuery<{ cart: GqlCart }>(GET_CART_QUERY);
+  return { data: data?.cart, loading, error };
+};
+
+export const useAddToCartMutation = () => {
+  const [mutate, { loading }] = useMutation<{ addToCart: GqlCart }, { input: CartItemInput }>(
+    ADD_TO_CART_MUTATION,
+    { refetchQueries: [{ query: GET_CART_QUERY }] }
+  );
+  return { addToCart: (input: CartItemInput) => mutate({ variables: { input } }), loading };
+};
+
+export const useRemoveFromCartMutation = () => {
+  const [mutate, { loading }] = useMutation<{ removeFromCart: GqlCart }, { uid: string }>(
+    REMOVE_FROM_CART_MUTATION,
+    { refetchQueries: [{ query: GET_CART_QUERY }] }
+  );
+  return { removeFromCart: (uid: string) => mutate({ variables: { uid } }), loading };
+};
+
+export const useGetTourByIdQuery = (id: string) => {
+  const { data, loading, error } = useQuery<{ tour: ProductDetailTour }>(
+    GET_TOUR_BY_ID_QUERY,
+    { variables: { id } }
+  );
+  return { data: data?.tour ?? null, loading, error };
+};
+
+export const useGetCruiseByIdQuery = (id: string) => {
+  const { data, loading, error } = useQuery<{ cruise: ProductDetailCruise }>(
+    GET_CRUISE_BY_ID_QUERY,
+    { variables: { id } }
+  );
+  return { data: data?.cruise ?? null, loading, error };
+};
 
 export function useSearchProductsQuery(variables: {
   filters?: GqlProductFilters;

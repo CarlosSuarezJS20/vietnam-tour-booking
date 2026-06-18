@@ -10,7 +10,7 @@ interface Props {
   badge?:       number;
 }
 
-export default function FilterGroup({ title, children, defaultOpen = false, badge }: Props) {
+const FilterGroup = ({ title, children, defaultOpen = false, badge }: Props) => {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
@@ -40,3 +40,5 @@ export default function FilterGroup({ title, children, defaultOpen = false, badg
     </div>
   );
 }
+
+export default FilterGroup;

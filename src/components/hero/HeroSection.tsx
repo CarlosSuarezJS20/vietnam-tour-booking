@@ -1,7 +1,7 @@
 import Image from "next/image";
 import GlobeArcs from "./GlobeArcs";
 
-export default function HeroSection({ children }: { children?: React.ReactNode }) {
+const HeroSection = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
       <Image
@@ -37,3 +37,5 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
     </>
   );
 }
+
+export default HeroSection;

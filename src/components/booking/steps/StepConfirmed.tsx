@@ -5,7 +5,7 @@ interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void; 
 
 const CONTACT_LABELS = { phone: "Phone Call", email: "Email", whatsapp: "WhatsApp", "": "—" };
 
-export default function StepConfirmed({ formData, onRestart }: Props) {
+const StepConfirmed = ({ formData, onRestart }: Props) => {
   const rows = [
     { label: "Tour type",     value: formData.tourType || "—" },
     { label: "Region",        value: formData.region || "—" },
@@ -49,3 +49,5 @@ export default function StepConfirmed({ formData, onRestart }: Props) {
     </div>
   );
 }
+
+export default StepConfirmed;

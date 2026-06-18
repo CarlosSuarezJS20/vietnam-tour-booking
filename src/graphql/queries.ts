@@ -66,6 +66,60 @@ export const ALL_CRUISES_QUERY = gql`
   }
 `;
 
+const CART_FIELDS = gql`
+  fragment CartFields on Cart {
+    itemCount
+    totalPrice
+    items {
+      uid productType date time partySize price
+      product {
+        __typename
+        ... on Tour   { id title imageUrl duration price cities { name } }
+        ... on Cruise { id title imageUrl duration price }
+      }
+    }
+  }
+`;
+
+export const GET_CART_QUERY = gql`
+  ${CART_FIELDS}
+  query GetCart {
+    cart { ...CartFields }
+  }
+`;
+
+export const ADD_TO_CART_MUTATION = gql`
+  ${CART_FIELDS}
+  mutation AddToCart($input: CartItemInput!) {
+    addToCart(input: $input) { ...CartFields }
+  }
+`;
+
+export const REMOVE_FROM_CART_MUTATION = gql`
+  ${CART_FIELDS}
+  mutation RemoveFromCart($uid: ID!) {
+    removeFromCart(uid: $uid) { ...CartFields }
+  }
+`;
+
+export const GET_TOUR_BY_ID_QUERY = gql`
+  query GetTourById($id: ID!) {
+    tour(id: $id) {
+      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage
+      cities     { id name region { id key label } }
+      categories { id slug label }
+    }
+  }
+`;
+
+export const GET_CRUISE_BY_ID_QUERY = gql`
+  query GetCruiseById($id: ID!) {
+    cruise(id: $id) {
+      id title description itinerary imageUrl duration price sourceUrl onSale saleDiscountPercentage
+    }
+  }
+`;
+
 export const SEARCH_PRODUCTS_QUERY = gql`
   query SearchProducts($filters: ProductFilters, $first: Int, $after: String) {
     searchProducts(filters: $filters, first: $first, after: $after) {
@@ -81,12 +135,12 @@ export const SEARCH_PRODUCTS_QUERY = gql`
         node {
           __typename
           ... on Tour {
-            id title imageUrl duration price featuredTour
+            id title imageUrl duration price featuredTour onSale saleDiscountPercentage
             cities     { id name region { id key label } }
             categories { id slug label }
           }
           ... on Cruise {
-            id title imageUrl duration price description sourceUrl
+            id title imageUrl duration price description sourceUrl onSale saleDiscountPercentage
           }
         }
       }

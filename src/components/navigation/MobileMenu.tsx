@@ -10,7 +10,7 @@ interface MobileMenuProps {
   onClose: () => void;
 }
 
-export default function MobileMenu({ open, onClose }: MobileMenuProps) {
+const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
   const [toursOpen, setToursOpen]     = useState(false);
   const [destOpen, setDestOpen]       = useState(false);
   const [openRegions, setOpenRegions] = useState<Record<string, boolean>>({});
@@ -187,3 +187,5 @@ export default function MobileMenu({ open, onClose }: MobileMenuProps) {
     </div>
   );
 }
+
+export default MobileMenu;

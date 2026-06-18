@@ -9,7 +9,7 @@ interface Props {
   onClose: () => void;
 }
 
-function SkeletonRow() {
+const SkeletonRow = () => {
   return (
     <div className="flex items-center gap-3 px-4 py-3 animate-pulse">
       <div className="w-16 h-16 rounded-lg bg-gray-100 flex-shrink-0" />
@@ -22,7 +22,7 @@ function SkeletonRow() {
   );
 }
 
-export default function SearchDropdown({ query, onClose }: Props) {
+const SearchDropdown = ({ query, onClose }: Props) => {
   const { tours, cruises, total, loading } = useTourSearch(query, DEFAULT_FILTERS);
 
   const isEmpty    = query.trim().length === 0;
@@ -80,3 +80,5 @@ export default function SearchDropdown({ query, onClose }: Props) {
     </div>
   );
 }
+
+export default SearchDropdown;

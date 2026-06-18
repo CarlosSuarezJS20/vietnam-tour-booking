@@ -3,17 +3,18 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiChevronDown, FiSearch, FiArrowUpRight, FiShoppingCart, FiX } from "react-icons/fi";
+import { FiChevronDown, FiSearch, FiArrowUpRight, FiX } from "react-icons/fi";
 import { navItems } from "@/data/navigation";
 import ToursDropdown from "@/components/navigation/ToursDropdown";
 import DestinationsMegaMenu from "@/components/navigation/DestinationsMegaMenu";
 import MobileMenu from "@/components/navigation/MobileMenu";
 import IconButton from "@/components/ui/IconButton";
+import CartIconButton from "@/components/cart/CartIconButton";
 import PillButton from "@/components/ui/PillButton";
 import SearchDropdown from "@/components/search/SearchDropdown";
 import { useStickyNav } from "@/hooks/useStickyNav";
 
-export default function Navbar() {
+const Navbar = () => {
   const [toursOpen, setToursOpen] = useState(false);
   const [destinationsOpen, setDestinationsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -215,9 +216,7 @@ export default function Navbar() {
               <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:scale-110" />
             </IconButton>
           </div>
-          <IconButton dark={pastHero}>
-            <FiShoppingCart className="w-5 h-5" />
-          </IconButton>
+          <CartIconButton dark={pastHero} />
           <PillButton variant="brand">My Bookings</PillButton>
         </div>
 
@@ -226,9 +225,7 @@ export default function Navbar() {
           <IconButton hoverEffect={false} dark={pastHero} onClick={openSearch}>
             <FiSearch className="w-5 h-5" />
           </IconButton>
-          <IconButton hoverEffect={false} dark={pastHero}>
-            <FiShoppingCart className="w-5 h-5" />
-          </IconButton>
+          <CartIconButton dark={pastHero} hoverEffect={false} />
           <PillButton variant="brand">My Bookings</PillButton>
           <PillButton variant="white" onClick={() => setMobileOpen(true)}>Menu</PillButton>
         </div>
@@ -265,3 +262,5 @@ export default function Navbar() {
     </>
   );
 }
+
+export default Navbar;

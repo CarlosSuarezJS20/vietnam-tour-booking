@@ -45,7 +45,7 @@ const INITIAL: FormData = {
   contactPreference: "",
 };
 
-export default function BookingForm() {
+const BookingForm = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(INITIAL);
 
@@ -112,3 +112,5 @@ export default function BookingForm() {
     </section>
   );
 }
+
+export default BookingForm;

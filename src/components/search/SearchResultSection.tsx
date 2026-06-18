@@ -7,7 +7,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function SearchResultSection({ label, items, onClose }: Props) {
+const SearchResultSection = ({ label, items, onClose }: Props) => {
   if (items.length === 0) return null;
 
   return (
@@ -24,3 +24,5 @@ export default function SearchResultSection({ label, items, onClose }: Props) {
     </div>
   );
 }
+
+export default SearchResultSection;

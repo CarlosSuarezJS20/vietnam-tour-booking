@@ -8,7 +8,7 @@ const socialIcons = {
   YouTube: FiYoutube,
 };
 
-export default function Footer() {
+const Footer = () => {
   return (
     <footer className="bg-gray-900">
 
@@ -127,3 +127,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default Footer;

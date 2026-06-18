@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { footerAwards } from "@/data/footer";
 
-export default function Credentials() {
+const Credentials = () => {
   return (
     <section className="py-12 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-20 flex flex-col md:flex-row items-center gap-12 md:gap-20">
@@ -43,3 +43,5 @@ export default function Credentials() {
     </section>
   );
 }
+
+export default Credentials;

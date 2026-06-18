@@ -19,13 +19,13 @@ interface Props {
   clearAll:          () => void;
 }
 
-export default function FilterSidebar({
+const FilterSidebar = ({
   filters,
   activeCount,
   toggleArrayFilter,
   setFilter,
   clearAll,
-}: Props) {
+}: Props) => {
   const { data: categories = [] } = useGetTourCategoriesQuery();
 
   return (
@@ -133,3 +133,5 @@ export default function FilterSidebar({
     </aside>
   );
 }
+
+export default FilterSidebar;

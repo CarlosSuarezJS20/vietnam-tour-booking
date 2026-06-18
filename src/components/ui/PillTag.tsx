@@ -7,7 +7,7 @@ interface PillTagProps {
   className?: string;
 }
 
-export default function PillTag({ children, variant = "brand", size = "sm", className = "" }: PillTagProps) {
+const PillTag = ({ children, variant = "brand", size = "sm", className = "" }: PillTagProps) => {
   const base = "inline-flex items-center gap-1.5 font-semibold rounded-full font-sans whitespace-nowrap";
   const sizes = {
     sm: "text-xs px-2.5 py-0.5",
@@ -24,3 +24,5 @@ export default function PillTag({ children, variant = "brand", size = "sm", clas
     </span>
   );
 }
+
+export default PillTag;

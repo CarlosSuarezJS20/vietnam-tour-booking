@@ -41,4 +41,16 @@ test.describe('Homepage', () => {
     // Wait for GraphQL data — skeleton should be replaced by real tour cards
     await expect(page.locator('p.text-base.font-medium').first()).toBeVisible({ timeout: 15_000 });
   });
+
+  test('credentials section is present on the page', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Our Credentials' })).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('booking form section is present on the page', async ({ page }) => {
+    await expect(page.getByRole('heading', { name: 'Plan Your Trip' })).toBeVisible();
+  });
+
+  test('footer is present at the bottom of the page', async ({ page }) => {
+    await expect(page.locator('footer')).toBeVisible();
+  });
 });

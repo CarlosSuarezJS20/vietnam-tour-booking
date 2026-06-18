@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FiArrowLeft, FiShoppingCart } from "react-icons/fi";
-import IconButton from "@/components/ui/IconButton";
+import { FiArrowLeft } from "react-icons/fi";
+import CartIconButton from "@/components/cart/CartIconButton";
 import PillButton from "@/components/ui/PillButton";
 
-export default function ToursLayout({ children }: { children: React.ReactNode }) {
+const ToursLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-10 py-4">
@@ -27,9 +27,7 @@ export default function ToursLayout({ children }: { children: React.ReactNode })
         </Link>
 
         <div className="flex items-center gap-3">
-          <IconButton dark>
-            <FiShoppingCart className="w-5 h-5" />
-          </IconButton>
+          <CartIconButton dark />
           <PillButton variant="brand">My Bookings</PillButton>
         </div>
       </header>
@@ -40,3 +38,5 @@ export default function ToursLayout({ children }: { children: React.ReactNode })
     </>
   );
 }
+
+export default ToursLayout;

@@ -8,7 +8,7 @@ interface Props {
   tour: FeaturedTour;
 }
 
-export default function BestSellingTourCard({ tour }: Props) {
+const BestSellingTourCard = ({ tour }: Props) => {
   const [, priceValue] = tour.price.split(": ");
   const areas = [...new Set(tour.cities.map((c) => c.region.label))];
 
@@ -20,7 +20,7 @@ export default function BestSellingTourCard({ tour }: Props) {
       <hr className="border-white/20 my-3" />
 
       <p className="text-white/75 text-sm font-sans">
-        {tour.duration} — Private tour — Guaranteed departure
+        {tour.title}
       </p>
 
       <hr className="border-white/20 my-3" />
@@ -64,3 +64,5 @@ export default function BestSellingTourCard({ tour }: Props) {
     </div>
   );
 }
+
+export default BestSellingTourCard;

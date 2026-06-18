@@ -7,7 +7,7 @@ import { aboutItems } from "@/data/about";
 const RADIUS = 130;
 const SIZE = 340;
 
-export default function AboutSection() {
+const AboutSection = () => {
   const [active, setActive] = useState(0);
 
   return (
@@ -117,3 +117,5 @@ export default function AboutSection() {
     </section>
   );
 }
+
+export default AboutSection;

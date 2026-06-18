@@ -22,7 +22,7 @@ const DURATION_OPTIONS = [
   { value: "15+",      label: "15+ days"   },
 ];
 
-export default function SearchFiltersBar({ filters, onChange }: Props) {
+const SearchFiltersBar = ({ filters, onChange }: Props) => {
   const { data: categories } = useGetTourCategoriesQuery();
   const { data: regions }    = useGetRegionsQuery();
 
@@ -102,3 +102,5 @@ export default function SearchFiltersBar({ filters, onChange }: Props) {
     </div>
   );
 }
+
+export default SearchFiltersBar;

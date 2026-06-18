@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { FiMapPin } from "react-icons/fi";
 import type { ListingProduct } from "@/types/graphql";
 
@@ -8,7 +9,7 @@ interface Props {
   product: ListingProduct;
 }
 
-function SkeletonCard() {
+const SkeletonCard = () => {
   return (
     <div className="bg-white border border-gray-100 overflow-hidden animate-pulse">
       <div className="aspect-video bg-gray-200" />
@@ -21,9 +22,7 @@ function SkeletonCard() {
   );
 }
 
-ProductCard.Skeleton = SkeletonCard;
-
-export default function ProductCard({ product }: Props) {
+const ProductCard = ({ product }: Props) => {
   const isTour = product.__typename === "Tour";
   const [, priceValue] = product.price.split(": ");
 
@@ -47,9 +46,15 @@ export default function ProductCard({ product }: Props) {
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 left-3">
-          <span className="bg-black/55 text-white text-[10px] font-medium px-2 py-1 font-sans">
-            {regionLabel}
-          </span>
+          {product.onSale ? (
+            <span className="bg-brand text-white text-[10px] font-bold px-2 py-1 font-sans uppercase tracking-wide">
+              % Deal
+            </span>
+          ) : (
+            <span className="bg-black/55 text-white text-[10px] font-medium px-2 py-1 font-sans">
+              {regionLabel}
+            </span>
+          )}
         </div>
         <div className="absolute top-3 right-3">
           <span className="bg-black/55 text-white text-[10px] font-medium px-2 py-1 font-sans">
@@ -97,12 +102,24 @@ export default function ProductCard({ product }: Props) {
             <p className="text-lg font-bold text-gray-900 font-sans leading-tight">
               {priceValue ?? product.price}
             </p>
+            {product.onSale && product.saleDiscountPercentage != null && (
+              <p className="text-[11px] font-semibold text-brand font-sans mt-0.5">
+                Save {product.saleDiscountPercentage}% today!
+              </p>
+            )}
           </div>
-          <button className="bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 hover:bg-brand transition-colors font-sans">
+          <Link
+            href={`/tours/${product.id}?type=${product.__typename.toLowerCase()}`}
+            className="bg-gray-900 text-white text-xs font-semibold px-4 py-2.5 hover:bg-brand transition-colors font-sans"
+          >
             Details
-          </button>
+          </Link>
         </div>
       </div>
     </div>
   );
 }
+
+ProductCard.Skeleton = SkeletonCard;
+
+export default ProductCard;

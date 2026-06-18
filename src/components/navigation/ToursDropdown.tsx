@@ -8,7 +8,7 @@ interface ToursDropdownProps {
   onClose: () => void;
 }
 
-export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
+const ToursDropdown = ({ open, onClose }: ToursDropdownProps) => {
   const { data: categories = [], loading, error } = useGetTourCategoriesQuery();
 
   const itemClass =
@@ -49,3 +49,5 @@ export default function ToursDropdown({ open, onClose }: ToursDropdownProps) {
     </div>
   );
 }
+
+export default ToursDropdown;

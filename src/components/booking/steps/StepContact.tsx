@@ -9,7 +9,7 @@ const OPTIONS = [
 
 interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void }
 
-export default function StepContact({ formData, onChange }: Props) {
+const StepContact = ({ formData, onChange }: Props) => {
   return (
     <div>
       <h3 className="text-gray-900 text-xl font-semibold font-sans mb-1">How would you like to discuss your trip?</h3>
@@ -41,3 +41,5 @@ export default function StepContact({ formData, onChange }: Props) {
     </div>
   );
 }
+
+export default StepContact;

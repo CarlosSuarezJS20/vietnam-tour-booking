@@ -7,7 +7,7 @@ interface PillButtonProps {
   className?: string;
 }
 
-export default function PillButton({ children, onClick, variant = "brand", className = "" }: PillButtonProps) {
+const PillButton = ({ children, onClick, variant = "brand", className = "" }: PillButtonProps) => {
   const base = "text-sm font-semibold px-5 py-2 rounded-full whitespace-nowrap transition-colors";
   const variants = {
     brand: "bg-brand text-white hover:bg-brand-dark",
@@ -20,3 +20,5 @@ export default function PillButton({ children, onClick, variant = "brand", class
     </button>
   );
 }
+
+export default PillButton;

@@ -8,7 +8,7 @@ interface IconButtonProps {
   dark?:        boolean;
 }
 
-export default function IconButton({ children, onClick, className = "", hoverEffect = true, dark = false }: IconButtonProps) {
+const IconButton = ({ children, onClick, className = "", hoverEffect = true, dark = false }: IconButtonProps) => {
   const colors = dark
     ? `border-gray-300 text-gray-700 ${hoverEffect ? "hover:bg-gray-100" : ""}`
     : `border-white/70 text-white ${hoverEffect ? "hover:bg-white/10" : ""}`;
@@ -22,3 +22,5 @@ export default function IconButton({ children, onClick, className = "", hoverEff
     </button>
   );
 }
+
+export default IconButton;

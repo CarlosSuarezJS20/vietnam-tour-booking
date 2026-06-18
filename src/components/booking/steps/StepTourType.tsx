@@ -11,7 +11,7 @@ const TYPES = [
 
 interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void }
 
-export default function StepTourType({ formData, onChange }: Props) {
+const StepTourType = ({ formData, onChange }: Props) => {
   return (
     <div>
       <h3 className="text-gray-900 text-xl font-semibold font-sans mb-1">What kind of tour?</h3>
@@ -43,3 +43,5 @@ export default function StepTourType({ formData, onChange }: Props) {
     </div>
   );
 }
+
+export default StepTourType;
