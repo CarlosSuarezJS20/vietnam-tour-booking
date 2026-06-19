@@ -226,6 +226,7 @@ const Navbar = () => {
             <FiSearch className="w-5 h-5" />
           </IconButton>
           <CartIconButton dark={pastHero} hoverEffect={false} />
+          <PillButton variant="brand">My Bookings</PillButton>
           <PillButton variant="white" onClick={() => setMobileOpen(true)}>Menu</PillButton>
         </div>
       </nav>
@@ -237,12 +238,11 @@ const Navbar = () => {
             <div className="flex items-center gap-3 bg-white rounded-2xl px-4 py-3 shadow-xl border border-gray-100">
               <FiSearch className="w-4 h-4 text-gray-400 flex-shrink-0" />
               <input
-                autoFocus
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder="Search destinations, tours…"
-                className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
+                className="flex-1 text-base text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
               />
               <button onClick={closeSearch} className="flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors">
                 <FiX className="w-5 h-5" />
