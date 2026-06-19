@@ -104,9 +104,9 @@ const CruisesCarousel = () => {
 
   return (
     <section className="py-12 md:py-20 bg-stone-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-20 mb-8 md:mb-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-20 mb-8 md:mb-12">
         <div className="text-center">
-          <h2 className="text-4xl md:text-6xl font-bold text-brand mb-3 font-display">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand mb-3 font-display">
             Halong Bay Cruises
           </h2>
           <p className="text-sm md:text-base text-gray-500 leading-relaxed font-sans max-w-xl mx-auto">

@@ -30,7 +30,7 @@ const FeaturedTourSection = () => {
 const Home = () => {
   return (
     <main>
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative min-h-screen md:h-screen w-full overflow-hidden">
         <HeroSection>
           <FeaturedTourSection />
         </HeroSection>

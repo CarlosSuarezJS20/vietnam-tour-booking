@@ -46,7 +46,7 @@ const AboutSection = () => {
         <div className="hidden lg:block">
 
           {/* Title — full width, centred */}
-          <h2 className="font-display text-4xl md:text-6xl font-bold text-brand leading-tight text-center mb-16">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-brand leading-tight text-center mb-16">
             An Experienced Team At Your Service
           </h2>
 

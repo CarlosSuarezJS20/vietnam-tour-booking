@@ -78,13 +78,13 @@ const CategoriesCarousel = () => {
   });
 
   return (
-    <section className="py-20 px-6 md:px-16 bg-white">
+    <section className="py-20 px-6 md:px-10 lg:px-16 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
 
         {/* Left — copy + filter buttons */}
         <div className="md:w-[280px] flex-shrink-0 flex flex-col justify-between">
           <div>
-            <h2 className="text-4xl md:text-6xl font-bold text-brand mb-4 font-display">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand mb-4 font-display">
               Popular Categories
             </h2>
             <p className="text-base text-gray-500 leading-relaxed font-sans mb-8">

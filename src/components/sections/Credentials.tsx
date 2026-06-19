@@ -4,11 +4,11 @@ import { footerAwards } from "@/data/footer";
 const Credentials = () => {
   return (
     <section className="py-12 md:py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-20 flex flex-col md:flex-row items-center gap-12 md:gap-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-20 flex flex-col md:flex-row items-center gap-12 md:gap-16 lg:gap-20">
 
         {/* Left — title and copy */}
         <div className="flex-shrink-0 md:w-72">
-          <h2 className="text-4xl md:text-6xl font-bold text-brand mb-4 font-display">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand mb-4 font-display">
             Our Credentials
           </h2>
           <p className="text-sm md:text-base text-gray-500 font-sans leading-relaxed">

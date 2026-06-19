@@ -15,14 +15,36 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
       <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/25 to-black/65" />
       <GlobeArcs />
 
-      <div className="absolute inset-0 z-10 flex items-start text-white px-10 md:px-16 pt-32 md:pt-40">
+      {/* Mobile layout — natural flow, no overlap */}
+      <div className="relative z-10 flex flex-col justify-between h-full px-6 pt-28 pb-8 md:hidden text-white">
         <div className="flex flex-col items-start">
-          <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={48} height={48} className="mb-3 opacity-85" />
-          
-          <h1 className="text-4xl md:text-6xl font-light tracking-wide leading-none mb-4 font-display">
+          <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={40} height={40} className="mb-3 opacity-85" />
+          <h1 className="text-3xl font-light tracking-wide leading-none mb-3 font-display">
             Discover <span className="font-bold">Vietnam</span>
           </h1>
-          <p className="italic text-white/70 text-sm md:text-base mb-8 max-w-sm font-sans">
+          <p className="italic text-white/70 text-sm mb-6 max-w-xs font-sans">
+            Premium, custom-crafted Vietnam experiences built on years of local expertise.
+          </p>
+          <Link href="/tours" className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-7 py-3 tracking-wider transition-colors">
+            Explore Our Tours
+          </Link>
+        </div>
+
+        {children && (
+          <div className="mt-6">
+            {children}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop layout — absolute positioning */}
+      <div className="hidden md:flex absolute inset-0 z-10 items-start text-white px-16 pt-40">
+        <div className="flex flex-col items-start">
+          <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={48} height={48} className="mb-3 opacity-85" />
+          <h1 className="text-6xl font-light tracking-wide leading-none mb-4 font-display">
+            Discover <span className="font-bold">Vietnam</span>
+          </h1>
+          <p className="italic text-white/70 text-base mb-8 max-w-sm font-sans">
             Premium, custom-crafted Vietnam experiences built on years of local expertise.
           </p>
           <Link href="/tours" className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-9 py-3.5 tracking-wider transition-colors">
@@ -32,7 +54,7 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
       </div>
 
       {children && (
-        <div className="absolute bottom-16 left-4 right-4 md:left-auto md:right-10 z-20 md:w-full md:max-w-lg">
+        <div className="hidden md:block absolute bottom-16 right-10 z-20 w-full max-w-lg">
           {children}
         </div>
       )}

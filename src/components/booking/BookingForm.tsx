@@ -68,7 +68,7 @@ const BookingForm = () => {
       <div className="max-w-3xl mx-auto px-6">
 
         <div className="text-center mb-12">
-          <h2 className="font-display text-4xl md:text-6xl font-bold text-brand leading-tight mb-4">
+          <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-brand leading-tight mb-4">
             Plan Your Trip
           </h2>
           <p className="text-gray-500 font-sans text-base">
