@@ -8,11 +8,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Include .graphql files in the serverless bundle so loadFilesSync works on Vercel
-(nextConfig as Record<string, unknown>).experimental = {
-  outputFileTracingIncludes: {
-    "/api/graphql": ["./src/graphql/schema/**/*.graphql"],
-  },
-};
-
 export default nextConfig;
