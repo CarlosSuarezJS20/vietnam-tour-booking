@@ -23,7 +23,7 @@ const BookingBar = ({ product, productType }: Props) => {
   return (
     <>
       {/* Mobile — floating pill bar */}
-      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 bg-white rounded-full shadow-2xl flex items-center justify-between px-5 py-3">
+      <div className="md:hidden fixed bottom-4 left-4 right-4 z-40 bg-white rounded-full border border-gray-200 flex items-center justify-between px-5 py-3">
         <button onClick={() => setOpen(true)} className="flex items-center gap-3 text-left">
           <FiCalendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
           <div>
