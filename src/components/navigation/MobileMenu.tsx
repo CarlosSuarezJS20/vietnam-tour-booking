@@ -31,7 +31,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
       }`}
       style={{
         background:
-          "radial-gradient(ellipse at center, #1a6b35 0%, #0a3018 70%, #021008 100%)",
+          "radial-gradient(ellipse at center, #1e3a5f 0%, #0f1e3a 70%, #060d1f 100%)",
       }}
     >
       {/* Header */}
