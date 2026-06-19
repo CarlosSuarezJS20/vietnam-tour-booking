@@ -17,10 +17,10 @@ const Credentials = () => {
         </div>
 
         {/* Right — logos */}
-        <div className="flex flex-wrap items-center gap-10 flex-1">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8 flex-1">
           {footerAwards.map((award) => (
-            <div key={award.src} className="flex flex-col items-center gap-3 w-40">
-              <div className="relative h-20 w-full">
+            <div key={award.src} className="flex flex-col items-center gap-3">
+              <div className="relative h-14 md:h-20 w-full">
                 <Image
                   src={award.src}
                   alt={award.name}
