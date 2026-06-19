@@ -201,12 +201,12 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                   month: "long", day: "numeric", year: "numeric",
                 });
                 await addToCart({
-                  productId:   product.id,
-                  productType,
-                  date:        dateStr,
-                  time:        selTime,
-                  partySize:   adults + youth + children,
-                  price:       total,
+                  tourId:    productType === "tour"   ? product.id : undefined,
+                  cruiseId:  productType === "cruise" ? product.id : undefined,
+                  date:      dateStr,
+                  time:      selTime,
+                  partySize: adults + youth + children,
+                  price:     total,
                 });
                 onClose();
                 cartDrawerOpenVar(true);
