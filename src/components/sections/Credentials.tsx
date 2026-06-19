@@ -18,9 +18,16 @@ const Credentials = () => {
 
         {/* Right — logos */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 md:gap-8 flex-1">
-          {footerAwards.map((award) => (
-            <div key={award.src} className="flex flex-col items-center gap-3">
-              <div className="relative h-14 md:h-20 w-full">
+          {footerAwards.map((award, i, arr) => (
+            <div
+              key={award.src}
+              className={`flex flex-col items-center gap-3 ${
+                i === arr.length - 1 && arr.length % 2 !== 0
+                  ? "col-span-2 sm:col-span-1 mx-auto w-1/2 sm:w-full"
+                  : ""
+              }`}
+            >
+              <div className="relative h-12 md:h-20 w-full">
                 <Image
                   src={award.src}
                   alt={award.name}
