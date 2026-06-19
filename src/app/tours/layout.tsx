@@ -8,12 +8,21 @@ const ToursLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-10 py-4">
+        {/* Mobile — icon button matching cart style */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-brand transition-colors font-sans"
+          className="md:hidden w-11 h-11 rounded-full border border-gray-300 text-gray-700 flex items-center justify-center transition-all hover:bg-gray-100"
+        >
+          <FiArrowLeft className="w-5 h-5" />
+        </Link>
+
+        {/* Desktop — text link */}
+        <Link
+          href="/"
+          className="hidden md:flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-brand transition-colors font-sans"
         >
           <FiArrowLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Back to Home</span>
+          Back to Home
         </Link>
 
         <Link href="/" className="absolute left-1/2 -translate-x-1/2">
