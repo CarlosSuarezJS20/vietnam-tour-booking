@@ -13,22 +13,31 @@ const ToursLayout = ({ children }: { children: React.ReactNode }) => {
           className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-brand transition-colors font-sans"
         >
           <FiArrowLeft className="w-4 h-4" />
-          Back to Home
+          <span className="hidden sm:inline">Back to Home</span>
         </Link>
 
         <Link href="/" className="absolute left-1/2 -translate-x-1/2">
+          <Image
+            src="/travel-vietnam-icon-dark.svg"
+            alt="Travel Vietnam"
+            width={36}
+            height={36}
+            priority
+            className="md:hidden"
+          />
           <Image
             src="/travel-vietnam-logo-dark.svg"
             alt="Travel Vietnam"
             width={120}
             height={36}
             priority
+            className="hidden md:block"
           />
         </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <CartIconButton dark />
-          <PillButton variant="brand">My Bookings</PillButton>
+          <PillButton variant="brand" className="hidden md:inline-flex">My Bookings</PillButton>
         </div>
       </header>
 

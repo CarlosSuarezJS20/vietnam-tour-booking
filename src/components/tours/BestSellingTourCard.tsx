@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FiUsers, FiArrowDown, FiMapPin } from "react-icons/fi";
 import type { FeaturedTour } from "@/types/graphql";
 import PillTag from "@/components/ui/PillTag";
@@ -56,9 +57,9 @@ const BestSellingTourCard = ({ tour }: Props) => {
           <p className="text-white/40 text-xs font-sans">per person · double occupancy</p>
         </div>
 
-        <button className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-3.5 transition-colors font-sans">
+        <Link href={`/tours/${tour.id}`} className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-3.5 transition-colors font-sans">
           Find more <FiArrowDown className="w-4 h-4" />
-        </button>
+        </Link>
       </div>
 
     </div>

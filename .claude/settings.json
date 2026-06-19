@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking push origin main)",
+      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking add src/components/product/BookingModal.tsx)",
+      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking commit -m ' *)",
+      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking add package.json)"
+    ]
+  }
+}

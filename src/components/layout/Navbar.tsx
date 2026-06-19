@@ -226,7 +226,6 @@ const Navbar = () => {
             <FiSearch className="w-5 h-5" />
           </IconButton>
           <CartIconButton dark={pastHero} hoverEffect={false} />
-          <PillButton variant="brand">My Bookings</PillButton>
           <PillButton variant="white" onClick={() => setMobileOpen(true)}>Menu</PillButton>
         </div>
       </nav>

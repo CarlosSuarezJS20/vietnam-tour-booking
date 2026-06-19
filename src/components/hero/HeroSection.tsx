@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import GlobeArcs from "./GlobeArcs";
 
 export default function HeroSection({ children }: { children?: React.ReactNode }) {
@@ -24,14 +25,14 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
           <p className="italic text-white/70 text-sm md:text-base mb-8 max-w-sm font-sans">
             Premium, custom-crafted Vietnam experiences built on years of local expertise.
           </p>
-          <button className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-9 py-3.5 tracking-wider transition-colors">
+          <Link href="/tours" className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-9 py-3.5 tracking-wider transition-colors">
             Explore Our Tours
-          </button>
+          </Link>
         </div>
       </div>
 
       {children && (
-        <div className="absolute bottom-16 right-10 z-20 w-full max-w-lg">
+        <div className="absolute bottom-16 left-4 right-4 md:left-auto md:right-10 z-20 md:w-full md:max-w-lg">
           {children}
         </div>
       )}
