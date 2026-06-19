@@ -220,7 +220,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile right actions */}
-        <div className="lg:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-2 ml-auto">
           <IconButton hoverEffect={false} dark={pastHero} onClick={openSearch}>
             <FiSearch className="w-5 h-5" />
           </IconButton>

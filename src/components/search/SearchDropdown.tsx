@@ -34,13 +34,13 @@ const SearchDropdown = ({ query, onClose }: Props) => {
       style={{ maxHeight: 520 }}
     >
       <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: isEmpty ? 520 : 472 }}>
-        {loading && (
+        {loading && !isEmpty && (
           <div className="divide-y divide-gray-50">
             {[1, 2, 3].map(n => <SkeletonRow key={n} />)}
           </div>
         )}
 
-        {!loading && isEmpty && (
+        {isEmpty && (
           <div className="flex flex-col items-center justify-center py-10 text-center px-6">
             <FiSearch className="w-8 h-8 text-gray-200 mb-3" />
             <p className="text-sm text-gray-400 font-sans">
