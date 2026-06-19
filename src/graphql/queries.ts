@@ -71,7 +71,7 @@ const CART_FIELDS = gql`
     itemCount
     totalPrice
     items {
-      uid productType date time partySize price
+      uid date time partySize price
       product {
         __typename
         ... on Tour   { id title imageUrl duration price cities { name } }
@@ -83,22 +83,22 @@ const CART_FIELDS = gql`
 
 export const GET_CART_QUERY = gql`
   ${CART_FIELDS}
-  query GetCart {
-    cart { ...CartFields }
+  query GetCart($sessionId: String!) {
+    cart(sessionId: $sessionId) { ...CartFields }
   }
 `;
 
 export const ADD_TO_CART_MUTATION = gql`
   ${CART_FIELDS}
-  mutation AddToCart($input: CartItemInput!) {
-    addToCart(input: $input) { ...CartFields }
+  mutation AddToCart($sessionId: String!, $input: CartItemInput!) {
+    addToCart(sessionId: $sessionId, input: $input) { ...CartFields }
   }
 `;
 
 export const REMOVE_FROM_CART_MUTATION = gql`
   ${CART_FIELDS}
-  mutation RemoveFromCart($uid: ID!) {
-    removeFromCart(uid: $uid) { ...CartFields }
+  mutation RemoveFromCart($sessionId: String!, $uid: ID!) {
+    removeFromCart(sessionId: $sessionId, uid: $uid) { ...CartFields }
   }
 `;
 

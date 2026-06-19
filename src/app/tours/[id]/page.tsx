@@ -20,16 +20,28 @@ const ProductDetailPage = ({ params, searchParams }: Props) => {
 
   const isCruise = type === "cruise";
 
-  const tourResult   = useGetTourByIdQuery(isCruise ? "" : id);
-  const cruiseResult = useGetCruiseByIdQuery(isCruise ? id : "");
+  const tourResult   = useGetTourByIdQuery(id, isCruise);
+  const cruiseResult = useGetCruiseByIdQuery(id, !isCruise);
 
   const product = isCruise ? cruiseResult.data : tourResult.data;
   const loading = isCruise ? cruiseResult.loading : tourResult.loading;
+  const error   = isCruise ? cruiseResult.error : tourResult.error;
 
   if (loading) {
     return (
       <div className="flex min-h-[calc(100vh-65px)] items-center justify-center">
         <div className="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-[calc(100vh-65px)] flex-col items-center justify-center gap-4">
+        <p className="text-lg font-semibold text-gray-900 font-sans">Something went wrong. Please try again.</p>
+        <Link href="/tours" className="text-brand text-sm font-sans hover:underline">
+          ← Back to all tours
+        </Link>
       </div>
     );
   }
@@ -51,7 +63,7 @@ const ProductDetailPage = ({ params, searchParams }: Props) => {
       <div className="pb-28">
         <ProductDescription text={product.description} />
         {product.itinerary && <ItineraryAccordion itinerary={product.itinerary} />}
-        <PriceInclusions />
+        <PriceInclusions productType={isCruise ? "cruise" : "tour"} />
       </div>
       <BookingBar product={product} productType={isCruise ? "cruise" : "tour"} />
     </>

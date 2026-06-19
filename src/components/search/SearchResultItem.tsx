@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { FiClock, FiAnchor } from "react-icons/fi";
 import PillTag from "@/components/ui/PillTag";
 import type { SearchItem } from "@/types/graphql";
@@ -9,8 +10,13 @@ interface Props {
 }
 
 const SearchResultItem = ({ item, onClick }: Props) => {
+  const href = item._type === "cruise"
+    ? `/tours/${item.id}?type=cruise`
+    : `/tours/${item.id}`;
+
   return (
-    <button
+    <Link
+      href={href}
       onClick={onClick}
       className="w-full flex items-center gap-3 px-4 py-3 hover:bg-surface transition-colors text-left group"
     >
@@ -48,7 +54,7 @@ const SearchResultItem = ({ item, onClick }: Props) => {
       <span className="text-xs font-semibold text-gray-700 flex-shrink-0 hidden sm:block">
         {item.price.replace("From: ", "")}
       </span>
-    </button>
+    </Link>
   );
 }
 

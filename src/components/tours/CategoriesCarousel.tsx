@@ -3,7 +3,7 @@
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetToursByCategoryQuery } from "@/graphql/hooks";
 import type { CarouselTour } from "@/types/graphql";
@@ -58,6 +58,19 @@ const CategoriesCarousel = () => {
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
   const [activeKey, setActiveKey] = useState<CategoryKey>("Luxury");
+  const isDragging = useRef(false);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onPointerDown = () => { isDragging.current = false; };
+    const onScroll = () => { isDragging.current = true; };
+    emblaApi.on("pointerDown", onPointerDown);
+    emblaApi.on("scroll", onScroll);
+    return () => {
+      emblaApi.off("pointerDown", onPointerDown);
+      emblaApi.off("scroll", onScroll);
+    };
+  }, [emblaApi]);
 
   const { data: tours = [], loading, error } = useGetToursByCategoryQuery({
     categoryId: CATEGORIES[activeKey].categoryId,
@@ -114,9 +127,9 @@ const CategoriesCarousel = () => {
                     {loading
                       ? [...Array(4)].map((_, i) => <CardSkeleton key={i} />)
                       : tours.map((tour) => (
-                          <div key={tour.id} className="flex-none w-[260px] mr-5">
+                          <Link key={tour.id} href={`/tours/${tour.id}`} onClick={(e) => { if (isDragging.current) e.preventDefault(); }} className="flex-none w-[260px] mr-5">
                             <TourCard tour={tour} />
-                          </div>
+                          </Link>
                         ))
                     }
                   </div>

@@ -1,24 +1,16 @@
-import { tourCategories, regions, cities, tours, cruises } from "@/data/db";
+import { prisma } from "@/lib/prisma";
 import { parsePriceValue } from "@/lib/tourParsers";
+import type { CartItemInput } from "@/types/graphql";
 
-interface CartItem {
-  uid:         string;
-  productId:   string;
-  productType: string;
-  date:        string;
-  time:        string;
-  partySize:   number;
-  price:       number;
-}
 
-// In-memory cart — dummy data until a real backend is wired up
-let cartItems: CartItem[] = [];
-
-const buildCart = () => ({
-  items:      cartItems,
-  itemCount:  cartItems.length,
-  totalPrice: cartItems.reduce((sum, i) => sum + i.price, 0),
-});
+const buildCartFromDb = (cart: { items: { id: string; tourId: string | null; cruiseId: string | null; date: string; time: string; partySize: number; price: number }[] } | null) => {
+  const items = cart?.items ?? [];
+  return {
+    items:      items.map(i => ({ ...i, uid: i.id })),
+    itemCount:  items.length,
+    totalPrice: items.reduce((sum, i) => sum + i.price, 0),
+  };
+};
 
 const PAGE_SIZE = 12;
 
@@ -38,7 +30,7 @@ export const resolvers = {
   },
 
   Query: {
-    searchProducts: (
+    searchProducts: async (
       _: unknown,
       {
         filters = {},
@@ -58,56 +50,50 @@ export const resolvers = {
         after?: string | null;
       }
     ) => {
-      type RawTour   = (typeof tours)[0]   & { __typename: "Tour" };
-      type RawCruise = (typeof cruises)[0] & { __typename: "Cruise" };
-      type RawProduct = RawTour | RawCruise;
+      const includeTours   = !filters.types?.length || filters.types.includes("tour");
+      const includeCruises = !filters.types?.length || filters.types.includes("cruise");
 
-      let pool: RawProduct[] = [
-        ...tours.map(t => ({ ...t, __typename: "Tour" as const })),
-        ...cruises.map(c => ({ ...c, __typename: "Cruise" as const })),
+      const tourWhere = {
+        ...(filters.categories?.length && {
+          categories: { some: { category: { slug: { in: filters.categories } } } },
+        }),
+        ...((filters.regions?.length || filters.cities?.length) && {
+          cities: {
+            some: {
+              city: {
+                OR: [
+                  ...(filters.regions?.length ? [{ region: { key: { in: filters.regions } } }] : []),
+                  ...(filters.cities?.length  ? [{ id:     { in: filters.cities } }]            : []),
+                ],
+              },
+            },
+          },
+        }),
+        ...(filters.deals && { onSale: true }),
+      };
+
+      const cruiseWhere = {
+        ...(filters.deals && { onSale: true }),
+      };
+
+      const [rawTours, rawCruises] = await Promise.all([
+        includeTours   ? prisma.tour.findMany({ where: tourWhere })     : [],
+        includeCruises ? prisma.cruise.findMany({ where: cruiseWhere }) : [],
+      ]);
+
+      type PoolItem = (typeof rawTours)[0] & { __typename: "Tour" }
+                   | (typeof rawCruises)[0] & { __typename: "Cruise" };
+
+      let pool: PoolItem[] = [
+        ...rawTours.map(t  => ({ ...t, __typename: "Tour"   as const })),
+        ...rawCruises.map(c => ({ ...c, __typename: "Cruise" as const })),
       ];
-
-      if (filters.types?.length) {
-        pool = pool.filter(i => filters.types!.includes(i.__typename.toLowerCase()));
-      }
-
-      if (filters.categories?.length) {
-        const catIds = tourCategories
-          .filter(c => filters.categories!.includes(c.slug))
-          .map(c => c.id);
-        pool = pool.filter(i =>
-          i.__typename !== "Tour" ||
-          (i as RawTour).categoryIds.some(id => catIds.includes(id))
-        );
-      }
-
-      if (filters.regions?.length || filters.cities?.length) {
-        const regionIds = regions
-          .filter(r => (filters.regions ?? []).includes(r.key))
-          .map(r => r.id);
-        const cityIdsFromRegions = cities
-          .filter(c => regionIds.includes(c.regionId))
-          .map(c => c.id);
-        const allMatchingCityIds = new Set([
-          ...cityIdsFromRegions,
-          ...(filters.cities ?? []),
-        ]);
-        pool = pool.filter(i =>
-          i.__typename !== "Tour" ||
-          (i as RawTour).cityIds.some(id => allMatchingCityIds.has(id))
-        );
-      }
 
       if (filters.minPrice != null) {
         pool = pool.filter(i => parsePriceValue(i.price) >= filters.minPrice!);
       }
-
       if (filters.maxPrice != null) {
         pool = pool.filter(i => parsePriceValue(i.price) <= filters.maxPrice!);
-      }
-
-      if (filters.deals) {
-        pool = pool.filter(i => (i as { onSale: boolean }).onSale === true);
       }
 
       const total = pool.length;
@@ -120,7 +106,6 @@ export const resolvers = {
       }
 
       const slice = pool.slice(startIndex, startIndex + first);
-
       const edges = slice.map(item => ({
         cursor: encodeCursor(item.id),
         node:   item,
@@ -137,59 +122,101 @@ export const resolvers = {
         total,
       };
     },
-    tourCategories: () => tourCategories,
-    regions:        () => regions,
-    region:         (_: unknown, { key }: { key: string }) => regions.find(r => r.key === key),
-    cities:         () => cities,
-    featuredTour:   () => tours.find(t => t.featuredTour === true) ?? null,
+    tourCategories: () => prisma.tourCategory.findMany(),
+    regions:         () => prisma.region.findMany(),
+    region:          (_: unknown, { key }: { key: string }) => prisma.region.findUnique({ where: { key } }),
+    cities:          () => prisma.city.findMany(),
+    featuredTour:    () => prisma.tour.findFirst({ where: { featuredTour: true } }),
     toursByCity:     (_: unknown, { cityId, limit = 4 }: { cityId: string; limit?: number }) =>
-                       tours.filter(t => t.cityIds.includes(cityId)).slice(0, limit),
+                       prisma.tour.findMany({ where: { cities: { some: { cityId } } }, take: limit }),
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
-                       tours.filter(t => t.categoryIds.includes(categoryId)).slice(0, limit),
-    cruises:        () => cruises,
-    allTours:       () => tours,
-    allCruises:     () => cruises,
-    tour:           (_: unknown, { id }: { id: string }) => tours.find(t => t.id === id) ?? null,
-    cruise:         (_: unknown, { id }: { id: string }) => cruises.find(c => c.id === id) ?? null,
-    cart:           () => buildCart(),
+                       prisma.tour.findMany({ where: { categories: { some: { categoryId } } }, take: limit }),
+    cruises:         () => prisma.cruise.findMany(),
+    allTours:        () => prisma.tour.findMany(),
+    allCruises:      () => prisma.cruise.findMany(),
+    tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id } }),
+    cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id } }),
+    cart: async (_: unknown, { sessionId }: { sessionId: string }) => {
+      const cart = await prisma.cart.findUnique({
+        where:   { sessionId },
+        include: { items: true },
+      });
+      return buildCartFromDb(cart);
+    },
   },
+
   CartItem: {
-    product: (item: CartItem) => {
-      if (item.productType === "cruise") {
-        const cruise = cruises.find(c => c.id === item.productId);
+    product: async (item: { tourId: string | null; cruiseId: string | null }) => {
+      if (item.tourId) {
+        const tour = await prisma.tour.findUnique({ where: { id: item.tourId } });
+        return tour ? { ...tour, __typename: "Tour" } : null;
+      }
+      if (item.cruiseId) {
+        const cruise = await prisma.cruise.findUnique({ where: { id: item.cruiseId } });
         return cruise ? { ...cruise, __typename: "Cruise" } : null;
       }
-      const tour = tours.find(t => t.id === item.productId);
-      return tour ? { ...tour, __typename: "Tour" } : null;
+      return null;
     },
   },
 
   Mutation: {
-    addToCart: (_: unknown, { input }: { input: Omit<CartItem, "uid"> }) => {
-      const item: CartItem = { ...input, uid: `${input.productId}-${Date.now()}` };
-      cartItems = [...cartItems, item];
-      return buildCart();
+    addToCart: async (_: unknown, { sessionId, input }: { sessionId: string; input: CartItemInput }) => {
+      const cart = await prisma.cart.upsert({
+        where:  { sessionId },
+        create: { sessionId },
+        update: {},
+      });
+      await prisma.cartItem.create({
+        data: {
+          cartId:    cart.id,
+          tourId:    input.tourId   ?? null,
+          cruiseId:  input.cruiseId ?? null,
+          date:      input.date,
+          time:      input.time,
+          partySize: input.partySize,
+          price:     input.price,
+        },
+      });
+      const updated = await prisma.cart.findUnique({
+        where:   { sessionId },
+        include: { items: true },
+      });
+      return buildCartFromDb(updated);
     },
-    removeFromCart: (_: unknown, { uid }: { uid: string }) => {
-      cartItems = cartItems.filter(i => i.uid !== uid);
-      return buildCart();
+
+    removeFromCart: async (_: unknown, { sessionId, uid }: { sessionId: string; uid: string }) => {
+      await prisma.cartItem.delete({ where: { id: uid } });
+      const cart = await prisma.cart.findUnique({
+        where:   { sessionId },
+        include: { items: true },
+      });
+      return buildCartFromDb(cart);
     },
-    clearCart: () => {
-      cartItems = [];
-      return buildCart();
+
+    clearCart: async (_: unknown, { sessionId }: { sessionId: string }) => {
+      await prisma.cartItem.deleteMany({ where: { cart: { sessionId } } });
+      const cart = await prisma.cart.findUnique({
+        where:   { sessionId },
+        include: { items: true },
+      });
+      return buildCartFromDb(cart);
     },
   },
 
   Tour: {
-    cities:     (tour: { cityIds: string[] }) => cities.filter(c => tour.cityIds.includes(c.id)),
-    categories: (tour: { categoryIds: string[] }) => tourCategories.filter(c => tour.categoryIds.includes(c.id)),
+    imageUrl:   (tour: { id: string }) =>
+      prisma.tourImage
+        .findFirst({ where: { tourId: tour.id }, orderBy: { position: "asc" } })
+        .then(img => img?.url ?? null),
+    cities:     (tour: { id: string }) => prisma.city.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
+    categories: (tour: { id: string }) => prisma.tourCategory.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
   },
   Region: {
     // Resolver for Region.cities — returns all cities that belong to this region
-    cities: (region: { id: string }) => cities.filter(c => c.regionId === region.id),
+    cities: (region: { id: string }) => prisma.city.findMany({ where: { regionId: region.id } }),
   },
   City: {
     // Resolver for City.region — looks up the parent region by regionId
-    region: (city: { regionId: string }) => regions.find(r => r.id === city.regionId),
+    region: (city: { regionId: string }) => prisma.region.findUnique({ where: { id: city.regionId } }),
   },
 };

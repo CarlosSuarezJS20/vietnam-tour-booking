@@ -30,8 +30,5 @@ const server = new ApolloServer({ schema });
 // function that accepts a Next.js Request and returns a Response.
 const handler = startServerAndCreateNextHandler<NextRequest>(server);
 
-// Expose the single /api/graphql endpoint for both GET and POST.
-// GraphQL clients typically use POST (query in the request body), but GET
-// is needed for browser-based tools like Apollo Sandbox.
 export const GET  = (req: NextRequest) => handler(req);
 export const POST = (req: NextRequest) => handler(req);

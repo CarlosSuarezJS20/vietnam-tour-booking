@@ -17,6 +17,8 @@ import {
   ADD_TO_CART_MUTATION,
   REMOVE_FROM_CART_MUTATION,
 } from "./queries";
+import { useReactiveVar } from "@apollo/client/react";
+import { sessionIdVar } from "@/lib/sessionVar";
 import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise, ProductConnection, GqlProductFilters, ProductDetailTour, ProductDetailCruise, GqlCart, CartItemInput } from "@/types/graphql";
 
 export function useGetTourCategoriesQuery() {
@@ -74,38 +76,44 @@ export function useGetAllCruisesQuery() {
 }
 
 export const useGetCartQuery = () => {
-  const { data, loading, error } = useQuery<{ cart: GqlCart }>(GET_CART_QUERY);
+  const sessionId = useReactiveVar(sessionIdVar);
+  const { data, loading, error } = useQuery<{ cart: GqlCart }>(
+    GET_CART_QUERY,
+    { variables: { sessionId }, skip: !sessionId }
+  );
   return { data: data?.cart, loading, error };
 };
 
 export const useAddToCartMutation = () => {
-  const [mutate, { loading }] = useMutation<{ addToCart: GqlCart }, { input: CartItemInput }>(
+  const sessionId = useReactiveVar(sessionIdVar);
+  const [mutate, { loading }] = useMutation<{ addToCart: GqlCart }, { sessionId: string; input: CartItemInput }>(
     ADD_TO_CART_MUTATION,
-    { refetchQueries: [{ query: GET_CART_QUERY }] }
+    { refetchQueries: [{ query: GET_CART_QUERY, variables: { sessionId } }] }
   );
-  return { addToCart: (input: CartItemInput) => mutate({ variables: { input } }), loading };
+  return { addToCart: (input: CartItemInput) => mutate({ variables: { sessionId: sessionId!, input } }), loading };
 };
 
 export const useRemoveFromCartMutation = () => {
-  const [mutate, { loading }] = useMutation<{ removeFromCart: GqlCart }, { uid: string }>(
+  const sessionId = useReactiveVar(sessionIdVar);
+  const [mutate, { loading }] = useMutation<{ removeFromCart: GqlCart }, { sessionId: string; uid: string }>(
     REMOVE_FROM_CART_MUTATION,
-    { refetchQueries: [{ query: GET_CART_QUERY }] }
+    { refetchQueries: [{ query: GET_CART_QUERY, variables: { sessionId } }] }
   );
-  return { removeFromCart: (uid: string) => mutate({ variables: { uid } }), loading };
+  return { removeFromCart: (uid: string) => mutate({ variables: { sessionId: sessionId!, uid } }), loading };
 };
 
-export const useGetTourByIdQuery = (id: string) => {
+export const useGetTourByIdQuery = (id: string, skip = false) => {
   const { data, loading, error } = useQuery<{ tour: ProductDetailTour }>(
     GET_TOUR_BY_ID_QUERY,
-    { variables: { id } }
+    { variables: { id }, skip: skip || !id }
   );
   return { data: data?.tour ?? null, loading, error };
 };
 
-export const useGetCruiseByIdQuery = (id: string) => {
+export const useGetCruiseByIdQuery = (id: string, skip = false) => {
   const { data, loading, error } = useQuery<{ cruise: ProductDetailCruise }>(
     GET_CRUISE_BY_ID_QUERY,
-    { variables: { id } }
+    { variables: { id }, skip: skip || !id }
   );
   return { data: data?.cruise ?? null, loading, error };
 };

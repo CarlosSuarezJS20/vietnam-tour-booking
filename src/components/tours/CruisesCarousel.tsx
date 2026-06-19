@@ -2,7 +2,8 @@
 
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetCruisesQuery } from "@/graphql/hooks";
 import type { Cruise } from "@/types/graphql";
@@ -31,6 +32,7 @@ const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
         fill
         sizes="(max-width: 780px) 60vw, 780px"
         className="object-cover"
+        draggable={false}
       />
       <div className="absolute inset-0 bg-black/20 md:bg-gradient-to-t md:from-black/60 md:via-black/10 md:to-transparent" />
 
@@ -71,6 +73,7 @@ const CruisesCarousel = () => {
     containScroll: false,
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const isDragging = useRef(false);
   const { data: cruises = [], loading, error } = useGetCruisesQuery();
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
@@ -86,6 +89,18 @@ const CruisesCarousel = () => {
     emblaApi.on("select", onSelect);
     return () => { emblaApi.off("select", onSelect); };
   }, [emblaApi, onSelect]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onPointerDown = () => { isDragging.current = false; };
+    const onScroll = () => { isDragging.current = true; };
+    emblaApi.on("pointerDown", onPointerDown);
+    emblaApi.on("scroll", onScroll);
+    return () => {
+      emblaApi.off("pointerDown", onPointerDown);
+      emblaApi.off("scroll", onScroll);
+    };
+  }, [emblaApi]);
 
   return (
     <section className="py-12 md:py-20 bg-stone-50">
@@ -119,14 +134,16 @@ const CruisesCarousel = () => {
                     </div>
                   ))
                 : cruises.map((cruise: Cruise, index: number) => (
-                    <div
+                    <Link
                       key={cruise.id}
+                      href={`/tours/${cruise.id}?type=cruise`}
+                      onClick={(e) => { if (isDragging.current) e.preventDefault(); }}
                       className={`flex-none w-[85vw] md:w-[60vw] max-w-[780px] relative transition-all duration-500 ${
-                        index === selectedIndex ? "z-10" : "z-0"
+                        index === selectedIndex ? "z-10" : "z-0 pointer-events-none"
                       }`}
                     >
                       <CruiseCard cruise={cruise} isActive={index === selectedIndex} />
-                    </div>
+                    </Link>
                   ))
               }
             </div>

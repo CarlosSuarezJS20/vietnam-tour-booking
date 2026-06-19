@@ -15,7 +15,7 @@ const pct = (value: number) => {
   return ((value - MIN_BOUND) / (MAX_BOUND - MIN_BOUND)) * 100;
 }
 
-const PriceRangeSlider = ({ minPrice, maxPrice, onChange }: Props) => {
+export default function PriceRangeSlider({ minPrice, maxPrice, onChange }: Props) {
   const localMin = minPrice ?? MIN_BOUND;
   const localMax = maxPrice ?? MAX_BOUND;
 
@@ -101,11 +101,9 @@ const PriceRangeSlider = ({ minPrice, maxPrice, onChange }: Props) => {
       </div>
 
       <div className="flex justify-between text-[10px] text-gray-400 font-sans">
-        <span>${MIN_BOUND.toLocaleString()}</span> Save
+        <span>${MIN_BOUND.toLocaleString()}</span> 
         <span>${MAX_BOUND.toLocaleString()}</span>
       </div>
     </div>
   );
 }
-
-export default PriceRangeSlider;

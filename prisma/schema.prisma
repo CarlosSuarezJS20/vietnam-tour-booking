@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model TourCategory {
+  id        String   @id
+  slug      String   @unique
+  label     String
+  createdAt DateTime @default(now())
+  tours     TourCategoryOnTour[]
+}
+
+model Region {
+  id        String   @id
+  key       String   @unique
+  label     String
+  image     String
+  createdAt DateTime @default(now())
+  cities    City[]
+}
+
+model City {
+  id        String   @id
+  name      String
+  regionId  String
+  createdAt DateTime @default(now())
+  region    Region     @relation(fields: [regionId], references: [id])
+  tours     TourCity[]
+}
+
+model TourCity {
+  tourId String
+  cityId String
+  tour   Tour   @relation(fields: [tourId], references: [id])
+  city   City   @relation(fields: [cityId], references: [id])
+
+  @@id([tourId, cityId])
+}
+
+model TourCategoryOnTour {
+  tourId     String
+  categoryId String
+  tour       Tour         @relation(fields: [tourId], references: [id])
+  category   TourCategory @relation(fields: [categoryId], references: [id])
+
+  @@id([tourId, categoryId])
+}
+
+model Tour {
+  id                     String  @id
+  title                  String
+  description            String
+  itinerary              String
+  duration               String
+  price                  String
+  featuredTour           Boolean  @default(false)
+  onSale                 Boolean  @default(false)
+  saleDiscountPercentage Int?
+  createdAt              DateTime @default(now())
+  images                 TourImage[]
+  cities                 TourCity[]
+  categories             TourCategoryOnTour[]
+  cartItems              CartItem[]
+}
+
+model TourImage {
+  id       String @id @default(cuid())
+  tourId   String
+  tour     Tour   @relation(fields: [tourId], references: [id])
+  url      String
+  position Int    @default(0)
+}
+
+model Cruise {
+  id                     String  @id
+  title                  String
+  imageUrl               String
+  description            String
+  itinerary              String
+  duration               String
+  price                  String
+  sourceUrl              String
+  onSale                 Boolean  @default(false)
+  saleDiscountPercentage Int?
+  createdAt              DateTime @default(now())
+  cartItems              CartItem[]
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  sessionId String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  tourId    String?
+  tour      Tour?    @relation(fields: [tourId], references: [id])
+  cruiseId  String?
+  cruise    Cruise?  @relation(fields: [cruiseId], references: [id])
+  date      String
+  time      String
+  partySize Int
+  price     Float
+  createdAt DateTime @default(now())
+}

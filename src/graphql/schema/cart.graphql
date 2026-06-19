@@ -1,34 +1,33 @@
 type CartItem {
-  uid:         ID!
-  product:     Product!
-  productType: String!
-  date:        String!
-  time:        String!
-  partySize:   Int!
-  price:       Int!
+  uid:       ID!
+  product:   Product!
+  date:      String!
+  time:      String!
+  partySize: Int!
+  price:     Float!
 }
 
 type Cart {
   items:      [CartItem!]!
   itemCount:  Int!
-  totalPrice: Int!
+  totalPrice: Float!
 }
 
 input CartItemInput {
-  productId:   String!
-  productType: String!
-  date:        String!
-  time:        String!
-  partySize:   Int!
-  price:       Int!
+  tourId:    String
+  cruiseId:  String
+  date:      String!
+  time:      String!
+  partySize: Int!
+  price:     Float!
 }
 
 extend type Query {
-  cart: Cart!
+  cart(sessionId: String!): Cart!
 }
 
 type Mutation {
-  addToCart(input: CartItemInput!): Cart!
-  removeFromCart(uid: ID!):        Cart!
-  clearCart:                       Cart!
+  addToCart(sessionId: String!, input: CartItemInput!): Cart!
+  removeFromCart(sessionId: String!, uid: ID!):         Cart!
+  clearCart(sessionId: String!):                        Cart!
 }

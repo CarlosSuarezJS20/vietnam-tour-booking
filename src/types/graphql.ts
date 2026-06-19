@@ -169,12 +169,12 @@ export interface GqlCart {
 }
 
 export interface CartItemInput {
-  productId:   string;
-  productType: string;
-  date:        string;
-  time:        string;
-  partySize:   number;
-  price:       number;
+  tourId?:   string;
+  cruiseId?: string;
+  date:      string;
+  time:      string;
+  partySize: number;
+  price:     number;
 }
 
 export interface ProductDetailTour {
