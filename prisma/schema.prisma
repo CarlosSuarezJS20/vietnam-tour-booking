@@ -113,3 +113,31 @@ model CartItem {
   price     Float
   createdAt DateTime @default(now())
 }
+
+
+model Order {
+  id                    String      @id @default(cuid())
+  sessionId             String
+  stripePaymentIntentId String      @unique
+  status                String      @default("pending")
+  totalAmount           Float
+  contactFirstName      String
+  contactLastName       String
+  contactEmail          String
+  createdAt             DateTime    @default(now())
+  items                 OrderItem[]
+}
+
+model OrderItem {
+  id                String  @id @default(cuid())
+  orderId           String
+  order             Order   @relation(fields: [orderId], references: [id])
+  tourId            String?
+  cruiseId          String?
+  date              String
+  time              String
+  partySize         Int
+  price             Float
+  travelerFirstName String
+  travelerLastName  String
+}

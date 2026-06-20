@@ -98,7 +98,7 @@ const CartDrawer = () => {
               <span className="text-sm font-bold text-gray-900 font-sans">${totalPrice.toLocaleString()}</span>
             </div>
             <Link
-              href="/booking"
+              href="/checkout"
               onClick={() => cartDrawerOpenVar(false)}
               className="block w-full bg-brand text-white text-center font-bold text-sm font-sans py-4 hover:bg-brand/90 transition-colors"
             >
