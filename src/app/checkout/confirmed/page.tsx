@@ -5,24 +5,17 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { FiCheckCircle } from "react-icons/fi";
-import { useApolloClient, useReactiveVar } from "@apollo/client/react";
-import { GET_CART_QUERY } from "@/graphql/queries";
-import { sessionIdVar } from "@/lib/sessionVar";
+import { useApolloClient } from "@apollo/client/react";
 
 const ConfirmedContent = () => {
   const params          = useSearchParams();
   const paymentIntentId = params.get("payment_intent");
-  const apollo          = useApolloClient();
-  const sessionId       = useReactiveVar(sessionIdVar);
+  const apollo = useApolloClient();
 
   useEffect(() => {
-    if (!sessionId) return;
-    apollo.cache.writeQuery({
-      query:     GET_CART_QUERY,
-      variables: { sessionId },
-      data:      { cart: { items: [], itemCount: 0, totalPrice: 0 } },
-    });
-  }, [apollo, sessionId]);
+    apollo.cache.evict({ fieldName: "cart" });
+    apollo.cache.gc();
+  }, [apollo]);
 
   return (
     <main className="min-h-screen bg-stone-50 pt-[var(--navbar-height)] pb-24 flex items-center justify-center">
