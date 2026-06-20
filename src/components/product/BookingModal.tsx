@@ -145,9 +145,9 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                   <button
                     key={opt}
                     onClick={() => setPickUp(opt)}
-                    className={`flex-1 py-2 text-sm font-semibold font-sans border transition-all active:scale-95 ${
+                    className={`flex-1 py-2 text-sm font-semibold font-sans border rounded-full transition-all active:scale-95 ${
                       pickUp === opt
-                        ? "bg-gray-900 text-white border-gray-900"
+                        ? "bg-brand text-white border-brand"
                         : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
                     }`}
                   >

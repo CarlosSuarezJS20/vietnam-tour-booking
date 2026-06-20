@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FiUsers, FiArrowDown, FiMapPin } from "react-icons/fi";
+import { FiUsers, FiArrowRight, FiMapPin } from "react-icons/fi";
 import type { FeaturedTour } from "@/types/graphql";
 import PillTag from "@/components/ui/PillTag";
 
@@ -58,7 +58,7 @@ const BestSellingTourCard = ({ tour }: Props) => {
         </div>
 
         <Link href={`/tours/${tour.id}`} className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-6 py-3.5 transition-colors font-sans">
-          Find more <FiArrowDown className="w-4 h-4" />
+          Find more <FiArrowRight className="w-4 h-4" />
         </Link>
       </div>
 

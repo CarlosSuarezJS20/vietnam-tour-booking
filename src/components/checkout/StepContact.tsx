@@ -3,9 +3,10 @@
 import { useState } from "react";
 
 export type ContactData = {
-  firstName: string;
-  lastName:  string;
-  email:     string;
+  firstName:  string;
+  lastName:   string;
+  email:      string;
+  isTraveler: boolean;
 };
 
 type Props = {
@@ -18,7 +19,7 @@ const labelClass = "block text-xs font-sans text-gray-500 mb-1";
 
 const StepContact = ({ initialData, onComplete }: Props) => {
   const [data, setData] = useState<ContactData>(
-    initialData ?? { firstName: "", lastName: "", email: "" }
+    initialData ?? { firstName: "", lastName: "", email: "", isTraveler: false }
   );
 
   const isValid = data.firstName.trim() && data.lastName.trim() && data.email.trim();
@@ -42,6 +43,15 @@ const StepContact = ({ initialData, onComplete }: Props) => {
         <label className={labelClass}>Email</label>
         <input type="email" value={data.email} onChange={set("email")} className={inputClass} />
       </div>
+      <label className="flex items-center gap-3 cursor-pointer select-none">
+        <input
+          type="checkbox"
+          checked={data.isTraveler}
+          onChange={(e) => setData((prev) => ({ ...prev, isTraveler: e.target.checked }))}
+          className="w-4 h-4 rounded border-gray-300 accent-brand cursor-pointer"
+        />
+        <span className="text-sm font-sans text-gray-700">I am also travelling</span>
+      </label>
       <button
         onClick={() => isValid && onComplete(data)}
         disabled={!isValid}

@@ -40,6 +40,13 @@ export default function CheckoutPage() {
 
   const handleContactComplete = (data: ContactData) => {
     setContactData(data);
+    if (data.isTraveler) {
+      setTravelerNames((prev) => {
+        const updated = [...prev];
+        updated[0] = { firstName: data.firstName, lastName: data.lastName };
+        return updated;
+      });
+    }
     complete(1);
   };
 
