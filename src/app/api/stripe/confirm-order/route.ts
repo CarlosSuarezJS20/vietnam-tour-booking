@@ -40,15 +40,19 @@ export async function POST(req: Request) {
         contactLastName:      contactData.lastName,
         contactEmail:         contactData.email,
         items: {
-          create: cart.items.map((i, idx) => ({
-            tourId:            i.tourId,
-            cruiseId:          i.cruiseId,
-            date:              i.date,
-            time:              i.time,
-            partySize:         i.partySize,
-            price:             i.price,
-            travelerFirstName: travelerNames[idx]?.firstName ?? "",
-            travelerLastName:  travelerNames[idx]?.lastName  ?? "",
+          create: cart.items.map((i) => ({
+            tourId:    i.tourId,
+            cruiseId:  i.cruiseId,
+            date:      i.date,
+            time:      i.time,
+            partySize: i.partySize,
+            price:     i.price,
+            travelers: {
+              create: travelerNames.map((n: { firstName: string; lastName: string }) => ({
+                firstName: n.firstName,
+                lastName:  n.lastName,
+              })),
+            },
           })),
         },
       },

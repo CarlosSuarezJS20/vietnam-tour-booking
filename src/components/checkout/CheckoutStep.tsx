@@ -14,7 +14,7 @@ const CheckoutStep = ({ number, title, isOpen, isLocked, onClick, children }: Pr
     <button
       onClick={onClick}
       disabled={isLocked}
-      className="w-full flex items-center gap-4 px-6 py-5 text-left disabled:cursor-not-allowed"
+      className="w-full flex items-center gap-4 px-6 py-5 text-left active:bg-gray-50 transition-colors disabled:cursor-not-allowed"
     >
       <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 transition-colors ${
         isOpen ? "bg-gray-900 text-white" : "border-2 border-gray-300 text-gray-400"

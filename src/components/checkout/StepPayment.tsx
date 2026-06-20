@@ -54,7 +54,7 @@ const PayForm = ({ totalPrice, onSuccess }: PayFormProps) => {
       <button
         type="submit"
         disabled={paying || !stripe}
-        className="w-full bg-brand text-white text-sm font-bold font-sans py-4 rounded-xl hover:bg-brand-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full bg-brand text-white text-sm font-bold font-sans py-4 rounded-xl hover:bg-brand-dark active:scale-95 active:brightness-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {paying ? "Processing..." : `Book Now — $${totalPrice.toLocaleString()}`}
       </button>

@@ -57,7 +57,7 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
         {/* Header */}
         <div className="flex items-center justify-between px-5 md:px-8 pt-6 md:pt-8 pb-4">
           <h2 className="text-lg md:text-xl font-bold text-gray-900 font-sans">{product.title}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors p-1">
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 active:scale-90 transition-all p-1">
             <FiX className="w-5 h-5" />
           </button>
         </div>
@@ -82,7 +82,7 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                   <button
                     key={t}
                     onClick={() => setSelTime(t)}
-                    className={`text-xs font-semibold font-sans px-3 py-1.5 rounded transition-colors ${
+                    className={`text-xs font-semibold font-sans px-3 py-1.5 rounded transition-all active:scale-95 ${
                       t === selTime ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                   >
@@ -119,14 +119,14 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => change(-1)}
-                        className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors text-sm"
+                        className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-50 active:bg-gray-200 active:scale-90 transition-all text-sm"
                       >
                         ←
                       </button>
                       <span className="w-4 text-center text-sm font-semibold text-gray-900 font-sans">{val}</span>
                       <button
                         onClick={() => change(1)}
-                        className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors text-sm"
+                        className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-50 active:bg-gray-200 active:scale-90 transition-all text-sm"
                       >
                         →
                       </button>
@@ -145,7 +145,7 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                   <button
                     key={opt}
                     onClick={() => setPickUp(opt)}
-                    className={`flex-1 py-2 text-sm font-semibold font-sans border transition-colors ${
+                    className={`flex-1 py-2 text-sm font-semibold font-sans border transition-all active:scale-95 ${
                       pickUp === opt
                         ? "bg-gray-900 text-white border-gray-900"
                         : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
@@ -211,7 +211,7 @@ const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
                 onClose();
                 cartDrawerOpenVar(true);
               }}
-              className="w-full bg-brand text-white font-bold text-sm font-sans py-3 hover:bg-brand/90 transition-colors mb-5"
+              className="w-full bg-brand text-white font-bold text-sm font-sans py-3 hover:bg-brand/90 active:scale-95 active:brightness-90 transition-all mb-5"
             >
               Add to Cart
             </button>

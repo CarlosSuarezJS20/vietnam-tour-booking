@@ -118,7 +118,7 @@ const CategoriesCarousel = () => {
           ) : (
             <>
               <div className="flex items-center gap-3">
-                <button onClick={scrollPrev} className="hidden md:flex flex-none w-9 h-9 items-center justify-center border border-gray-300 text-gray-500 hover:border-brand hover:text-brand transition-colors">
+                <button onClick={scrollPrev} className="hidden md:flex flex-none w-9 h-9 items-center justify-center border border-gray-300 text-gray-500 hover:border-brand hover:text-brand active:scale-90 active:bg-gray-100 transition-all">
                   <FiChevronLeft className="w-4 h-4" />
                 </button>
 
@@ -135,7 +135,7 @@ const CategoriesCarousel = () => {
                   </div>
                 </div>
 
-                <button onClick={scrollNext} className="hidden md:flex flex-none w-9 h-9 items-center justify-center border border-gray-300 text-gray-500 hover:border-brand hover:text-brand transition-colors">
+                <button onClick={scrollNext} className="hidden md:flex flex-none w-9 h-9 items-center justify-center border border-gray-300 text-gray-500 hover:border-brand hover:text-brand active:scale-90 active:bg-gray-100 transition-all">
                   <FiChevronRight className="w-4 h-4" />
                 </button>
               </div>

@@ -62,7 +62,7 @@ const FilterSidebar = ({
             {activeCount > 0 && (
               <button
                 onClick={clearAll}
-                className="text-xs text-brand hover:underline font-sans"
+                className="text-xs text-brand hover:underline active:opacity-60 transition-opacity font-sans"
               >
                 Reset all
               </button>

@@ -45,7 +45,7 @@ const StepContact = ({ initialData, onComplete }: Props) => {
       <button
         onClick={() => isValid && onComplete(data)}
         disabled={!isValid}
-        className="w-full bg-gray-900 text-white text-sm font-bold font-sans py-4 rounded-xl mt-2 hover:bg-gray-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full bg-gray-900 text-white text-sm font-bold font-sans py-4 rounded-xl mt-2 hover:bg-gray-700 active:scale-95 active:brightness-90 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Continue
       </button>

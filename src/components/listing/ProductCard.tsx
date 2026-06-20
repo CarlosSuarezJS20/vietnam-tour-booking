@@ -35,7 +35,7 @@ const ProductCard = ({ product }: Props) => {
     : null;
 
   return (
-    <div className="group bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col">
+    <div className="group bg-white border border-gray-200 overflow-hidden hover:shadow-lg hover:scale-[1.02] transition-all duration-200 flex flex-col">
       {/* Image */}
       <Link href={`/tours/${product.id}?type=${product.__typename.toLowerCase()}`} className="relative aspect-video overflow-hidden flex-shrink-0 block">
         <Image

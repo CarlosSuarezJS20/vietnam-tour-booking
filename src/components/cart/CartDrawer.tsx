@@ -37,7 +37,7 @@ const CartDrawer = () => {
           <h2 className="text-lg font-bold text-gray-900 font-sans">
             My Cart{itemCount > 0 && `, ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
           </h2>
-          <button onClick={() => cartDrawerOpenVar(false)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors">
+          <button onClick={() => cartDrawerOpenVar(false)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 active:scale-90 active:bg-gray-300 flex items-center justify-center text-gray-500 transition-all">
             <FiX className="w-4 h-4" />
           </button>
         </div>
@@ -80,7 +80,7 @@ const CartDrawer = () => {
 
                 <button
                   onClick={() => removeFromCart(item.uid)}
-                  className="flex items-center gap-2 text-xs text-gray-400 hover:text-red-500 transition-colors font-sans"
+                  className="flex items-center gap-2 text-xs text-gray-400 hover:text-red-500 active:scale-95 active:opacity-70 transition-all font-sans"
                 >
                   <FiTrash2 className="w-3.5 h-3.5" />
                   Remove from cart
@@ -100,7 +100,7 @@ const CartDrawer = () => {
             <Link
               href="/checkout"
               onClick={() => cartDrawerOpenVar(false)}
-              className="block w-full bg-brand text-white text-center font-bold text-sm font-sans py-4 hover:bg-brand/90 transition-colors"
+              className="block w-full bg-brand text-white text-center font-bold text-sm font-sans py-4 hover:bg-brand/90 active:scale-[0.98] active:brightness-90 transition-all"
             >
               Go to checkout
             </Link>
