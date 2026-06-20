@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiX, FiTrash2 } from "react-icons/fi";
@@ -11,6 +12,11 @@ const CartDrawer = () => {
   const isOpen  = useReactiveVar(cartDrawerOpenVar);
   const { data } = useGetCartQuery();
   const { removeFromCart } = useRemoveFromCartMutation();
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
 
   const items      = data?.items      ?? [];
   const itemCount  = data?.itemCount  ?? 0;
@@ -31,8 +37,8 @@ const CartDrawer = () => {
           <h2 className="text-lg font-bold text-gray-900 font-sans">
             My Cart{itemCount > 0 && `, ${itemCount} ${itemCount === 1 ? "item" : "items"}`}
           </h2>
-          <button onClick={() => cartDrawerOpenVar(false)} className="text-gray-400 hover:text-gray-600 transition-colors p-1">
-            <FiX className="w-5 h-5" />
+          <button onClick={() => cartDrawerOpenVar(false)} className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors">
+            <FiX className="w-4 h-4" />
           </button>
         </div>
 

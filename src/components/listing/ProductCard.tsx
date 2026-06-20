@@ -11,7 +11,7 @@ interface Props {
 
 const SkeletonCard = () => {
   return (
-    <div className="bg-white border border-gray-100 overflow-hidden animate-pulse">
+    <div className="bg-white border border-gray-200 overflow-hidden animate-pulse">
       <div className="aspect-video bg-gray-200" />
       <div className="p-4 space-y-2">
         <div className="h-3 bg-gray-200 rounded w-3/4" />
@@ -35,9 +35,9 @@ const ProductCard = ({ product }: Props) => {
     : null;
 
   return (
-    <div className="group bg-white border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col">
+    <div className="group bg-white border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-200 flex flex-col">
       {/* Image */}
-      <div className="relative aspect-video overflow-hidden flex-shrink-0">
+      <Link href={`/tours/${product.id}?type=${product.__typename.toLowerCase()}`} className="relative aspect-video overflow-hidden flex-shrink-0 block">
         <Image
           src={product.imageUrl}
           alt={product.title}
@@ -68,7 +68,7 @@ const ProductCard = ({ product }: Props) => {
             </span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">

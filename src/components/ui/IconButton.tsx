@@ -10,8 +10,8 @@ interface IconButtonProps {
 
 const IconButton = ({ children, onClick, className = "", hoverEffect = true, dark = false }: IconButtonProps) => {
   const colors = dark
-    ? `border-gray-300 text-gray-700 ${hoverEffect ? "hover:bg-gray-100" : ""}`
-    : `border-white/70 text-white ${hoverEffect ? "hover:bg-white/10" : ""}`;
+    ? `border-gray-300 text-gray-700 ${hoverEffect ? "hover:bg-gray-100" : ""} active:bg-gray-200 active:scale-95`
+    : `border-white/70 text-white ${hoverEffect ? "hover:bg-white/10" : ""} active:bg-white/20 active:scale-95`;
 
   return (
     <button

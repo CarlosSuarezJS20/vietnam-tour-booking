@@ -199,8 +199,8 @@ const Navbar = () => {
               placeholder="Search destinations, tours…"
               className="flex-1 text-sm text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
             />
-            <button onClick={closeSearch} className="flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors">
-              <FiX className="w-5 h-5" />
+            <button onClick={closeSearch} className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors">
+              <FiX className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -243,8 +243,8 @@ const Navbar = () => {
                 placeholder="Search destinations, tours…"
                 className="flex-1 text-base text-gray-700 placeholder-gray-400 outline-none bg-transparent font-sans"
               />
-              <button onClick={closeSearch} className="flex-shrink-0 text-gray-400 hover:text-gray-700 transition-colors">
-                <FiX className="w-5 h-5" />
+              <button onClick={closeSearch} className="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-500 transition-colors">
+                <FiX className="w-4 h-4" />
               </button>
             </div>
             <SearchDropdown query={searchValue} onClose={closeSearch} />

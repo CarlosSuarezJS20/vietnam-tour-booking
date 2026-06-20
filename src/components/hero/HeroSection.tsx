@@ -25,7 +25,7 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
           <p className="italic text-white/70 text-sm mb-6 max-w-xs font-sans">
             Premium, custom-crafted Vietnam experiences built on years of local expertise.
           </p>
-          <Link href="/tours" className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-7 py-3 tracking-wider transition-colors">
+          <Link href="/tours" className="bg-brand hover:bg-brand-dark active:bg-brand-dark active:scale-95 text-white text-sm font-semibold px-7 py-3 rounded-full tracking-wider transition-all">
             Explore Our Tours
           </Link>
         </div>
@@ -47,7 +47,7 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
           <p className="italic text-white/70 text-base mb-8 max-w-sm font-sans">
             Premium, custom-crafted Vietnam experiences built on years of local expertise.
           </p>
-          <Link href="/tours" className="bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-9 py-3.5 tracking-wider transition-colors">
+          <Link href="/tours" className="bg-brand hover:bg-brand-dark active:bg-brand-dark active:scale-95 text-white text-sm font-semibold px-9 py-3.5 rounded-full tracking-wider transition-all">
             Explore Our Tours
           </Link>
         </div>

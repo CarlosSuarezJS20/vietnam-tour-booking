@@ -29,10 +29,10 @@ const ToursListing = () => {
 
       <div className="flex-1 min-w-0">
         {/* Mobile filter bar */}
-        <div className="md:hidden sticky top-[65px] z-30 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+        <div className="md:hidden sticky top-[65px] z-30 bg-white border-b border-gray-100 px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => setFilterOpen(true)}
-            className="flex items-center gap-2 text-sm font-semibold text-gray-700 font-sans border border-gray-200 px-3 py-2"
+            className="flex items-center gap-2 text-sm font-semibold text-gray-700 font-sans border border-gray-200 px-4 py-3"
           >
             <FiSliders className="w-4 h-4" />
             Filters
