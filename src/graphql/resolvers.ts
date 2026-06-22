@@ -18,14 +18,13 @@ const PAGE_SIZE = 12;
 // it belongs to so the next request knows which table to resume from.
 type CursorPayload = { id: string; type: "Tour" | "Cruise" };
 
-function encodeCursor(id: string, type: "Tour" | "Cruise"): string {
+const encodeCursor = (id: string, type: "Tour" | "Cruise"): string => {
   const payload: CursorPayload = { id, type };
   return Buffer.from(JSON.stringify(payload)).toString("base64");
-}
+};
 
-function decodeCursor(cursor: string): CursorPayload {
-  return JSON.parse(Buffer.from(cursor, "base64").toString("utf8")) as CursorPayload;
-}
+const decodeCursor = (cursor: string): CursorPayload =>
+  JSON.parse(Buffer.from(cursor, "base64").toString("utf8")) as CursorPayload;
 
 // Filters accepted by searchProducts
 type ProductFilters = {
@@ -50,39 +49,35 @@ type PoolItem = (Tour & { __typename: "Tour" }) | (Cruise & { __typename: "Cruis
 
 // Builds the Prisma WHERE clause for tours from the active filters.
 // Kept separate so filter logic stays out of the pagination logic.
-function buildTourWhere(filters: ProductFilters) {
-  return {
-    ...(filters.categories?.length && {
-      categories: { some: { category: { slug: { in: filters.categories } } } },
-    }),
-    ...((filters.regions?.length || filters.cities?.length) && {
-      cities: {
-        some: {
-          city: {
-            OR: [
-              ...(filters.regions?.length ? [{ region: { key: { in: filters.regions } } }] : []),
-              ...(filters.cities?.length  ? [{ id:     { in: filters.cities } }]            : []),
-            ],
-          },
+const buildTourWhere = (filters: ProductFilters) => ({
+  ...(filters.categories?.length && {
+    categories: { some: { category: { slug: { in: filters.categories } } } },
+  }),
+  ...((filters.regions?.length || filters.cities?.length) && {
+    cities: {
+      some: {
+        city: {
+          OR: [
+            ...(filters.regions?.length ? [{ region: { key: { in: filters.regions } } }] : []),
+            ...(filters.cities?.length  ? [{ id:     { in: filters.cities } }]            : []),
+          ],
         },
       },
-    }),
-    ...(filters.deals && { onSale: true }),
-    // minPrice / maxPrice are NOT applied here.
-    // price is stored as a formatted string (e.g. "$1,200"), not a numeric column,
-    // so SQL cannot compare it directly. Price filtering happens in JS after the
-    // DB fetch. To fix this, add a numeric priceValue column to Tour and Cruise.
-  };
-}
+    },
+  }),
+  ...(filters.deals && { onSale: true }),
+  // minPrice / maxPrice are NOT applied here.
+  // price is stored as a formatted string (e.g. "$1,200"), not a numeric column,
+  // so SQL cannot compare it directly. Price filtering happens in JS after the
+  // DB fetch. To fix this, add a numeric priceValue column to Tour and Cruise.
+});
 
 // Builds the Prisma WHERE clause for cruises.
 // Cruises don't support category or city filters yet — only deals applies.
-function buildCruiseWhere(filters: ProductFilters) {
-  return {
-    ...(filters.deals && { onSale: true }),
-    // Same price limitation as buildTourWhere.
-  };
-}
+const buildCruiseWhere = (filters: ProductFilters) => ({
+  ...(filters.deals && { onSale: true }),
+  // Same price limitation as buildTourWhere.
+});
 
 export const resolvers = {
   Product: {
