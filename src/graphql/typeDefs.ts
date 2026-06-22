@@ -26,7 +26,7 @@ const typeDefs = `
     itinerary:    String!
     imageUrl:     String!
     duration:     String!
-    price:        Float!
+    price:        String!
     cities:       [City!]!
     categories:   [TourCategory!]!
     featuredTour: Boolean!
@@ -41,7 +41,7 @@ const typeDefs = `
     description: String!
     itinerary:   String!
     duration:    String!
-    price:       Float!
+    price:       String!
     sourceUrl:   String!
     onSale:                Boolean!
     saleDiscountPercentage: Int

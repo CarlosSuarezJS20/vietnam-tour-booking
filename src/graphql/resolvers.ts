@@ -1,13 +1,21 @@
 import { prisma } from "@/lib/prisma";
+import { parsePriceValue } from "@/lib/tourParsers";
 import type { CartItemInput } from "@/types/graphql";
 import type { Tour, Cruise } from "@/generated/prisma/client";
-import {
-  buildCartFromDb, encodeCursor, decodeCursor,
-  buildTourWhere, buildCruiseWhere,
-  type PoolItem, type ProductFilters,
-} from "./helpers";
+import { buildCartFromDb, encodeCursor, decodeCursor, type PoolItem } from "./helpers";
 
 const PAGE_SIZE = 12;
+
+// Filters accepted by searchProducts
+type ProductFilters = {
+  types?:      string[];
+  categories?: string[];
+  regions?:    string[];
+  cities?:     string[];
+  minPrice?:   number;
+  maxPrice?:   number;
+  deals?:      boolean;
+};
 
 // Named interface for the searchProducts resolver arguments
 interface SearchProductsArgs {
@@ -15,6 +23,38 @@ interface SearchProductsArgs {
   first?:   number;
   after?:   string | null;
 }
+
+// Builds the Prisma WHERE clause for tours from the active filters.
+// Kept separate so filter logic stays out of the pagination logic.
+const buildTourWhere = (filters: ProductFilters) => ({
+  ...(filters.categories?.length && {
+    categories: { some: { category: { slug: { in: filters.categories } } } },
+  }),
+  ...((filters.regions?.length || filters.cities?.length) && {
+    cities: {
+      some: {
+        city: {
+          OR: [
+            ...(filters.regions?.length ? [{ region: { key: { in: filters.regions } } }] : []),
+            ...(filters.cities?.length  ? [{ id:     { in: filters.cities } }]            : []),
+          ],
+        },
+      },
+    },
+  }),
+  ...(filters.deals && { onSale: true }),
+  // minPrice / maxPrice are NOT applied here.
+  // price is stored as a formatted string (e.g. "$1,200"), not a numeric column,
+  // so SQL cannot compare it directly. Price filtering happens in JS after the
+  // DB fetch. To fix this, add a numeric priceValue column to Tour and Cruise.
+});
+
+// Builds the Prisma WHERE clause for cruises.
+// Cruises don't support category or city filters yet — only deals applies.
+const buildCruiseWhere = (filters: ProductFilters) => ({
+  ...(filters.deals && { onSale: true }),
+  // Same price limitation as buildTourWhere.
+});
 
 export const resolvers = {
   Product: {
@@ -86,6 +126,18 @@ export const resolvers = {
         ...rawTours.map(t  => ({ ...t, __typename: "Tour"   as const })),
         ...rawCruises.map(c => ({ ...c, __typename: "Cruise" as const })),
       ];
+
+      // Apply price filters in JS — price is a formatted string in the DB so it
+      // cannot be filtered at the SQL level (see buildTourWhere for details).
+      // Limitation: when a price filter is active, pages may return fewer than
+      // `first` items even when more pages exist, and `total` will not reflect
+      // the price filter.
+      if (filters.minPrice != null) {
+        pool = pool.filter(i => parsePriceValue(i.price) >= filters.minPrice!);
+      }
+      if (filters.maxPrice != null) {
+        pool = pool.filter(i => parsePriceValue(i.price) <= filters.maxPrice!);
+      }
 
       // The extra item we fetched (first+1) tells us whether a next page exists.
       const hasNextPage = pool.length > first;

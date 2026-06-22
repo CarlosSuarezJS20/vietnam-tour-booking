@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import Fuse from "fuse.js";
 import { useGetAllToursQuery, useGetAllCruisesQuery } from "@/graphql/hooks";
-import { durationBucket } from "@/lib/tourParsers";
+import { parsePriceValue, durationBucket } from "@/lib/tourParsers";
 import type { SearchItem, SearchFilters } from "@/types/graphql";
 
 export const DEFAULT_FILTERS: SearchFilters = {
@@ -63,7 +63,10 @@ export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FI
       );
     }
 
-    pool = pool.filter(i => i.price >= filters.minPrice && i.price <= filters.maxPrice);
+    pool = pool.filter(i => {
+      const p = parsePriceValue(i.price);
+      return p >= filters.minPrice && p <= filters.maxPrice;
+    });
 
     if (filters.duration !== "any") {
       pool = pool.filter(i => durationBucket(i.duration) === filters.duration);

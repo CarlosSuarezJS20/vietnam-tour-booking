@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { FiX, FiCheck, FiInfo } from "react-icons/fi";
+import { parsePriceValue } from "@/lib/tourParsers";
 import { cartDrawerOpenVar } from "@/lib/cartDrawerVar";
 import { useAddToCartMutation } from "@/graphql/hooks";
 import type { ProductDetail } from "@/types/graphql";
@@ -18,7 +19,7 @@ const TIME_SLOTS = ["08:00", "10:00", "12:00", "14:00", "15:30", "17:00"];
 
 const BookingModal = ({ isOpen, onClose, product, productType }: Props) => {
   const today          = new Date();
-  const basePrice      = product.price;
+  const basePrice      = parsePriceValue(product.price);
   const effectivePrice = product.onSale && product.saleDiscountPercentage
     ? Math.floor(basePrice * (1 - product.saleDiscountPercentage / 100))
     : basePrice;

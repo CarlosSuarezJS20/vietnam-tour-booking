@@ -18,6 +18,7 @@ interface CardSkeletonProps {
 }
 
 const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
+  const [, priceValue] = cruise.price.split(": ");
 
   return (
     <div
@@ -48,7 +49,7 @@ const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
         </h3>
         <div className="flex items-center gap-4 mt-2 md:mt-3">
           <span className="inline-block bg-brand text-white text-xs md:text-sm font-semibold font-sans px-2.5 py-0.5 rounded-full">{cruise.duration}</span>
-          <span className="text-white font-sans"><span className="text-xs md:text-sm font-light opacity-70">From </span><span className="text-sm md:text-lg font-bold">${cruise.price.toLocaleString()}</span></span>
+          <span className="text-white font-sans"><span className="text-xs md:text-sm font-light opacity-70">From </span><span className="text-sm md:text-lg font-bold">{priceValue ?? cruise.price}</span></span>
         </div>
       </div>
     </div>

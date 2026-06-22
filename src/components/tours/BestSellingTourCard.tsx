@@ -10,6 +10,7 @@ interface Props {
 }
 
 const BestSellingTourCard = ({ tour }: Props) => {
+  const [, priceValue] = tour.price.split(": ");
   const areas = [...new Set(tour.cities.map((c) => c.region.label))];
 
   return (
@@ -50,7 +51,7 @@ const BestSellingTourCard = ({ tour }: Props) => {
           <div className="flex items-baseline gap-3 mb-1">
             <span className="text-white/50 text-xs uppercase tracking-wider font-sans">From</span>
             <span className="text-white text-3xl font-bold leading-none font-sans">
-              ${tour.price.toLocaleString()}
+              {priceValue ?? tour.price}
             </span>
           </div>
           <p className="text-white/40 text-xs font-sans">per person · double occupancy</p>

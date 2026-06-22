@@ -24,6 +24,7 @@ const SkeletonCard = () => {
 
 const ProductCard = ({ product }: Props) => {
   const isTour = product.__typename === "Tour";
+  const [, priceValue] = product.price.split(": ");
 
   const regionLabel = isTour && product.cities[0]
     ? product.cities[0].region.label
@@ -99,7 +100,7 @@ const ProductCard = ({ product }: Props) => {
           <div>
             <span className="text-[10px] text-gray-400 uppercase tracking-wide font-sans">From</span>
             <p className="text-lg font-bold text-gray-900 font-sans leading-tight">
-              ${product.price.toLocaleString()}
+              {priceValue ?? product.price}
             </p>
             {product.onSale && product.saleDiscountPercentage != null && (
               <p className="text-[11px] font-semibold text-brand font-sans mt-0.5">

@@ -26,7 +26,7 @@ describe("Query resolvers", () => {
     it("returns a single tour by id", async () => {
       const mockTour = {
         id: "1", title: "Test Tour", description: "", itinerary: "",
-        duration: "3 days", price: 120, featuredTour: false,
+        duration: "3 days", price: "From: $120", featuredTour: false,
         onSale: false, saleDiscountPercentage: null, createdAt: new Date(),
       };
 
@@ -51,7 +51,7 @@ describe("Query resolvers", () => {
     it("returns the first tour with featuredTour: true", async () => {
       const mockTour = {
         id: "1", title: "Featured Tour", description: "", itinerary: "",
-        duration: "5 days", price: 500, featuredTour: true,
+        duration: "5 days", price: "From: $500", featuredTour: true,
         onSale: false, saleDiscountPercentage: null, createdAt: new Date(),
       };
 

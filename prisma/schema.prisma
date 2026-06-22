@@ -57,7 +57,7 @@ model Tour {
   description            String
   itinerary              String
   duration               String
-  price                  Float
+  price                  String
   featuredTour           Boolean  @default(false)
   onSale                 Boolean  @default(false)
   saleDiscountPercentage Int?
@@ -83,7 +83,7 @@ model Cruise {
   description            String
   itinerary              String
   duration               String
-  price                  Float
+  price                  String
   sourceUrl              String
   onSale                 Boolean  @default(false)
   saleDiscountPercentage Int?
