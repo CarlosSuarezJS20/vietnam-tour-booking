@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { FiMapPin, FiClock, FiTag } from "react-icons/fi";
 import type { ProductDetail } from "@/types/graphql";
-import { parsePriceValue } from "@/lib/tourParsers";
 
 interface Props {
   product: ProductDetail;
@@ -88,7 +87,7 @@ const ProductHero = ({ product }: Props) => {
         <div className="mb-8">
           <p className="text-[11px] uppercase tracking-wide text-gray-400 font-sans mb-1">Price From</p>
           <p className="text-3xl md:text-4xl font-bold text-gray-900 font-sans">
-            ${parsePriceValue(product.price).toLocaleString()}
+            ${product.price.toLocaleString()}
           </p>
           {product.onSale && product.saleDiscountPercentage != null && (
             <p className="text-sm font-semibold text-brand font-sans mt-1">

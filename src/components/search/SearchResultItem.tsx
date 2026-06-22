@@ -52,7 +52,7 @@ const SearchResultItem = ({ item, onClick }: Props) => {
       </div>
 
       <span className="text-xs font-semibold text-gray-700 flex-shrink-0 hidden sm:block">
-        {item.price.replace("From: ", "")}
+        ${item.price.toLocaleString()}
       </span>
     </Link>
   );
