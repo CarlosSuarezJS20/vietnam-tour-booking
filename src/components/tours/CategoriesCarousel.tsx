@@ -19,7 +19,6 @@ const CATEGORIES = {
 type CategoryKey = keyof typeof CATEGORIES;
 
 const TourCard = ({ tour }: { tour: CarouselTour }) => {
-  const [, priceValue] = tour.price.split(": ");
 
   return (
     <div className="flex flex-col group cursor-pointer">
@@ -37,7 +36,7 @@ const TourCard = ({ tour }: { tour: CarouselTour }) => {
       </p>
       <p className="text-sm font-sans">
         <PillTag variant="brand">{tour.duration}</PillTag>
-        <span className="text-gray-400 font-light"> · From </span><span className="text-gray-900 font-bold">{priceValue ?? tour.price}</span>
+        <span className="text-gray-400 font-light"> · From </span><span className="text-gray-900 font-bold">${tour.price.toLocaleString()}</span>
       </p>
     </div>
   );

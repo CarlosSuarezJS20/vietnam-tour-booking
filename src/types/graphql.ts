@@ -9,7 +9,7 @@ export interface CarouselTour {
   title:      string;
   imageUrl:   string;
   duration:   string;
-  price:      string;
+  price:      number;
   categories: TourCategory[];
 }
 
@@ -33,7 +33,7 @@ export interface Cruise {
   description: string;
   itinerary:   string;
   duration:    string;
-  price:       string;
+  price:       number;
   sourceUrl:   string;
 }
 
@@ -44,7 +44,7 @@ export interface SearchTour {
   itinerary:    string;
   imageUrl:     string;
   duration:     string;
-  price:        string;
+  price:        number;
   featuredTour: boolean;
   cities:       (City & { region: { id: string; key: string; label: string } })[];
   categories:   TourCategory[];
@@ -59,7 +59,7 @@ export interface SearchCruise {
   itinerary:   string;
   imageUrl:    string;
   duration:    string;
-  price:       string;
+  price:       number;
   sourceUrl:   string;
   _type:       "cruise";
 }
@@ -81,7 +81,7 @@ export interface ListingTour {
   title:       string;
   imageUrl:    string;
   duration:    string;
-  price:       string;
+  price:       number;
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
@@ -95,7 +95,7 @@ export interface ListingCruise {
   title:       string;
   imageUrl:    string;
   duration:    string;
-  price:       string;
+  price:       number;
   description: string;
   sourceUrl:   string;
   onSale:      boolean;
@@ -185,7 +185,7 @@ export interface ProductDetailTour {
   itinerary:   string;
   imageUrl:    string;
   duration:    string;
-  price:       string;
+  price:       number;
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
@@ -201,7 +201,7 @@ export interface ProductDetailCruise {
   itinerary:   string;
   imageUrl:    string;
   duration:    string;
-  price:       string;
+  price:       number;
   sourceUrl:   string;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
@@ -215,7 +215,7 @@ export interface FeaturedTour {
   description:  string;
   imageUrl:     string;
   duration:     string;
-  price:        string;
+  price:        number;
   cities:       (City & { region: { label: string } })[];
   categories:   TourCategory[];
   featuredTour: boolean;

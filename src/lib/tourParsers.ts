@@ -1,9 +1,3 @@
-export function parsePriceValue(price: string): number {
-  const match = price.match(/\$([\d,]+)/);
-  if (!match) return 0;
-  return parseInt(match[1].replace(/,/g, ""), 10);
-}
-
 export function parseDurationDays(duration: string): number {
   const lower = duration.toLowerCase().trim();
   if (lower.includes("half")) return 0.5;
