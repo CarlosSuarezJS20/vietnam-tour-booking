@@ -2,29 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { parsePriceValue } from "@/lib/tourParsers";
 import type { CartItemInput } from "@/types/graphql";
 import type { Tour, Cruise } from "@/generated/prisma/client";
-
-const buildCartFromDb = (cart: { items: { id: string; tourId: string | null; cruiseId: string | null; date: string; time: string; partySize: number; price: number }[] } | null) => {
-  const items = cart?.items ?? [];
-  return {
-    items:      items.map(i => ({ ...i, uid: i.id })),
-    itemCount:  items.length,
-    totalPrice: items.reduce((sum, i) => sum + i.price, 0),
-  };
-};
+import { buildCartFromDb, encodeCursor, decodeCursor, type PoolItem } from "./helpers";
 
 const PAGE_SIZE = 12;
-
-// Payload stored inside every cursor — encodes both the row id and which table
-// it belongs to so the next request knows which table to resume from.
-type CursorPayload = { id: string; type: "Tour" | "Cruise" };
-
-const encodeCursor = (id: string, type: "Tour" | "Cruise"): string => {
-  const payload: CursorPayload = { id, type };
-  return Buffer.from(JSON.stringify(payload)).toString("base64");
-};
-
-const decodeCursor = (cursor: string): CursorPayload =>
-  JSON.parse(Buffer.from(cursor, "base64").toString("utf8")) as CursorPayload;
 
 // Filters accepted by searchProducts
 type ProductFilters = {
@@ -43,9 +23,6 @@ interface SearchProductsArgs {
   first?:   number;
   after?:   string | null;
 }
-
-// Module-level union type for items in the merged tour+cruise pool
-type PoolItem = (Tour & { __typename: "Tour" }) | (Cruise & { __typename: "Cruise" });
 
 // Builds the Prisma WHERE clause for tours from the active filters.
 // Kept separate so filter logic stays out of the pagination logic.
