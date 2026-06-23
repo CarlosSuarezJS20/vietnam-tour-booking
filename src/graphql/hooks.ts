@@ -16,10 +16,11 @@ import {
   GET_CART_QUERY,
   ADD_TO_CART_MUTATION,
   REMOVE_FROM_CART_MUTATION,
+  SUBMIT_ENQUIRY_MUTATION,
 } from "./queries";
 import { useReactiveVar } from "@apollo/client/react";
 import { sessionIdVar } from "@/lib/sessionVar";
-import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise, ProductConnection, GqlProductFilters, ProductDetailTour, ProductDetailCruise, GqlCart, CartItemInput } from "@/types/graphql";
+import type { TourCategory, Region, FeaturedTour, CarouselTour, Cruise, SearchTour, SearchCruise, ProductConnection, GqlProductFilters, ProductDetailTour, ProductDetailCruise, GqlCart, CartItemInput, EnquiryInput, EnquiryResult } from "@/types/graphql";
 
 export function useGetTourCategoriesQuery() {
   const { data, loading, error } = useQuery<{ tourCategories: TourCategory[] }>(
@@ -117,6 +118,18 @@ export const useGetCruiseByIdQuery = (id: string, skip = false) => {
   );
   return { data: data?.cruise ?? null, loading, error };
 };
+
+export function useSubmitEnquiryMutation() {
+  const [mutate, { loading, error }] = useMutation<
+    { submitEnquiry: EnquiryResult },
+    { input: EnquiryInput }
+  >(SUBMIT_ENQUIRY_MUTATION);
+  return {
+    submitEnquiry: (input: EnquiryInput) => mutate({ variables: { input } }),
+    loading,
+    error,
+  };
+}
 
 export function useSearchProductsQuery(variables: {
   filters?: GqlProductFilters;

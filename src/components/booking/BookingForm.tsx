@@ -6,6 +6,8 @@ import StepIndicator from "./StepIndicator";
 import StepTourType from "./steps/StepTourType";
 import StepDestination from "./steps/StepDestination";
 import StepDates from "./steps/StepDates";
+import StepCruise from "./steps/StepCruise";
+import StepExtras from "./steps/StepExtras";
 import StepDetails from "./steps/StepDetails";
 import StepContact from "./steps/StepContact";
 import StepConfirmed from "./steps/StepConfirmed";
@@ -16,6 +18,8 @@ export type FormData = {
   cities: string[];
   departureDate: string;
   nights: number;
+  includeCruise: boolean | null;
+  extras: string;
   name: string;
   email: string;
   phone: string;
@@ -27,6 +31,8 @@ const STEPS = [
   { label: "Tour Type" },
   { label: "Destination" },
   { label: "Dates" },
+  { label: "Cruise" },
+  { label: "Extras" },
   { label: "Your Details" },
   { label: "Contact" },
   { label: "Confirmed" },
@@ -38,6 +44,8 @@ const INITIAL: FormData = {
   cities: [],
   departureDate: "",
   nights: 7,
+  includeCruise: null,
+  extras: "",
   name: "",
   email: "",
   phone: "",
@@ -56,8 +64,10 @@ const BookingForm = () => {
     if (step === 1) return !!formData.tourType;
     if (step === 2) return !!formData.region;
     if (step === 3) return !!formData.departureDate;
-    if (step === 4) return !!formData.name && !!formData.email;
-    if (step === 5) return !!formData.contactPreference;
+    if (step === 4) return formData.includeCruise !== null;
+    if (step === 5) return true;
+    if (step === 6) return !!formData.name && !!formData.email;
+    if (step === 7) return !!formData.contactPreference;
     return true;
   };
 
@@ -83,12 +93,14 @@ const BookingForm = () => {
             {step === 1 && <StepTourType {...stepProps} />}
             {step === 2 && <StepDestination {...stepProps} />}
             {step === 3 && <StepDates {...stepProps} />}
-            {step === 4 && <StepDetails {...stepProps} />}
-            {step === 5 && <StepContact {...stepProps} />}
-            {step === 6 && <StepConfirmed {...stepProps} onRestart={() => { setStep(1); setFormData(INITIAL); }} />}
+            {step === 4 && <StepCruise {...stepProps} />}
+            {step === 5 && <StepExtras {...stepProps} />}
+            {step === 6 && <StepDetails {...stepProps} />}
+            {step === 7 && <StepContact {...stepProps} />}
+            {step === 8 && <StepConfirmed {...stepProps} onRestart={() => { setStep(1); setFormData(INITIAL); }} />}
           </div>
 
-          {step < 6 && (
+          {step < 8 && (
             <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
               <button
                 onClick={() => setStep((s) => Math.max(1, s - 1))}
@@ -98,7 +110,7 @@ const BookingForm = () => {
                 <FiArrowLeft className="w-4 h-4" /> Back
               </button>
               <button
-                onClick={() => setStep((s) => Math.min(6, s + 1))}
+                onClick={() => setStep((s) => Math.min(8, s + 1))}
                 disabled={!canContinue()}
                 className="flex items-center gap-2 bg-brand hover:bg-brand-dark text-white text-sm font-semibold px-8 py-3 rounded-full font-sans transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >

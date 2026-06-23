@@ -1,10 +1,9 @@
-import { FiGlobe, FiCompass, FiAnchor, FiMap, FiEdit2 } from "react-icons/fi";
+import { FiGlobe, FiCompass, FiMap, FiEdit2 } from "react-icons/fi";
 import type { FormData } from "../BookingForm";
 
 const TYPES = [
   { id: "cultural",  label: "Cultural Tours",        description: "Ancient temples, historic sites and local traditions.", Icon: FiGlobe },
   { id: "adventure", label: "Adventure Tours",        description: "Trekking, motorbike trails and off-the-beaten-track experiences.", Icon: FiCompass },
-  { id: "cruise",    label: "Ha Long Bay Cruise",     description: "Overnight or multi-day cruises through iconic limestone karsts.", Icon: FiAnchor },
   { id: "city",      label: "City Day Tours",         description: "Guided half or full-day tours of Hanoi, Hoi An and more.", Icon: FiMap },
   { id: "custom",    label: "Custom / Tailor-made",   description: "Tell us your dream trip and we'll design it from scratch.", Icon: FiEdit2 },
 ];

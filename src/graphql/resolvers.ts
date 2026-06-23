@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import type { CartItemInput } from "@/types/graphql";
+import type { CartItemInput, EnquiryInput } from "@/types/graphql";
 import type { Tour, Cruise } from "@/generated/prisma/client";
 import {
   buildCartFromDb, encodeCursor, decodeCursor,
@@ -190,6 +190,11 @@ export const resolvers = {
         include: { items: true },
       });
       return buildCartFromDb(cart);
+    },
+
+    submitEnquiry: async (_: unknown, { input }: { input: EnquiryInput }) => {
+      const enquiry = await prisma.enquiry.create({ data: input });
+      return { id: enquiry.id, createdAt: enquiry.createdAt.toISOString() };
     },
   },
 

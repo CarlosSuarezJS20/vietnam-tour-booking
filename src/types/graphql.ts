@@ -209,6 +209,26 @@ export interface ProductDetailCruise {
 
 export type ProductDetail = ProductDetailTour | ProductDetailCruise;
 
+export interface EnquiryInput {
+  tourType:          string;
+  region:            string;
+  cities:            string[];
+  departureDate:     string;
+  nights:            number;
+  includeCruise:     boolean;
+  extras?:           string;
+  name:              string;
+  email:             string;
+  phone:             string;
+  travellers:        number;
+  contactPreference: string;
+}
+
+export interface EnquiryResult {
+  id:        string;
+  createdAt: string;
+}
+
 export interface FeaturedTour {
   id:           string;
   title:        string;

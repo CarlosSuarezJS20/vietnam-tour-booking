@@ -129,6 +129,30 @@ const typeDefs = `
     removeFromCart(sessionId: String!, uid: ID!):         Cart!
     clearCart(sessionId: String!):                        Cart!
   }
+
+  input EnquiryInput {
+    tourType:          String!
+    region:            String!
+    cities:            [String!]!
+    departureDate:     String!
+    nights:            Int!
+    includeCruise:     Boolean!
+    extras:            String
+    name:              String!
+    email:             String!
+    phone:             String!
+    travellers:        Int!
+    contactPreference: String!
+  }
+
+  type EnquiryResult {
+    id:        ID!
+    createdAt: String!
+  }
+
+  extend type Mutation {
+    submitEnquiry(input: EnquiryInput!): EnquiryResult!
+  }
 `;
 
 export default typeDefs;

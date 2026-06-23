@@ -95,6 +95,15 @@ export const ADD_TO_CART_MUTATION = gql`
   }
 `;
 
+export const SUBMIT_ENQUIRY_MUTATION = gql`
+  mutation SubmitEnquiry($input: EnquiryInput!) {
+    submitEnquiry(input: $input) {
+      id
+      createdAt
+    }
+  }
+`;
+
 export const REMOVE_FROM_CART_MUTATION = gql`
   ${CART_FIELDS}
   mutation RemoveFromCart($sessionId: String!, $uid: ID!) {

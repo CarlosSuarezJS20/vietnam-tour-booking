@@ -148,3 +148,21 @@ model TravelerDetail {
   firstName   String
   lastName    String
 }
+
+model Enquiry {
+  id                String   @id @default(cuid())
+  tourType          String
+  region            String
+  cities            String[]
+  departureDate     String
+  nights            Int
+  includeCruise     Boolean
+  extras            String?
+  name              String
+  email             String
+  phone             String
+  travellers        Int
+  contactPreference String
+  status            String   @default("new")
+  createdAt         DateTime @default(now())
+}

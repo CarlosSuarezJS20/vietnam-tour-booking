@@ -6,9 +6,9 @@ interface Props { formData: FormData; onChange: (p: Partial<FormData>) => void }
 
 const StepDestination = ({ formData, onChange }: Props) => {
   const { data: regions = [], loading } = useGetRegionsQuery();
-  const [activeRegion, setActiveRegion] = useState(formData.region || regions[0]?.key || "");
+  const [activeRegion, setActiveRegion] = useState(formData.region || "");
 
-  const current = regions.find((r) => r.key === activeRegion) ?? regions[0];
+  const current = regions.find((r) => r.key === activeRegion);
 
   const selectRegion = (key: string) => {
     setActiveRegion(key);
