@@ -91,7 +91,9 @@ export const GET_CART_QUERY = gql`
 export const ADD_TO_CART_MUTATION = gql`
   ${CART_FIELDS}
   mutation AddToCart($sessionId: String!, $input: CartItemInput!) {
-    addToCart(sessionId: $sessionId, input: $input) { ...CartFields }
+    addToCart(sessionId: $sessionId, input: $input) { 
+    ...CartFields 
+    }
   }
 `;
 

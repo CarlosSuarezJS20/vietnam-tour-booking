@@ -184,7 +184,7 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
           Deals
         </Link>
         <a href="/#about-section" onClick={onClose} className={linkClass}>
-          Contact Us
+          About Us
         </a>
       </div>
     </div>

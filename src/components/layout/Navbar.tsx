@@ -207,14 +207,14 @@ const Navbar = () => {
 
         {/* Desktop right actions */}
         <div className="hidden lg:flex items-center gap-3">
-          <div className="flex items-center gap-3 group cursor-pointer">
+          <Link href="/about" className="flex items-center gap-3 group">
             <span className={`text-sm font-medium transition-all group-hover:opacity-70 group-hover:tracking-wider font-sans ${pastHero ? "text-gray-800" : "text-white"}`}>
-              Contact Us
+              About Us
             </span>
             <IconButton dark={pastHero} className={!pastHero ? "group-hover:bg-white/20 group-hover:border-white" : ""}>
               <FiArrowUpRight className="w-5 h-5 transition-transform group-hover:scale-110" />
             </IconButton>
-          </div>
+          </Link>
           <CartIconButton dark={pastHero} />
           <PillButton variant="brand">My Bookings</PillButton>
         </div>

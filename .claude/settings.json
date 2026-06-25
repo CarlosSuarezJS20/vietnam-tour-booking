@@ -4,7 +4,11 @@
       "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking push origin main)",
       "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking add src/components/product/BookingModal.tsx)",
       "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking commit -m ' *)",
-      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking add package.json)"
+      "Bash(git -C /Users/kyotoescobarbabaeva/vietnam-tour-booking add package.json)",
+      "Bash(npx vercel *)",
+      "Bash(node -e ' *)",
+      "Bash(npx prisma *)",
+      "Bash(NODE_OPTIONS=\"--dns-result-order=ipv4first\" npx prisma db seed)"
     ]
   }
 }
