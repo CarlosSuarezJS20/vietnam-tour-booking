@@ -101,7 +101,7 @@ const Navbar = () => {
         >
           <div className="h-[102px] bg-gray-900" />
           <div className="bg-white">
-            <DestinationsMegaMenu />
+            <DestinationsMegaMenu onClose={() => setDestinationsOpen(false)} />
           </div>
         </div>
       </div>
