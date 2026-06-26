@@ -23,18 +23,7 @@ const Navbar = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pillRef = useRef<HTMLDivElement>(null);
   const mobileSearchBarRef = useRef<HTMLDivElement>(null);
-  const destCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { pastHero, atAbout } = useStickyNav();
-
-  const openDestinations = () => {
-    if (destCloseTimer.current) clearTimeout(destCloseTimer.current);
-    setDestinationsOpen(true);
-    setToursOpen(false);
-  };
-
-  const scheduleCloseDestinations = () => {
-    destCloseTimer.current = setTimeout(() => setDestinationsOpen(false), 120);
-  };
 
   const closeAll = () => {
     setToursOpen(false);
@@ -98,9 +87,10 @@ const Navbar = () => {
       */}
       {/* Backdrop — fades in behind the mega menu */}
       <div
-        className={`fixed inset-0 z-[35] backdrop-blur-sm bg-black/30 transition-opacity duration-300 pointer-events-none ${
-          destinationsOpen ? "opacity-100" : "opacity-0"
+        className={`fixed inset-0 z-[35] backdrop-blur-sm bg-black/30 transition-opacity duration-300 ${
+          destinationsOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
+        onClick={() => setDestinationsOpen(false)}
       />
 
       <div className="fixed top-0 left-0 right-0 z-[40] overflow-hidden pointer-events-none">
@@ -111,10 +101,7 @@ const Navbar = () => {
         >
           <div className="h-[102px] bg-gray-900" />
           <div className="bg-white">
-            <DestinationsMegaMenu
-              onMouseEnter={openDestinations}
-              onMouseLeave={scheduleCloseDestinations}
-            />
+            <DestinationsMegaMenu />
           </div>
         </div>
       </div>
@@ -141,14 +128,15 @@ const Navbar = () => {
               return (
                 <div key={item.label} className="flex items-center relative">
                   {isTours ? (
-                    <Link
-                      href="/tours"
-                      className="flex items-center gap-1 px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors font-sans text-gray-700 hover:text-brand hover:bg-gray-50 rounded-full"
-                      onMouseEnter={() => { setToursOpen(true); setDestinationsOpen(false); }}
+                    <button
+                      className={`flex items-center gap-1 px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors font-sans ${
+                        toursOpen ? "text-brand" : "text-gray-700 hover:text-brand hover:bg-gray-50 rounded-full"
+                      }`}
+                      onClick={() => { setToursOpen((o) => !o); setDestinationsOpen(false); }}
                     >
                       {item.label}
-                      <FiChevronDown className="w-3 h-3 opacity-50" />
-                    </Link>
+                      <FiChevronDown className={`w-3 h-3 opacity-50 transition-transform duration-200 ${toursOpen ? "rotate-180" : ""}`} />
+                    </button>
                   ) : isDeals ? (
                     <Link
                       href="/tours?deals=true"
@@ -161,12 +149,6 @@ const Navbar = () => {
                     className={`flex items-center gap-1 px-5 py-2 text-sm font-medium whitespace-nowrap transition-colors font-sans ${
                       isActive ? "text-brand" : "text-gray-700 hover:text-brand hover:bg-gray-50 rounded-full"
                     }`}
-                    onMouseEnter={() => {
-                      if (isDestinations) openDestinations();
-                    }}
-                    onMouseLeave={() => {
-                      if (isDestinations) scheduleCloseDestinations();
-                    }}
                     onClick={() => {
                       if (isDestinations) { setDestinationsOpen((o) => !o); setToursOpen(false); }
                     }}

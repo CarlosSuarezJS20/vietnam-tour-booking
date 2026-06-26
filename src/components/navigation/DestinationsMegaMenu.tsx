@@ -6,19 +6,14 @@ import Link from "next/link";
 import { FiMapPin, FiArrowUpRight } from "react-icons/fi";
 import { useGetRegionsQuery } from "@/graphql/hooks";
 
-interface Props {
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
-}
-
-const DestinationsMegaMenu = ({ onMouseEnter, onMouseLeave }: Props) => {
+const DestinationsMegaMenu = () => {
   const { data: regions = [], loading, error } = useGetRegionsQuery();
   const [activeKey, setActiveKey] = useState<string | null>(null);
 
   const current = regions.find((r) => r.key === activeKey) ?? regions[0];
 
   return (
-    <div className="flex h-[420px]" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div className="flex h-[420px]">
       {/* Left — regions */}
       <div className="w-72 bg-surface flex flex-col justify-center px-10 py-10 flex-shrink-0">
         <h2 className="text-2xl font-semibold leading-tight mb-8 text-gray-900 font-display">
