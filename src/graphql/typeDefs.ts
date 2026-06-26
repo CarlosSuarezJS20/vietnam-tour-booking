@@ -130,6 +130,23 @@ const typeDefs = `
     clearCart(sessionId: String!):                        Cart!
   }
 
+  input ContactInput {
+    firstName: String!
+    lastName:  String!
+    email:     String!
+    phone:     String
+    message:   String
+  }
+
+  type ContactResult {
+    id:        ID!
+    createdAt: String!
+  }
+
+  extend type Mutation {
+    submitContact(input: ContactInput!): ContactResult!
+  }
+
   input EnquiryInput {
     tourType:          String!
     region:            String!

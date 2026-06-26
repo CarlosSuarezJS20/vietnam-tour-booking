@@ -97,6 +97,15 @@ export const ADD_TO_CART_MUTATION = gql`
   }
 `;
 
+export const SUBMIT_CONTACT_MUTATION = gql`
+  mutation SubmitContact($input: ContactInput!) {
+    submitContact(input: $input) {
+      id
+      createdAt
+    }
+  }
+`;
+
 export const SUBMIT_ENQUIRY_MUTATION = gql`
   mutation SubmitEnquiry($input: EnquiryInput!) {
     submitEnquiry(input: $input) {

@@ -183,9 +183,9 @@ const MobileMenu = ({ open, onClose }: MobileMenuProps) => {
         <Link href="/tours?deals=true" onClick={onClose} className={linkClass}>
           Deals
         </Link>
-        <a href="/#about-section" onClick={onClose} className={linkClass}>
+        <Link href="/about" onClick={onClose} className={linkClass}>
           About Us
-        </a>
+        </Link>
       </div>
     </div>
   );

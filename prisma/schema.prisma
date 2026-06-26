@@ -149,6 +149,16 @@ model TravelerDetail {
   lastName    String
 }
 
+model Contact {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  message   String?
+  createdAt DateTime @default(now())
+}
+
 model Enquiry {
   id                String   @id @default(cuid())
   tourType          String

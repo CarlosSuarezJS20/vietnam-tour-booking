@@ -192,6 +192,11 @@ export const resolvers = {
       return buildCartFromDb(cart);
     },
 
+    submitContact: async (_: unknown, { input }: { input: { firstName: string; lastName: string; email: string; phone?: string; message?: string } }) => {
+      const contact = await prisma.contact.create({ data: input });
+      return { id: contact.id, createdAt: contact.createdAt.toISOString() };
+    },
+
     submitEnquiry: async (_: unknown, { input }: { input: EnquiryInput }) => {
       const enquiry = await prisma.enquiry.create({ data: input });
       return { id: enquiry.id, createdAt: enquiry.createdAt.toISOString() };

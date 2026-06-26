@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowLeft } from "react-icons/fi";
 import { aboutItems } from "@/data/about";
+import { useSubmitContactMutation } from "@/graphql/hooks";
 
 /* ─── Wheel ─────────────────────────────────────────── */
 const RADIUS = 130;
@@ -152,14 +153,27 @@ function Wheel() {
 
 /* ─── Page ──────────────────────────────────────────── */
 export default function AboutPage() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phone: "", message: "" });
   const set = (k: keyof typeof form) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setForm(p => ({ ...p, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); setSent(true); };
+  const { submitContact } = useSubmitContactMutation();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg(null);
+    submitContact({ firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone || undefined, message: form.message || undefined })
+      .then(() => setStatus("success"))
+      .catch((err: unknown) => {
+        setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+        setStatus("error");
+      });
+  };
 
   const inputCls =
     "w-full bg-transparent border-b border-gray-300 py-3 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-gray-900 transition-colors font-sans";
@@ -332,9 +346,14 @@ export default function AboutPage() {
 
         {/* Centre white panel — form */}
         <div className="flex-1 bg-white flex flex-col justify-center px-8 md:px-14 lg:px-16 py-14">
-          {sent ? (
+          {status === "loading" ? (
+            <div className="flex flex-col items-center justify-center gap-4 py-12">
+              <div className="w-10 h-10 border-2 border-gray-900 border-t-transparent rounded-full animate-spin" />
+              <p className="text-gray-400 text-sm font-sans">Submitting your request…</p>
+            </div>
+          ) : status === "success" ? (
             <div className="flex flex-col items-center justify-center gap-6 text-center py-12">
-              <div className="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-green-500 flex items-center justify-center">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round">
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
@@ -343,6 +362,16 @@ export default function AboutPage() {
               <p className="text-sm text-gray-500 font-sans max-w-xs">
                 Our team will reach out within 24 hours to start planning your journey.
               </p>
+            </div>
+          ) : status === "error" ? (
+            <div className="flex flex-col items-center justify-center gap-4 text-center py-12">
+              <p className="text-gray-700 text-sm font-sans">{errorMsg}</p>
+              <button
+                onClick={() => formRef.current?.requestSubmit()}
+                className="text-gray-900 text-sm font-semibold font-sans underline underline-offset-4"
+              >
+                Try again
+              </button>
             </div>
           ) : (
             <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-8 max-w-lg w-full">
@@ -376,8 +405,8 @@ export default function AboutPage() {
               </div>
               {/* Mobile-only submit */}
               <button type="submit"
-                className="lg:hidden self-start border border-gray-900 text-gray-900 text-[11px]
-                  tracking-widest uppercase font-sans px-9 py-4 rounded-full hover:bg-gray-900
+                className="lg:hidden self-start border border-brand text-brand text-[11px]
+                  tracking-widest uppercase font-sans px-9 py-4 rounded-full hover:bg-brand
                   hover:text-white transition-all">
                 Send Request
               </button>
@@ -399,8 +428,8 @@ export default function AboutPage() {
             </h2>
             <button
               onClick={() => formRef.current?.requestSubmit()}
-              className="self-start border border-white/60 text-white text-[11px] tracking-widest
-                uppercase font-sans px-9 py-4 rounded-full hover:bg-white hover:text-gray-900 transition-all"
+              className="self-start border border-brand bg-brand text-white text-[11px] tracking-widest
+                uppercase font-sans px-9 py-4 rounded-full hover:bg-brand-dark hover:border-brand-dark transition-all"
             >
               Send Request
             </button>

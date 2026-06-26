@@ -209,6 +209,19 @@ export interface ProductDetailCruise {
 
 export type ProductDetail = ProductDetailTour | ProductDetailCruise;
 
+export interface ContactInput {
+  firstName: string;
+  lastName:  string;
+  email:     string;
+  phone?:    string;
+  message?:  string;
+}
+
+export interface ContactResult {
+  id:        string;
+  createdAt: string;
+}
+
 export interface EnquiryInput {
   tourType:          string;
   region:            string;
