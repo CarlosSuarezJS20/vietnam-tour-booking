@@ -28,9 +28,12 @@ const ToursPage = () => {
     loadingIds: new Set(),
   });
 
+  // Always fetch ALL for accurate counts
+  const { data: allTours } = useGetAllToursQuery('ALL');
+  // Fetch filtered data for display
   const { data: tours, loading, error } = useGetAllToursQuery(state.visibilityFilter);
-  const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
-  const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
+  const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation(state.visibilityFilter);
+  const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation(state.visibilityFilter);
 
   const { filteredTours: searchResults } = useAdminTourSearch(tours as Tour[], state.searchQuery);
 
@@ -109,9 +112,9 @@ const ToursPage = () => {
     }
   };
 
-  // Count visible/hidden for filter display
-  const visibleCount = tours.filter((t: Tour) => t.isVisible).length;
-  const hiddenCount = tours.filter((t: Tour) => !t.isVisible).length;
+  // Count visible/hidden from ALL tours (regardless of current filter)
+  const visibleCount = allTours.filter((t: Tour) => t.isVisible).length;
+  const hiddenCount = allTours.filter((t: Tour) => !t.isVisible).length;
 
   if (loading) return <div className="text-sm text-[#17171799]">Loading tours...</div>;
   if (error) return <div className="text-sm text-red-600">Error loading tours</div>;

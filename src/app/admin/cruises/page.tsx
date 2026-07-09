@@ -28,9 +28,12 @@ const CruisesPage = () => {
     loadingIds: new Set(),
   });
 
+  // Always fetch ALL for accurate counts
+  const { data: allCruises } = useGetAllCruisesQuery('ALL');
+  // Fetch filtered data for display
   const { data: cruises, loading, error } = useGetAllCruisesQuery(state.visibilityFilter);
-  const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation();
-  const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
+  const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation(state.visibilityFilter);
+  const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation(state.visibilityFilter);
 
   const { filteredCruises: searchResults } = useAdminCruiseSearch(cruises as Cruise[], state.searchQuery);
 
@@ -109,8 +112,9 @@ const CruisesPage = () => {
     }
   };
 
-  const visibleCount = cruises.filter((c: Cruise) => c.isVisible).length;
-  const hiddenCount = cruises.filter((c: Cruise) => !c.isVisible).length;
+  // Count visible/hidden from ALL cruises (regardless of current filter)
+  const visibleCount = allCruises.filter((c: Cruise) => c.isVisible).length;
+  const hiddenCount = allCruises.filter((c: Cruise) => !c.isVisible).length;
 
   if (loading) return <div className="text-sm text-[#17171799]">Loading cruises...</div>;
   if (error) return <div className="text-sm text-red-600">Error loading cruises</div>;

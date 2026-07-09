@@ -162,34 +162,76 @@ export function useSearchProductsQuery(variables: {
   return { data: data?.searchProducts, loading, error };
 }
 
-export const useToggleTourVisibilityMutation = () => {
+export const useToggleTourVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
   const [mutate, { loading }] = useMutation<
     { toggleTourVisibility: SearchTour },
     { id: string }
-  >(TOGGLE_TOUR_VISIBILITY_MUTATION);
+  >(TOGGLE_TOUR_VISIBILITY_MUTATION, {
+    update(cache, { data }) {
+      if (!data?.toggleTourVisibility) return;
+      const updated = data.toggleTourVisibility;
+
+      const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: filter || 'ALL' } };
+      const existing = cache.readQuery<{ allTours: SearchTour[] }>(cacheKey);
+
+      if (existing) {
+        const newTours = existing.allTours.map(t => t.id === updated.id ? updated : t);
+        cache.writeQuery({ ...cacheKey, data: { allTours: newTours } });
+      }
+    }
+  });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
 };
 
-export const useToggleCruiseVisibilityMutation = () => {
+export const useToggleCruiseVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
   const [mutate, { loading }] = useMutation<
     { toggleCruiseVisibility: SearchCruise },
     { id: string }
-  >(TOGGLE_CRUISE_VISIBILITY_MUTATION);
+  >(TOGGLE_CRUISE_VISIBILITY_MUTATION, {
+    update(cache, { data }) {
+      if (!data?.toggleCruiseVisibility) return;
+      const updated = data.toggleCruiseVisibility;
+
+      const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: filter || 'ALL' } };
+      const existing = cache.readQuery<{ allCruises: SearchCruise[] }>(cacheKey);
+
+      if (existing) {
+        const newCruises = existing.allCruises.map(c => c.id === updated.id ? updated : c);
+        cache.writeQuery({ ...cacheKey, data: { allCruises: newCruises } });
+      }
+    }
+  });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
 };
 
-export const useSetAllToursVisibilityMutation = () => {
+export const useSetAllToursVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
   const [mutate, { loading }] = useMutation<
     { setAllToursVisibility: SearchTour[] },
     { visible: boolean }
-  >(SET_ALL_TOURS_VISIBILITY_MUTATION);
+  >(SET_ALL_TOURS_VISIBILITY_MUTATION, {
+    update(cache, { data }) {
+      if (!data?.setAllToursVisibility) return;
+      const updated = data.setAllToursVisibility;
+
+      const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: filter || 'ALL' } };
+      cache.writeQuery({ ...cacheKey, data: { allTours: updated } });
+    }
+  });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
 };
 
-export const useSetAllCruisesVisibilityMutation = () => {
+export const useSetAllCruisesVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
   const [mutate, { loading }] = useMutation<
     { setAllCruisesVisibility: SearchCruise[] },
     { visible: boolean }
-  >(SET_ALL_CRUISES_VISIBILITY_MUTATION);
+  >(SET_ALL_CRUISES_VISIBILITY_MUTATION, {
+    update(cache, { data }) {
+      if (!data?.setAllCruisesVisibility) return;
+      const updated = data.setAllCruisesVisibility;
+
+      const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: filter || 'ALL' } };
+      cache.writeQuery({ ...cacheKey, data: { allCruises: updated } });
+    }
+  });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
 };
