@@ -116,12 +116,12 @@ export const resolvers = {
     regions:         () => prisma.region.findMany(),
     region:          (_: unknown, { key }: { key: string }) => prisma.region.findUnique({ where: { key } }),
     cities:          () => prisma.city.findMany(),
-    featuredTour:    () => prisma.tour.findFirst({ where: { featuredTour: true } }),
+    featuredTour:    () => prisma.tour.findFirst({ where: { featuredTour: true, isVisible: true } }),
     toursByCity:     (_: unknown, { cityId, limit = 4 }: { cityId: string; limit?: number }) =>
-                       prisma.tour.findMany({ where: { cities: { some: { cityId } } }, take: limit }),
+                       prisma.tour.findMany({ where: { cities: { some: { cityId } }, isVisible: true }, take: limit }),
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
-                       prisma.tour.findMany({ where: { categories: { some: { categoryId } } }, take: limit }),
-    cruises:         () => prisma.cruise.findMany(),
+                       prisma.tour.findMany({ where: { categories: { some: { categoryId } }, isVisible: true }, take: limit }),
+    cruises:         () => prisma.cruise.findMany({ where: { isVisible: true } }),
     allTours:        (_: unknown, { filter }: { filter?: string }) => {
       const where = filter === 'VISIBLE'
         ? { isVisible: true }
@@ -138,8 +138,8 @@ export const resolvers = {
         : undefined;
       return prisma.cruise.findMany({ where });
     },
-    tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id } }),
-    cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id } }),
+    tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id, isVisible: true } }),
+    cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id, isVisible: true } }),
     cart: async (_: unknown, { sessionId }: { sessionId: string }) => {
       const cart = await prisma.cart.findUnique({
         where:   { sessionId },

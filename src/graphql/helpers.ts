@@ -11,6 +11,7 @@ export type ProductFilters = {
 };
 
 export const buildTourWhere = (filters: ProductFilters) => ({
+  isVisible: true,
   ...(filters.categories?.length && {
     categories: { some: { category: { slug: { in: filters.categories } } } },
   }),
@@ -32,6 +33,7 @@ export const buildTourWhere = (filters: ProductFilters) => ({
 });
 
 export const buildCruiseWhere = (filters: ProductFilters) => ({
+  isVisible: true,
   ...(filters.deals            && { onSale: true }),
   ...(filters.minPrice != null && { price: { gte: filters.minPrice } }),
   ...(filters.maxPrice != null && { price: { lte: filters.maxPrice } }),
