@@ -62,6 +62,7 @@ model Tour {
   onSale                 Boolean  @default(false)
   saleDiscountPercentage Int?
   createdAt              DateTime @default(now())
+  isVisible              Boolean  @default(true)
   images                 TourImage[]
   cities                 TourCity[]
   categories             TourCategoryOnTour[]
@@ -88,6 +89,7 @@ model Cruise {
   onSale                 Boolean  @default(false)
   saleDiscountPercentage Int?
   createdAt              DateTime @default(now())
+  isVisible              Boolean  @default(true)
   cartItems              CartItem[]
 }
 

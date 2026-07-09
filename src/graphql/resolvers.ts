@@ -122,8 +122,22 @@ export const resolvers = {
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
                        prisma.tour.findMany({ where: { categories: { some: { categoryId } } }, take: limit }),
     cruises:         () => prisma.cruise.findMany(),
-    allTours:        () => prisma.tour.findMany(),
-    allCruises:      () => prisma.cruise.findMany(),
+    allTours:        (_: unknown, { filter }: { filter?: string }) => {
+      const where = filter === 'VISIBLE'
+        ? { isVisible: true }
+        : filter === 'HIDDEN'
+        ? { isVisible: false }
+        : undefined;
+      return prisma.tour.findMany({ where });
+    },
+    allCruises:      (_: unknown, { filter }: { filter?: string }) => {
+      const where = filter === 'VISIBLE'
+        ? { isVisible: true }
+        : filter === 'HIDDEN'
+        ? { isVisible: false }
+        : undefined;
+      return prisma.cruise.findMany({ where });
+    },
     tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id } }),
     cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id } }),
     cart: async (_: unknown, { sessionId }: { sessionId: string }) => {
@@ -201,6 +215,38 @@ export const resolvers = {
       const enquiry = await prisma.enquiry.create({ data: input });
       return { id: enquiry.id, createdAt: enquiry.createdAt.toISOString() };
     },
+
+    toggleTourVisibility: async (_: unknown, { id }: { id: string }) => {
+      const tour = await prisma.tour.findUnique({ where: { id } });
+      if (!tour) throw new Error(`Tour not found: ${id}`);
+      return prisma.tour.update({
+        where: { id },
+        data: { isVisible: !tour.isVisible },
+      });
+    },
+
+    toggleCruiseVisibility: async (_: unknown, { id }: { id: string }) => {
+      const cruise = await prisma.cruise.findUnique({ where: { id } });
+      if (!cruise) throw new Error(`Cruise not found: ${id}`);
+      return prisma.cruise.update({
+        where: { id },
+        data: { isVisible: !cruise.isVisible },
+      });
+    },
+
+    setAllToursVisibility: async (_: unknown, { visible }: { visible: boolean }) => {
+      await prisma.tour.updateMany({
+        data: { isVisible: visible },
+      });
+      return prisma.tour.findMany();
+    },
+
+    setAllCruisesVisibility: async (_: unknown, { visible }: { visible: boolean }) => {
+      await prisma.cruise.updateMany({
+        data: { isVisible: visible },
+      });
+      return prisma.cruise.findMany();
+    },
   },
 
   Tour: {
@@ -210,6 +256,7 @@ export const resolvers = {
         .then(img => img?.url ?? null),
     cities:     (tour: { id: string }) => prisma.city.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
     categories: (tour: { id: string }) => prisma.tourCategory.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
+    createdAt:  (tour: { createdAt?: Date }) => tour.createdAt ? new Date(tour.createdAt).toISOString() : null,
   },
   Region: {
     // Resolver for Region.cities — returns all cities that belong to this region

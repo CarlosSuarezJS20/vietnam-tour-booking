@@ -1,4 +1,10 @@
 const typeDefs = `
+  enum VisibilityFilter {
+    ALL
+    VISIBLE
+    HIDDEN
+  }
+
   type TourCategory {
     id: ID!
     slug: String!
@@ -32,6 +38,8 @@ const typeDefs = `
     featuredTour: Boolean!
     onSale:                Boolean!
     saleDiscountPercentage: Int
+    createdAt:    String!
+    isVisible:    Boolean!
   }
 
   type Cruise {
@@ -45,6 +53,7 @@ const typeDefs = `
     sourceUrl:   String!
     onSale:                Boolean!
     saleDiscountPercentage: Int
+    isVisible:   Boolean!
   }
 
   type Query {
@@ -56,8 +65,8 @@ const typeDefs = `
     toursByCity(cityId: ID!, limit: Int):         [Tour!]!
     toursByCategory(categoryId: ID!, limit: Int): [Tour!]!
     cruises:                         [Cruise!]!
-    allTours:                        [Tour!]!
-    allCruises:                      [Cruise!]!
+    allTours(filter: VisibilityFilter = ALL):     [Tour!]!
+    allCruises(filter: VisibilityFilter = ALL):   [Cruise!]!
     tour(id: ID!):                   Tour
     cruise(id: ID!):                 Cruise
   }
@@ -169,6 +178,13 @@ const typeDefs = `
 
   extend type Mutation {
     submitEnquiry(input: EnquiryInput!): EnquiryResult!
+  }
+
+  extend type Mutation {
+    toggleTourVisibility(id: String!): Tour!
+    toggleCruiseVisibility(id: String!): Cruise!
+    setAllToursVisibility(visible: Boolean!): [Tour!]!
+    setAllCruisesVisibility(visible: Boolean!): [Cruise!]!
   }
 `;
 

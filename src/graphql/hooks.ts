@@ -18,6 +18,10 @@ import {
   REMOVE_FROM_CART_MUTATION,
   SUBMIT_CONTACT_MUTATION,
   SUBMIT_ENQUIRY_MUTATION,
+  TOGGLE_TOUR_VISIBILITY_MUTATION,
+  TOGGLE_CRUISE_VISIBILITY_MUTATION,
+  SET_ALL_TOURS_VISIBILITY_MUTATION,
+  SET_ALL_CRUISES_VISIBILITY_MUTATION,
 } from "./queries";
 import { useReactiveVar } from "@apollo/client/react";
 import { sessionIdVar } from "@/lib/sessionVar";
@@ -63,16 +67,18 @@ export function useGetToursByCityQuery(variables: { cityId: string; limit?: numb
   return { data: data?.toursByCity ?? [], loading, error };
 }
 
-export function useGetAllToursQuery() {
+export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
   const { data, loading, error } = useQuery<{ allTours: Omit<SearchTour, "_type" | "cityNames">[] }>(
-    ALL_TOURS_QUERY
+    ALL_TOURS_QUERY,
+    { variables: { filter: filter || 'ALL' } }
   );
   return { data: data?.allTours ?? [], loading, error };
 }
 
-export function useGetAllCruisesQuery() {
+export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
   const { data, loading, error } = useQuery<{ allCruises: Omit<SearchCruise, "_type">[] }>(
-    ALL_CRUISES_QUERY
+    ALL_CRUISES_QUERY,
+    { variables: { filter: filter || 'ALL' } }
   );
   return { data: data?.allCruises ?? [], loading, error };
 }
@@ -155,3 +161,35 @@ export function useSearchProductsQuery(variables: {
   );
   return { data: data?.searchProducts, loading, error };
 }
+
+export const useToggleTourVisibilityMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { toggleTourVisibility: SearchTour },
+    { id: string }
+  >(TOGGLE_TOUR_VISIBILITY_MUTATION);
+  return { toggle: (id: string) => mutate({ variables: { id } }), loading };
+};
+
+export const useToggleCruiseVisibilityMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { toggleCruiseVisibility: SearchCruise },
+    { id: string }
+  >(TOGGLE_CRUISE_VISIBILITY_MUTATION);
+  return { toggle: (id: string) => mutate({ variables: { id } }), loading };
+};
+
+export const useSetAllToursVisibilityMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { setAllToursVisibility: SearchTour[] },
+    { visible: boolean }
+  >(SET_ALL_TOURS_VISIBILITY_MUTATION);
+  return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
+};
+
+export const useSetAllCruisesVisibilityMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { setAllCruisesVisibility: SearchCruise[] },
+    { visible: boolean }
+  >(SET_ALL_CRUISES_VISIBILITY_MUTATION);
+  return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
+};

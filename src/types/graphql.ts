@@ -46,6 +46,10 @@ export interface SearchTour {
   duration:     string;
   price:        number;
   featuredTour: boolean;
+  onSale:       boolean;
+  isVisible:    boolean;
+  saleDiscountPercentage?: number;
+  createdAt:    string;
   cities:       (City & { region: { id: string; key: string; label: string } })[];
   categories:   TourCategory[];
   _type:        "tour";
@@ -61,6 +65,9 @@ export interface SearchCruise {
   duration:    string;
   price:       number;
   sourceUrl:   string;
+  onSale:      boolean;
+  isVisible:   boolean;
+  saleDiscountPercentage?: number;
   _type:       "cruise";
 }
 
