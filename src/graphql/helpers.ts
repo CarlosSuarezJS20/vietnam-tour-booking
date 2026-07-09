@@ -10,13 +10,13 @@ export type ProductFilters = {
   deals?:      boolean;
 };
 
-export const buildTourWhere = (filters: ProductFilters) => ({
-  isVisible: true,
-  ...(filters.categories?.length && {
-    categories: { some: { category: { slug: { in: filters.categories } } } },
-  }),
-  ...((filters.regions?.length || filters.cities?.length) && {
-    cities: {
+export const buildTourWhere = (filters: ProductFilters) => {
+  const where: any = { isVisible: true };
+  if (filters.categories?.length) {
+    where.categories = { some: { category: { slug: { in: filters.categories } } } };
+  }
+  if (filters.regions?.length || filters.cities?.length) {
+    where.cities = {
       some: {
         city: {
           OR: [
@@ -25,19 +25,21 @@ export const buildTourWhere = (filters: ProductFilters) => ({
           ],
         },
       },
-    },
-  }),
-  ...(filters.deals                && { onSale: true }),
-  ...(filters.minPrice != null     && { price: { gte: filters.minPrice } }),
-  ...(filters.maxPrice != null     && { price: { lte: filters.maxPrice } }),
-});
+    };
+  }
+  if (filters.deals)            where.onSale = true;
+  if (filters.minPrice != null) where.price = { ...where.price, gte: filters.minPrice };
+  if (filters.maxPrice != null) where.price = { ...where.price, lte: filters.maxPrice };
+  return where;
+};
 
-export const buildCruiseWhere = (filters: ProductFilters) => ({
-  isVisible: true,
-  ...(filters.deals            && { onSale: true }),
-  ...(filters.minPrice != null && { price: { gte: filters.minPrice } }),
-  ...(filters.maxPrice != null && { price: { lte: filters.maxPrice } }),
-});
+export const buildCruiseWhere = (filters: ProductFilters) => {
+  const where: any = { isVisible: true };
+  if (filters.deals)            where.onSale = true;
+  if (filters.minPrice != null) where.price = { ...where.price, gte: filters.minPrice };
+  if (filters.maxPrice != null) where.price = { ...where.price, lte: filters.maxPrice };
+  return where;
+};
 
 export type CursorPayload = { id: string; type: "Tour" | "Cruise" };
 

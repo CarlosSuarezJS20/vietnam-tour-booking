@@ -16,8 +16,8 @@ export const DEFAULT_FILTERS: SearchFilters = {
 };
 
 export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FILTERS) {
-  const { data: rawTours,   loading: toursLoading   } = useGetAllToursQuery();
-  const { data: rawCruises, loading: cruisesLoading } = useGetAllCruisesQuery();
+  const { data: rawTours,   loading: toursLoading   } = useGetAllToursQuery('VISIBLE');
+  const { data: rawCruises, loading: cruisesLoading } = useGetAllCruisesQuery('VISIBLE');
 
   const allItems = useMemo<SearchItem[]>(() => [
     ...rawTours.map(t => ({

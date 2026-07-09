@@ -35,6 +35,8 @@ export const resolvers = {
 
       const tourWhere   = buildTourWhere(filters);
       const cruiseWhere = buildCruiseWhere(filters);
+      console.log('searchProducts - tourWhere:', JSON.stringify(tourWhere, null, 2));
+      console.log('searchProducts - cruiseWhere:', JSON.stringify(cruiseWhere, null, 2));
 
       // Decode the cursor to find which table and row we left off at.
       const afterPayload = after ? decodeCursor(after) : null;
