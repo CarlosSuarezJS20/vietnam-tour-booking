@@ -120,8 +120,9 @@ const CruisesPage = () => {
   const visibleCount = cruisesConnection.visibleCount;
   const hiddenCount = cruisesConnection.hiddenCount;
 
-  const startItem = state.currentCursor || cruisesConnection.total === 0 ? (state.cursorStack.length * CRUISES_PER_PAGE) + 1 : 1;
-  const endItem = startItem + displayCruises.length - 1;
+  const pageNumber = state.cursorStack.length + 1;
+  const startItem = (pageNumber - 1) * CRUISES_PER_PAGE + 1;
+  const endItem = Math.min(startItem + cruises.length - 1, cruisesConnection.total);
 
   if (error) return <div className="text-sm text-red-600">Error loading cruises</div>;
 

@@ -120,8 +120,9 @@ const ToursPage = () => {
   const visibleCount = toursConnection.visibleCount;
   const hiddenCount = toursConnection.hiddenCount;
 
-  const startItem = state.currentCursor || toursConnection.total === 0 ? (state.cursorStack.length * TOURS_PER_PAGE) + 1 : 1;
-  const endItem = startItem + displayTours.length - 1;
+  const pageNumber = state.cursorStack.length + 1;
+  const startItem = (pageNumber - 1) * TOURS_PER_PAGE + 1;
+  const endItem = Math.min(startItem + tours.length - 1, toursConnection.total);
 
   if (error) return <div className="text-sm text-red-600">Error loading tours</div>;
 
