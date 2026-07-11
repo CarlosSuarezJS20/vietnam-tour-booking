@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCruisesVisibilityMutation } from '@/graphql/hooks';
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
@@ -117,8 +117,13 @@ const CruisesPage = () => {
     });
   };
 
-  const visibleCount = cruisesConnection.total > 0 ? cruises.filter((c: Cruise) => c.isVisible).length : 0;
-  const hiddenCount = cruisesConnection.total > 0 ? cruises.filter((c: Cruise) => !c.isVisible).length : 0;
+  const { visibleCount, hiddenCount } = useMemo(() => {
+    const allCruises = cruisesConnection.edges.map(e => e.node);
+    return {
+      visibleCount: allCruises.filter(c => c.isVisible).length,
+      hiddenCount: allCruises.filter(c => !c.isVisible).length,
+    };
+  }, [cruiseFilter, cruisesConnection.total]);
 
   const startItem = state.currentCursor || cruisesConnection.total === 0 ? (state.cursorStack.length * CRUISES_PER_PAGE) + 1 : 1;
   const endItem = startItem + displayCruises.length - 1;
