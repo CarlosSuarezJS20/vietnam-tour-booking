@@ -8,6 +8,7 @@ import { ToursTable } from '@/components/admin/tours/ToursTable';
 import { ToursSearchBar } from '@/components/admin/tours/ToursSearchBar';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
+import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -18,6 +19,8 @@ interface ToursListState {
   cursorStack: string[];
   visibleCountCache: number;
   hiddenCountCache: number;
+  drawerOpen: boolean;
+  drawerTour?: Tour;
 }
 
 const TOURS_PER_PAGE = 7;
@@ -30,6 +33,8 @@ const ToursPage = () => {
     cursorStack: [],
     visibleCountCache: 0,
     hiddenCountCache: 0,
+    drawerOpen: false,
+    drawerTour: undefined,
   });
 
   const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
@@ -98,6 +103,22 @@ const ToursPage = () => {
     } catch (err) {
       console.error('Failed to set visibility:', err);
     }
+  };
+
+  const handleRowClick = (tour: Tour) => {
+    setState((prev) => ({
+      ...prev,
+      drawerOpen: true,
+      drawerTour: tour,
+    }));
+  };
+
+  const handleCloseDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      drawerOpen: false,
+      drawerTour: undefined,
+    }));
   };
 
   const handleNextPage = () => {
@@ -219,6 +240,7 @@ const ToursPage = () => {
               tours={displayTours}
               onToggleVisibility={handleToggleVisibility}
               loadingIds={state.loadingIds}
+              onRowClick={handleRowClick}
             />
           </>
         ) : (
@@ -227,6 +249,13 @@ const ToursPage = () => {
           </div>
         )}
       </div>
+
+      <EditDrawer
+        isOpen={state.drawerOpen}
+        item={state.drawerTour}
+        title={state.drawerTour?.title || 'Edit Tour'}
+        onClose={handleCloseDrawer}
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { CruisesTable } from '@/components/admin/cruises/CruisesTable';
 import { CruisesSearchBar } from '@/components/admin/cruises/CruisesSearchBar';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
+import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
@@ -18,6 +19,8 @@ interface CruisesListState {
   cursorStack: string[];
   visibleCountCache: number;
   hiddenCountCache: number;
+  drawerOpen: boolean;
+  drawerCruise?: Cruise;
 }
 
 const CRUISES_PER_PAGE = 7;
@@ -30,6 +33,8 @@ const CruisesPage = () => {
     cursorStack: [],
     visibleCountCache: 0,
     hiddenCountCache: 0,
+    drawerOpen: false,
+    drawerCruise: undefined,
   });
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
@@ -98,6 +103,22 @@ const CruisesPage = () => {
     } catch (err) {
       console.error('Failed to set visibility:', err);
     }
+  };
+
+  const handleRowClick = (cruise: Cruise) => {
+    setState((prev) => ({
+      ...prev,
+      drawerOpen: true,
+      drawerCruise: cruise,
+    }));
+  };
+
+  const handleCloseDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      drawerOpen: false,
+      drawerCruise: undefined,
+    }));
   };
 
   const handleNextPage = () => {
@@ -219,6 +240,7 @@ const CruisesPage = () => {
               cruises={displayCruises}
               onToggleVisibility={handleToggleVisibility}
               loadingIds={state.loadingIds}
+              onRowClick={handleRowClick}
             />
           </>
         ) : (
@@ -227,6 +249,13 @@ const CruisesPage = () => {
           </div>
         )}
       </div>
+
+      <EditDrawer
+        isOpen={state.drawerOpen}
+        item={state.drawerCruise}
+        title={state.drawerCruise?.title || 'Edit Cruise'}
+        onClose={handleCloseDrawer}
+      />
     </div>
   );
 };

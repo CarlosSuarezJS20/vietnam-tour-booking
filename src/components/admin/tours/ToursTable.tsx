@@ -6,6 +6,7 @@ interface ToursTableProps {
   tours: Tour[];
   onToggleVisibility?: (id: string) => Promise<any>;
   loadingIds?: Set<string>;
+  onRowClick?: (tour: Tour) => void;
 }
 
 const formatDate = (dateStr: string) => {
@@ -18,7 +19,7 @@ const formatDate = (dateStr: string) => {
   }
 };
 
-export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set() }: ToursTableProps) => (
+export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set(), onRowClick }: ToursTableProps) => (
   <table className="w-full border-collapse">
     <thead>
       <tr className="border-b border-[#17171724] bg-white">
@@ -35,6 +36,8 @@ export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set() }
       {tours.map((tour) => (
         <TableRow
           key={tour.id}
+          onClick={() => onRowClick?.(tour)}
+          className="cursor-pointer"
         >
           <td className="px-4 py-3">
             <img src={tour.imageUrl} alt={tour.title} className="h-10 w-10 rounded object-cover" />

@@ -6,9 +6,10 @@ interface CruisesTableProps {
   cruises: Cruise[];
   onToggleVisibility?: (id: string) => Promise<any>;
   loadingIds?: Set<string>;
+  onRowClick?: (cruise: Cruise) => void;
 }
 
-export const CruisesTable = ({ cruises, onToggleVisibility, loadingIds = new Set() }: CruisesTableProps) => (
+export const CruisesTable = ({ cruises, onToggleVisibility, loadingIds = new Set(), onRowClick }: CruisesTableProps) => (
   <table className="w-full border-collapse">
     <thead>
       <tr className="border-b border-[#17171724] bg-white">
@@ -24,6 +25,8 @@ export const CruisesTable = ({ cruises, onToggleVisibility, loadingIds = new Set
       {cruises.map((cruise) => (
         <TableRow
           key={cruise.id}
+          onClick={() => onRowClick?.(cruise)}
+          className="cursor-pointer"
         >
           <td className="px-4 py-3">
             <img src={cruise.imageUrl} alt={cruise.title} className="h-10 w-10 rounded object-cover" />
