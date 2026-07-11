@@ -9,8 +9,6 @@ interface VisibilityFilterProps {
 }
 
 export const VisibilityFilter = ({ activeFilter, onFilterChange, visibleCount, hiddenCount, currentItemCount }: VisibilityFilterProps) => {
-  const showFilters = currentItemCount > 1;
-
   return (
     <div className="flex gap-2">
       <button
@@ -23,30 +21,26 @@ export const VisibilityFilter = ({ activeFilter, onFilterChange, visibleCount, h
       >
         All
       </button>
-      {showFilters && visibleCount > 0 && (
-        <button
-          onClick={() => onFilterChange('VISIBLE')}
-          className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
-            activeFilter === 'VISIBLE'
-              ? 'bg-[#DC143C] text-white'
-              : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
-          }`}
-        >
-          Visible ({visibleCount})
-        </button>
-      )}
-      {showFilters && hiddenCount > 0 && (
-        <button
-          onClick={() => onFilterChange('HIDDEN')}
-          className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
-            activeFilter === 'HIDDEN'
-              ? 'bg-[#DC143C] text-white'
-              : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
-          }`}
-        >
-          Hidden ({hiddenCount})
-        </button>
-      )}
+      <button
+        onClick={() => onFilterChange('VISIBLE')}
+        className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+          activeFilter === 'VISIBLE'
+            ? 'bg-[#DC143C] text-white'
+            : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
+        }`}
+      >
+        Visible ({visibleCount})
+      </button>
+      <button
+        onClick={() => onFilterChange('HIDDEN')}
+        className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+          activeFilter === 'HIDDEN'
+            ? 'bg-[#DC143C] text-white'
+            : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
+        }`}
+      >
+        Hidden ({hiddenCount})
+      </button>
     </div>
   );
 };
