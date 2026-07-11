@@ -16,7 +16,7 @@ export const EditDrawer = ({ isOpen, item, title, onClose }: EditDrawerProps) =>
         className="fixed inset-0 z-40 bg-black/20 transition-opacity"
         onClick={onClose}
       />
-      <div className="fixed right-0 top-0 z-50 h-screen w-96 overflow-y-auto bg-white shadow-lg transition-transform">
+      <div className="fixed right-0 top-0 z-50 h-screen w-1/2 overflow-y-auto bg-white shadow-lg transition-transform">
         <div className="sticky top-0 border-b border-[#17171724] bg-white px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-[#171717]">{title}</h2>
           <button
@@ -91,19 +91,17 @@ export const EditDrawer = ({ isOpen, item, title, onClose }: EditDrawerProps) =>
             />
           </div>
 
-          {item.itinerary && (
-            <div>
-              <label className="block text-sm font-medium text-[#171717] mb-2">
-                Itinerary
-              </label>
-              <textarea
-                defaultValue={item.itinerary}
-                className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-                rows={4}
-                disabled
-              />
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-[#171717] mb-2">
+              Itinerary
+            </label>
+            <textarea
+              defaultValue={item.itinerary || ''}
+              className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
+              rows={4}
+              disabled
+            />
+          </div>
 
           {item.sourceUrl && (
             <div>
