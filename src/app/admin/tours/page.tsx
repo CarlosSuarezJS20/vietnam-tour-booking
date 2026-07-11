@@ -151,21 +151,23 @@ const ToursPage = () => {
         onTourClick={handleTourClick}
       />
 
-      <div className="flex items-center justify-between gap-4">
-        <VisibilityFilter
-          activeFilter={tourFilter}
-          onFilterChange={handleFilterChange}
-          visibleCount={visibleCount}
-          hiddenCount={hiddenCount}
-          currentItemCount={displayTours.length}
-        />
-        {displayTours.length > 1 && (
-          <BulkVisibilityButton
-            filter={tourFilter}
-            onToggleBulk={handleBulkVisibility}
+      {!loading && (
+        <div className="flex items-center justify-between gap-4">
+          <VisibilityFilter
+            activeFilter={tourFilter}
+            onFilterChange={handleFilterChange}
+            visibleCount={visibleCount}
+            hiddenCount={hiddenCount}
+            currentItemCount={displayTours.length}
           />
-        )}
-      </div>
+          {displayTours.length > 1 && (
+            <BulkVisibilityButton
+              filter={tourFilter}
+              onToggleBulk={handleBulkVisibility}
+            />
+          )}
+        </div>
+      )}
 
       <div className="rounded border border-[#17171724] overflow-hidden">
         {loading ? (

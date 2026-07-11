@@ -151,21 +151,23 @@ const CruisesPage = () => {
         onCruiseClick={handleCruiseClick}
       />
 
-      <div className="flex items-center justify-between gap-4">
-        <VisibilityFilter
-          activeFilter={cruiseFilter}
-          onFilterChange={handleFilterChange}
-          visibleCount={visibleCount}
-          hiddenCount={hiddenCount}
-          currentItemCount={displayCruises.length}
-        />
-        {displayCruises.length > 1 && (
-          <BulkVisibilityButton
-            filter={cruiseFilter}
-            onToggleBulk={handleBulkVisibility}
+      {!loading && (
+        <div className="flex items-center justify-between gap-4">
+          <VisibilityFilter
+            activeFilter={cruiseFilter}
+            onFilterChange={handleFilterChange}
+            visibleCount={visibleCount}
+            hiddenCount={hiddenCount}
+            currentItemCount={displayCruises.length}
           />
-        )}
-      </div>
+          {displayCruises.length > 1 && (
+            <BulkVisibilityButton
+              filter={cruiseFilter}
+              onToggleBulk={handleBulkVisibility}
+            />
+          )}
+        </div>
+      )}
 
       <div className="rounded border border-[#17171724] overflow-hidden">
         {loading ? (
