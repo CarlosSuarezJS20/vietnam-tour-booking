@@ -8,14 +8,14 @@ import { ToursTable } from '@/components/admin/tours/ToursTable';
 import { ToursSearchBar } from '@/components/admin/tours/ToursSearchBar';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
-import { PaginationControls } from '@/components/admin/shared/PaginationControls';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
   searchQuery: string;
-  currentPage: number;
+  currentCursor?: string;
   selectedTourId?: string;
   loadingIds: Set<string>;
+  cursorStack: string[];
 }
 
 const TOURS_PER_PAGE = 7;
@@ -24,42 +24,31 @@ const ToursPage = () => {
   const { tourFilter, setTourFilter } = useVisibilityFilter();
   const [state, setState] = useState<ToursListState>({
     searchQuery: '',
-    currentPage: 1,
     loadingIds: new Set(),
+    cursorStack: [],
   });
 
-  // Always fetch ALL for accurate counts
-  const { data: allTours } = useGetAllToursQuery('ALL');
-  // Fetch filtered data for display
-  const { data: tours, loading, error } = useGetAllToursQuery(tourFilter);
+  const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
+  const tours = toursConnection.edges.map(e => e.node) as Tour[];
   const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
   const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
 
-  const { filteredTours: searchResults } = useAdminTourSearch(tours as Tour[], state.searchQuery);
+  const { filteredTours: searchResults } = useAdminTourSearch(tours, state.searchQuery);
 
-  // If tour is selected via search, show only that tour
   const displayTours = state.selectedTourId
     ? tours.filter((t: Tour) => t.id === state.selectedTourId)
     : tours;
 
-  // Calculate pagination for display tours
-  const totalPages = Math.ceil(displayTours.length / TOURS_PER_PAGE);
-  const startIdx = (state.currentPage - 1) * TOURS_PER_PAGE;
-  const endIdx = startIdx + TOURS_PER_PAGE;
-  const currentPageTours = displayTours.slice(startIdx, endIdx);
-
   const handleSearch = (query: string) => {
-    setState((prev) => ({
-      ...prev,
-      searchQuery: query,
-    }));
+    setState((prev) => ({ ...prev, searchQuery: query }));
   };
 
   const handleTourClick = (tour: Tour) => {
     setState((prev) => ({
       ...prev,
       searchQuery: '',
-      currentPage: 1,
+      currentCursor: undefined,
+      cursorStack: [],
       selectedTourId: tour.id,
     }));
   };
@@ -68,14 +57,6 @@ const ToursPage = () => {
     setState((prev) => ({
       ...prev,
       selectedTourId: undefined,
-      currentPage: 1,
-    }));
-  };
-
-  const handlePageChange = (page: number) => {
-    setState((prev) => ({
-      ...prev,
-      currentPage: page,
     }));
   };
 
@@ -83,7 +64,8 @@ const ToursPage = () => {
     setTourFilter(filter);
     setState((prev) => ({
       ...prev,
-      currentPage: 1,
+      currentCursor: undefined,
+      cursorStack: [],
       selectedTourId: undefined,
     }));
   };
@@ -112,9 +94,34 @@ const ToursPage = () => {
     }
   };
 
-  // Count visible/hidden from ALL tours (regardless of current filter)
-  const visibleCount = allTours.filter((t: Tour) => t.isVisible).length;
-  const hiddenCount = allTours.filter((t: Tour) => !t.isVisible).length;
+  const handleNextPage = () => {
+    if (toursConnection.pageInfo.hasNextPage && toursConnection.pageInfo.endCursor) {
+      setState((prev) => ({
+        ...prev,
+        cursorStack: [...prev.cursorStack, prev.currentCursor || ''],
+        currentCursor: toursConnection.pageInfo.endCursor || undefined,
+      }));
+    }
+  };
+
+  const handlePrevPage = () => {
+    setState((prev) => {
+      const newStack = [...prev.cursorStack];
+      newStack.pop();
+      const prevCursor = newStack.length > 0 ? newStack[newStack.length - 1] : undefined;
+      return {
+        ...prev,
+        cursorStack: newStack,
+        currentCursor: prevCursor,
+      };
+    });
+  };
+
+  const visibleCount = toursConnection.total > 0 ? tours.filter((t: Tour) => t.isVisible).length : 0;
+  const hiddenCount = toursConnection.total > 0 ? tours.filter((t: Tour) => !t.isVisible).length : 0;
+
+  const startItem = state.currentCursor || toursConnection.total === 0 ? (state.cursorStack.length * TOURS_PER_PAGE) + 1 : 1;
+  const endItem = startItem + displayTours.length - 1;
 
   if (error) return <div className="text-sm text-red-600">Error loading tours</div>;
 
@@ -124,7 +131,7 @@ const ToursPage = () => {
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Tours</h1>
           <p className="mt-1 text-sm text-[#17171799]">
-            {state.selectedTourId ? 'Selected tour' : `All (${allTours.length})`}
+            {state.selectedTourId ? 'Selected tour' : `All (${toursConnection.total})`}
           </p>
         </div>
         {state.selectedTourId && (
@@ -165,22 +172,36 @@ const ToursPage = () => {
           <div className="px-4 py-8 text-center text-sm text-[#17171799]">
             Loading tours...
           </div>
-        ) : currentPageTours.length > 0 ? (
+        ) : displayTours.length > 0 ? (
           <>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[#17171724] bg-[#f7f5f0]">
+              <span className="text-sm text-[#17171799]">
+                {state.selectedTourId ? 'Selected tour' : `Showing ${startItem}-${endItem} of ${toursConnection.total}`}
+              </span>
+              {!state.selectedTourId && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={!toursConnection.pageInfo.hasPreviousPage}
+                    className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
+                  >
+                    ← Prev
+                  </button>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={!toursConnection.pageInfo.hasNextPage}
+                    className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
+            </div>
             <ToursTable
-              tours={currentPageTours}
+              tours={displayTours}
               onToggleVisibility={handleToggleVisibility}
               loadingIds={state.loadingIds}
             />
-            {totalPages > 1 && (
-              <PaginationControls
-                currentPage={state.currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-                itemsPerPage={TOURS_PER_PAGE}
-                totalItems={displayTours.length}
-              />
-            )}
           </>
         ) : (
           <div className="px-4 py-8 text-center text-sm text-[#17171799]">

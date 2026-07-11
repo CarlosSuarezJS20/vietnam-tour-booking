@@ -124,25 +124,65 @@ export const resolvers = {
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
                        prisma.tour.findMany({ where: { categories: { some: { categoryId } }, isVisible: true }, take: limit }),
     cruises:         () => prisma.cruise.findMany({ where: { isVisible: true } }),
-    allTours: async (_: unknown, { filter }: { filter?: string }) => {
+    allTours: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
       const allTours = await prisma.tour.findMany();
+
+      let filtered = allTours;
       if (filter === 'VISIBLE') {
-        return allTours.filter(t => t.isVisible === true);
+        filtered = allTours.filter(t => t.isVisible === true);
+      } else if (filter === 'HIDDEN') {
+        filtered = allTours.filter(t => t.isVisible === false);
       }
-      if (filter === 'HIDDEN') {
-        return allTours.filter(t => t.isVisible === false);
-      }
-      return allTours;
+
+      const cursorIndex = after ? filtered.findIndex(t => t.id === decodeCursor(after).id) : -1;
+      const startIdx = after ? cursorIndex + 1 : 0;
+      const fetchSize = first + 1;
+      const items = filtered.slice(startIdx, startIdx + fetchSize);
+      const hasNextPage = items.length > first;
+      const paginated = items.slice(0, first);
+
+      return {
+        edges: paginated.map(tour => ({
+          cursor: encodeCursor(tour.id, 'Tour'),
+          node: tour,
+        })),
+        pageInfo: {
+          hasNextPage,
+          hasPreviousPage: startIdx > 0,
+          endCursor: paginated.length > 0 ? encodeCursor(paginated[paginated.length - 1].id, 'Tour') : null,
+        },
+        total: filtered.length,
+      };
     },
-    allCruises: async (_: unknown, { filter }: { filter?: string }) => {
+    allCruises: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
       const allCruises = await prisma.cruise.findMany();
+
+      let filtered = allCruises;
       if (filter === 'VISIBLE') {
-        return allCruises.filter(c => c.isVisible === true);
+        filtered = allCruises.filter(c => c.isVisible === true);
+      } else if (filter === 'HIDDEN') {
+        filtered = allCruises.filter(c => c.isVisible === false);
       }
-      if (filter === 'HIDDEN') {
-        return allCruises.filter(c => c.isVisible === false);
-      }
-      return allCruises;
+
+      const cursorIndex = after ? filtered.findIndex(c => c.id === decodeCursor(after).id) : -1;
+      const startIdx = after ? cursorIndex + 1 : 0;
+      const fetchSize = first + 1;
+      const items = filtered.slice(startIdx, startIdx + fetchSize);
+      const hasNextPage = items.length > first;
+      const paginated = items.slice(0, first);
+
+      return {
+        edges: paginated.map(cruise => ({
+          cursor: encodeCursor(cruise.id, 'Cruise'),
+          node: cruise,
+        })),
+        pageInfo: {
+          hasNextPage,
+          hasPreviousPage: startIdx > 0,
+          endCursor: paginated.length > 0 ? encodeCursor(paginated[paginated.length - 1].id, 'Cruise') : null,
+        },
+        total: filtered.length,
+      };
     },
     tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id, isVisible: true } }),
     cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id, isVisible: true } }),

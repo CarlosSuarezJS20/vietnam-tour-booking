@@ -56,6 +56,28 @@ const typeDefs = `
     isVisible:   Boolean!
   }
 
+  type TourEdge {
+    cursor: String!
+    node: Tour!
+  }
+
+  type TourConnection {
+    edges: [TourEdge!]!
+    pageInfo: PageInfo!
+    total: Int!
+  }
+
+  type CruiseEdge {
+    cursor: String!
+    node: Cruise!
+  }
+
+  type CruiseConnection {
+    edges: [CruiseEdge!]!
+    pageInfo: PageInfo!
+    total: Int!
+  }
+
   type Query {
     tourCategories:                  [TourCategory!]!
     regions:                         [Region!]!
@@ -65,8 +87,8 @@ const typeDefs = `
     toursByCity(cityId: ID!, limit: Int):         [Tour!]!
     toursByCategory(categoryId: ID!, limit: Int): [Tour!]!
     cruises:                         [Cruise!]!
-    allTours(filter: VisibilityFilter = ALL):     [Tour!]!
-    allCruises(filter: VisibilityFilter = ALL):   [Cruise!]!
+    allTours(filter: VisibilityFilter = ALL, first: Int, after: String):     TourConnection!
+    allCruises(filter: VisibilityFilter = ALL, first: Int, after: String):   CruiseConnection!
     tour(id: ID!):                   Tour
     cruise(id: ID!):                 Cruise
   }

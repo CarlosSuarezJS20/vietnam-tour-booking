@@ -67,20 +67,28 @@ export function useGetToursByCityQuery(variables: { cityId: string; limit?: numb
   return { data: data?.toursByCity ?? [], loading, error };
 }
 
-export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
-  const { data, loading, error } = useQuery<{ allTours: Omit<SearchTour, "_type" | "cityNames">[] }>(
+export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
+  const { data, loading, error } = useQuery<{ allTours: { edges: Array<{ node: Omit<SearchTour, "_type" | "cityNames">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number } }>(
     ALL_TOURS_QUERY,
-    { variables: { filter: filter || 'ALL' }, fetchPolicy: 'cache-and-network' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'cache-and-network' }
   );
-  return { data: data?.allTours ?? [], loading, error };
+  return {
+    data: data?.allTours ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0 },
+    loading,
+    error,
+  };
 }
 
-export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
-  const { data, loading, error } = useQuery<{ allCruises: Omit<SearchCruise, "_type">[] }>(
+export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
+  const { data, loading, error } = useQuery<{ allCruises: { edges: Array<{ node: Omit<SearchCruise, "_type">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number } }>(
     ALL_CRUISES_QUERY,
-    { variables: { filter: filter || 'ALL' }, fetchPolicy: 'cache-and-network' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'cache-and-network' }
   );
-  return { data: data?.allCruises ?? [], loading, error };
+  return {
+    data: data?.allCruises ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0 },
+    loading,
+    error,
+  };
 }
 
 export const useGetCartQuery = () => {

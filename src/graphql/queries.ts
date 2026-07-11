@@ -49,19 +49,41 @@ export const TOURS_BY_CITY_QUERY = gql`
 `;
 
 export const ALL_TOURS_QUERY = gql`
-  query AllTours($filter: VisibilityFilter = ALL) {
-    allTours(filter: $filter) {
-      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
-      cities     { id name region { id key label } }
-      categories { id slug label }
+  query AllTours($filter: VisibilityFilter = ALL, $first: Int = 7, $after: String) {
+    allTours(filter: $filter, first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+          cities     { id name region { id key label } }
+          categories { id slug label }
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+      }
+      total
     }
   }
 `;
 
 export const ALL_CRUISES_QUERY = gql`
-  query AllCruises($filter: VisibilityFilter = ALL) {
-    allCruises(filter: $filter) {
-      id title description itinerary imageUrl duration price sourceUrl isVisible
+  query AllCruises($filter: VisibilityFilter = ALL, $first: Int = 7, $after: String) {
+    allCruises(filter: $filter, first: $first, after: $after) {
+      edges {
+        cursor
+        node {
+          id title description itinerary imageUrl duration price sourceUrl isVisible
+        }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+      }
+      total
     }
   }
 `;
