@@ -16,6 +16,8 @@ interface CruisesListState {
   selectedCruiseId?: string;
   loadingIds: Set<string>;
   cursorStack: string[];
+  cachedVisibleCount: number;
+  cachedHiddenCount: number;
 }
 
 const CRUISES_PER_PAGE = 7;
@@ -26,6 +28,8 @@ const CruisesPage = () => {
     searchQuery: '',
     loadingIds: new Set(),
     cursorStack: [],
+    cachedVisibleCount: 0,
+    cachedHiddenCount: 0,
   });
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
@@ -117,8 +121,16 @@ const CruisesPage = () => {
     });
   };
 
-  const visibleCount = cruisesConnection.visibleCount;
-  const hiddenCount = cruisesConnection.hiddenCount;
+  const visibleCount = cruisesConnection.visibleCount || state.cachedVisibleCount;
+  const hiddenCount = cruisesConnection.hiddenCount || state.cachedHiddenCount;
+
+  if ((cruisesConnection.visibleCount || cruisesConnection.hiddenCount) && !loading) {
+    setState(prev => ({
+      ...prev,
+      cachedVisibleCount: cruisesConnection.visibleCount,
+      cachedHiddenCount: cruisesConnection.hiddenCount,
+    }));
+  }
 
   const startItem = state.currentCursor || cruisesConnection.total === 0 ? (state.cursorStack.length * CRUISES_PER_PAGE) + 1 : 1;
   const endItem = startItem + displayCruises.length - 1;

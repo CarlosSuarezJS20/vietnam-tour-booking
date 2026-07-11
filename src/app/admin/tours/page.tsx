@@ -16,6 +16,8 @@ interface ToursListState {
   selectedTourId?: string;
   loadingIds: Set<string>;
   cursorStack: string[];
+  cachedVisibleCount: number;
+  cachedHiddenCount: number;
 }
 
 const TOURS_PER_PAGE = 7;
@@ -26,6 +28,8 @@ const ToursPage = () => {
     searchQuery: '',
     loadingIds: new Set(),
     cursorStack: [],
+    cachedVisibleCount: 0,
+    cachedHiddenCount: 0,
   });
 
   const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
@@ -117,8 +121,16 @@ const ToursPage = () => {
     });
   };
 
-  const visibleCount = toursConnection.visibleCount;
-  const hiddenCount = toursConnection.hiddenCount;
+  const visibleCount = toursConnection.visibleCount || state.cachedVisibleCount;
+  const hiddenCount = toursConnection.hiddenCount || state.cachedHiddenCount;
+
+  if ((toursConnection.visibleCount || toursConnection.hiddenCount) && !loading) {
+    setState(prev => ({
+      ...prev,
+      cachedVisibleCount: toursConnection.visibleCount,
+      cachedHiddenCount: toursConnection.hiddenCount,
+    }));
+  }
 
   const startItem = state.currentCursor || toursConnection.total === 0 ? (state.cursorStack.length * TOURS_PER_PAGE) + 1 : 1;
   const endItem = startItem + displayTours.length - 1;
