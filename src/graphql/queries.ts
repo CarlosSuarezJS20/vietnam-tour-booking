@@ -65,6 +65,8 @@ export const ALL_TOURS_QUERY = gql`
         endCursor
       }
       total
+      visibleCount
+      hiddenCount
     }
   }
 `;
@@ -84,6 +86,8 @@ export const ALL_CRUISES_QUERY = gql`
         endCursor
       }
       total
+      visibleCount
+      hiddenCount
     }
   }
 `;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
@@ -117,13 +117,8 @@ const ToursPage = () => {
     });
   };
 
-  const { visibleCount, hiddenCount } = useMemo(() => {
-    const allTours = toursConnection.edges.map(e => e.node);
-    return {
-      visibleCount: allTours.filter(t => t.isVisible).length,
-      hiddenCount: allTours.filter(t => !t.isVisible).length,
-    };
-  }, [tourFilter, toursConnection.total]);
+  const visibleCount = toursConnection.visibleCount;
+  const hiddenCount = toursConnection.hiddenCount;
 
   const startItem = state.currentCursor || toursConnection.total === 0 ? (state.cursorStack.length * TOURS_PER_PAGE) + 1 : 1;
   const endItem = startItem + displayTours.length - 1;

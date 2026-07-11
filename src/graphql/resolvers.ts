@@ -141,6 +141,9 @@ export const resolvers = {
       const hasNextPage = items.length > first;
       const paginated = items.slice(0, first);
 
+      const visibleCount = allTours.filter(t => t.isVisible).length;
+      const hiddenCount = allTours.filter(t => !t.isVisible).length;
+
       return {
         edges: paginated.map(tour => ({
           cursor: encodeCursor(tour.id, 'Tour'),
@@ -152,6 +155,8 @@ export const resolvers = {
           endCursor: paginated.length > 0 ? encodeCursor(paginated[paginated.length - 1].id, 'Tour') : null,
         },
         total: filtered.length,
+        visibleCount,
+        hiddenCount,
       };
     },
     allCruises: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
@@ -171,6 +176,9 @@ export const resolvers = {
       const hasNextPage = items.length > first;
       const paginated = items.slice(0, first);
 
+      const visibleCount = allCruises.filter(c => c.isVisible).length;
+      const hiddenCount = allCruises.filter(c => !c.isVisible).length;
+
       return {
         edges: paginated.map(cruise => ({
           cursor: encodeCursor(cruise.id, 'Cruise'),
@@ -182,6 +190,8 @@ export const resolvers = {
           endCursor: paginated.length > 0 ? encodeCursor(paginated[paginated.length - 1].id, 'Cruise') : null,
         },
         total: filtered.length,
+        visibleCount,
+        hiddenCount,
       };
     },
     tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id, isVisible: true } }),

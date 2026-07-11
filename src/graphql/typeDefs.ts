@@ -65,6 +65,8 @@ const typeDefs = `
     edges: [TourEdge!]!
     pageInfo: PageInfo!
     total: Int!
+    visibleCount: Int!
+    hiddenCount: Int!
   }
 
   type CruiseEdge {
@@ -76,6 +78,8 @@ const typeDefs = `
     edges: [CruiseEdge!]!
     pageInfo: PageInfo!
     total: Int!
+    visibleCount: Int!
+    hiddenCount: Int!
   }
 
   type Query {
