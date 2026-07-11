@@ -70,7 +70,7 @@ export function useGetToursByCityQuery(variables: { cityId: string; limit?: numb
 export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
   const { data, loading, error } = useQuery<{ allTours: Omit<SearchTour, "_type" | "cityNames">[] }>(
     ALL_TOURS_QUERY,
-    { variables: { filter: filter || 'ALL' } }
+    { variables: { filter: filter || 'ALL' }, fetchPolicy: 'cache-and-network' }
   );
   return { data: data?.allTours ?? [], loading, error };
 }
@@ -78,7 +78,7 @@ export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
 export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
   const { data, loading, error } = useQuery<{ allCruises: Omit<SearchCruise, "_type">[] }>(
     ALL_CRUISES_QUERY,
-    { variables: { filter: filter || 'ALL' } }
+    { variables: { filter: filter || 'ALL' }, fetchPolicy: 'cache-and-network' }
   );
   return { data: data?.allCruises ?? [], loading, error };
 }
@@ -162,7 +162,7 @@ export function useSearchProductsQuery(variables: {
   return { data: data?.searchProducts, loading, error };
 }
 
-export const useToggleTourVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+export const useToggleTourVisibilityMutation = () => {
   const [mutate, { loading }] = useMutation<
     { toggleTourVisibility: SearchTour },
     { id: string }
@@ -171,19 +171,28 @@ export const useToggleTourVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HI
       if (!data?.toggleTourVisibility) return;
       const updated = data.toggleTourVisibility;
 
-      const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: filter || 'ALL' } };
-      const existing = cache.readQuery<{ allTours: SearchTour[] }>(cacheKey);
+      // Update all three filter caches
+      (['ALL', 'VISIBLE', 'HIDDEN'] as const).forEach(f => {
+        const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: f } };
+        const existing = cache.readQuery<{ allTours: SearchTour[] }>(cacheKey);
 
-      if (existing) {
-        const newTours = existing.allTours.map(t => t.id === updated.id ? updated : t);
-        cache.writeQuery({ ...cacheKey, data: { allTours: newTours } });
-      }
+        if (existing) {
+          let newTours = existing.allTours.map(t => t.id === updated.id ? updated : t);
+          // Filter to only include items that match this filter
+          if (f === 'VISIBLE') {
+            newTours = newTours.filter(t => t.isVisible);
+          } else if (f === 'HIDDEN') {
+            newTours = newTours.filter(t => !t.isVisible);
+          }
+          cache.writeQuery({ ...cacheKey, data: { allTours: newTours } });
+        }
+      });
     }
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
 };
 
-export const useToggleCruiseVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+export const useToggleCruiseVisibilityMutation = () => {
   const [mutate, { loading }] = useMutation<
     { toggleCruiseVisibility: SearchCruise },
     { id: string }
@@ -192,19 +201,28 @@ export const useToggleCruiseVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | '
       if (!data?.toggleCruiseVisibility) return;
       const updated = data.toggleCruiseVisibility;
 
-      const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: filter || 'ALL' } };
-      const existing = cache.readQuery<{ allCruises: SearchCruise[] }>(cacheKey);
+      // Update all three filter caches
+      (['ALL', 'VISIBLE', 'HIDDEN'] as const).forEach(f => {
+        const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: f } };
+        const existing = cache.readQuery<{ allCruises: SearchCruise[] }>(cacheKey);
 
-      if (existing) {
-        const newCruises = existing.allCruises.map(c => c.id === updated.id ? updated : c);
-        cache.writeQuery({ ...cacheKey, data: { allCruises: newCruises } });
-      }
+        if (existing) {
+          let newCruises = existing.allCruises.map(c => c.id === updated.id ? updated : c);
+          // Filter to only include items that match this filter
+          if (f === 'VISIBLE') {
+            newCruises = newCruises.filter(c => c.isVisible);
+          } else if (f === 'HIDDEN') {
+            newCruises = newCruises.filter(c => !c.isVisible);
+          }
+          cache.writeQuery({ ...cacheKey, data: { allCruises: newCruises } });
+        }
+      });
     }
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
 };
 
-export const useSetAllToursVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+export const useSetAllToursVisibilityMutation = () => {
   const [mutate, { loading }] = useMutation<
     { setAllToursVisibility: SearchTour[] },
     { visible: boolean }
@@ -213,14 +231,23 @@ export const useSetAllToursVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'H
       if (!data?.setAllToursVisibility) return;
       const updated = data.setAllToursVisibility;
 
-      const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: filter || 'ALL' } };
-      cache.writeQuery({ ...cacheKey, data: { allTours: updated } });
+      // Update all three filter caches
+      (['ALL', 'VISIBLE', 'HIDDEN'] as const).forEach(f => {
+        const cacheKey = { query: ALL_TOURS_QUERY, variables: { filter: f } };
+        let newTours = updated;
+        if (f === 'VISIBLE') {
+          newTours = updated.filter(t => t.isVisible);
+        } else if (f === 'HIDDEN') {
+          newTours = updated.filter(t => !t.isVisible);
+        }
+        cache.writeQuery({ ...cacheKey, data: { allTours: newTours } });
+      });
     }
   });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
 };
 
-export const useSetAllCruisesVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+export const useSetAllCruisesVisibilityMutation = () => {
   const [mutate, { loading }] = useMutation<
     { setAllCruisesVisibility: SearchCruise[] },
     { visible: boolean }
@@ -229,8 +256,17 @@ export const useSetAllCruisesVisibilityMutation = (filter?: 'ALL' | 'VISIBLE' | 
       if (!data?.setAllCruisesVisibility) return;
       const updated = data.setAllCruisesVisibility;
 
-      const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: filter || 'ALL' } };
-      cache.writeQuery({ ...cacheKey, data: { allCruises: updated } });
+      // Update all three filter caches
+      (['ALL', 'VISIBLE', 'HIDDEN'] as const).forEach(f => {
+        const cacheKey = { query: ALL_CRUISES_QUERY, variables: { filter: f } };
+        let newCruises = updated;
+        if (f === 'VISIBLE') {
+          newCruises = updated.filter(c => c.isVisible);
+        } else if (f === 'HIDDEN') {
+          newCruises = updated.filter(c => !c.isVisible);
+        }
+        cache.writeQuery({ ...cacheKey, data: { allCruises: newCruises } });
+      });
     }
   });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };

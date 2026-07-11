@@ -171,8 +171,9 @@ export const SEARCH_PRODUCTS_QUERY = gql`
 export const TOGGLE_TOUR_VISIBILITY_MUTATION = gql`
   mutation ToggleTourVisibility($id: String!) {
     toggleTourVisibility(id: $id) {
-      id
-      isVisible
+      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      cities     { id name region { id key label } }
+      categories { id slug label }
     }
   }
 `;
@@ -180,8 +181,7 @@ export const TOGGLE_TOUR_VISIBILITY_MUTATION = gql`
 export const TOGGLE_CRUISE_VISIBILITY_MUTATION = gql`
   mutation ToggleCruiseVisibility($id: String!) {
     toggleCruiseVisibility(id: $id) {
-      id
-      isVisible
+      id title description itinerary imageUrl duration price sourceUrl isVisible
     }
   }
 `;
@@ -189,8 +189,9 @@ export const TOGGLE_CRUISE_VISIBILITY_MUTATION = gql`
 export const SET_ALL_TOURS_VISIBILITY_MUTATION = gql`
   mutation SetAllToursVisibility($visible: Boolean!) {
     setAllToursVisibility(visible: $visible) {
-      id
-      isVisible
+      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      cities     { id name region { id key label } }
+      categories { id slug label }
     }
   }
 `;
@@ -198,8 +199,7 @@ export const SET_ALL_TOURS_VISIBILITY_MUTATION = gql`
 export const SET_ALL_CRUISES_VISIBILITY_MUTATION = gql`
   mutation SetAllCruisesVisibility($visible: Boolean!) {
     setAllCruisesVisibility(visible: $visible) {
-      id
-      isVisible
+      id title description itinerary imageUrl duration price sourceUrl isVisible
     }
   }
 `;

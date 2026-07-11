@@ -5,30 +5,48 @@ interface VisibilityFilterProps {
   onFilterChange: (filter: 'ALL' | 'VISIBLE' | 'HIDDEN') => void;
   visibleCount: number;
   hiddenCount: number;
+  currentItemCount: number;
 }
 
-export const VisibilityFilter = ({ activeFilter, onFilterChange, visibleCount, hiddenCount }: VisibilityFilterProps) => {
-  const filters = [
-    { label: 'All', value: 'ALL' as const },
-    { label: `Visible (${visibleCount})`, value: 'VISIBLE' as const },
-    { label: `Hidden (${hiddenCount})`, value: 'HIDDEN' as const },
-  ];
+export const VisibilityFilter = ({ activeFilter, onFilterChange, visibleCount, hiddenCount, currentItemCount }: VisibilityFilterProps) => {
+  const showFilters = currentItemCount > 1;
 
   return (
     <div className="flex gap-2">
-      {filters.map((filter) => (
+      <button
+        onClick={() => onFilterChange('ALL')}
+        className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+          activeFilter === 'ALL'
+            ? 'bg-[#DC143C] text-white'
+            : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
+        }`}
+      >
+        All
+      </button>
+      {showFilters && visibleCount > 0 && (
         <button
-          key={filter.value}
-          onClick={() => onFilterChange(filter.value)}
+          onClick={() => onFilterChange('VISIBLE')}
           className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
-            activeFilter === filter.value
+            activeFilter === 'VISIBLE'
               ? 'bg-[#DC143C] text-white'
               : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
           }`}
         >
-          {filter.label}
+          Visible ({visibleCount})
         </button>
-      ))}
+      )}
+      {showFilters && hiddenCount > 0 && (
+        <button
+          onClick={() => onFilterChange('HIDDEN')}
+          className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+            activeFilter === 'HIDDEN'
+              ? 'bg-[#DC143C] text-white'
+              : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
+          }`}
+        >
+          Hidden ({hiddenCount})
+        </button>
+      )}
     </div>
   );
 };

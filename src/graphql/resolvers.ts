@@ -124,21 +124,25 @@ export const resolvers = {
     toursByCategory: (_: unknown, { categoryId, limit = 8 }: { categoryId: string; limit?: number }) =>
                        prisma.tour.findMany({ where: { categories: { some: { categoryId } }, isVisible: true }, take: limit }),
     cruises:         () => prisma.cruise.findMany({ where: { isVisible: true } }),
-    allTours:        (_: unknown, { filter }: { filter?: string }) => {
-      const where = filter === 'VISIBLE'
-        ? { isVisible: true }
-        : filter === 'HIDDEN'
-        ? { isVisible: false }
-        : undefined;
-      return prisma.tour.findMany({ where });
+    allTours: async (_: unknown, { filter }: { filter?: string }) => {
+      const allTours = await prisma.tour.findMany();
+      if (filter === 'VISIBLE') {
+        return allTours.filter(t => t.isVisible === true);
+      }
+      if (filter === 'HIDDEN') {
+        return allTours.filter(t => t.isVisible === false);
+      }
+      return allTours;
     },
-    allCruises:      (_: unknown, { filter }: { filter?: string }) => {
-      const where = filter === 'VISIBLE'
-        ? { isVisible: true }
-        : filter === 'HIDDEN'
-        ? { isVisible: false }
-        : undefined;
-      return prisma.cruise.findMany({ where });
+    allCruises: async (_: unknown, { filter }: { filter?: string }) => {
+      const allCruises = await prisma.cruise.findMany();
+      if (filter === 'VISIBLE') {
+        return allCruises.filter(c => c.isVisible === true);
+      }
+      if (filter === 'HIDDEN') {
+        return allCruises.filter(c => c.isVisible === false);
+      }
+      return allCruises;
     },
     tour:            (_: unknown, { id }: { id: string }) => prisma.tour.findUnique({ where: { id, isVisible: true } }),
     cruise:          (_: unknown, { id }: { id: string }) => prisma.cruise.findUnique({ where: { id, isVisible: true } }),

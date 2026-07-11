@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCruisesVisibilityMutation } from '@/graphql/hooks';
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
 import { CruisesTable } from '@/components/admin/cruises/CruisesTable';
@@ -12,7 +13,6 @@ import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
   searchQuery: string;
-  visibilityFilter: 'ALL' | 'VISIBLE' | 'HIDDEN';
   currentPage: number;
   selectedCruiseId?: string;
   loadingIds: Set<string>;
@@ -21,9 +21,9 @@ interface CruisesListState {
 const CRUISES_PER_PAGE = 7;
 
 const CruisesPage = () => {
+  const { cruiseFilter, setCruiseFilter } = useVisibilityFilter();
   const [state, setState] = useState<CruisesListState>({
     searchQuery: '',
-    visibilityFilter: 'ALL',
     currentPage: 1,
     loadingIds: new Set(),
   });
@@ -31,9 +31,9 @@ const CruisesPage = () => {
   // Always fetch ALL for accurate counts
   const { data: allCruises } = useGetAllCruisesQuery('ALL');
   // Fetch filtered data for display
-  const { data: cruises, loading, error } = useGetAllCruisesQuery(state.visibilityFilter);
-  const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation(state.visibilityFilter);
-  const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation(state.visibilityFilter);
+  const { data: cruises, loading, error } = useGetAllCruisesQuery(cruiseFilter);
+  const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation();
+  const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
 
   const { filteredCruises: searchResults } = useAdminCruiseSearch(cruises as Cruise[], state.searchQuery);
 
@@ -80,9 +80,9 @@ const CruisesPage = () => {
   };
 
   const handleFilterChange = (filter: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+    setCruiseFilter(filter);
     setState((prev) => ({
       ...prev,
-      visibilityFilter: filter,
       currentPage: 1,
       selectedCruiseId: undefined,
     }));
@@ -116,7 +116,6 @@ const CruisesPage = () => {
   const visibleCount = allCruises.filter((c: Cruise) => c.isVisible).length;
   const hiddenCount = allCruises.filter((c: Cruise) => !c.isVisible).length;
 
-  if (loading) return <div className="text-sm text-[#17171799]">Loading cruises...</div>;
   if (error) return <div className="text-sm text-red-600">Error loading cruises</div>;
 
   return (
@@ -125,7 +124,7 @@ const CruisesPage = () => {
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Cruises</h1>
           <p className="mt-1 text-sm text-[#17171799]">
-            {state.selectedCruiseId ? 'Selected cruise' : `All (${cruises.length})`}
+            {state.selectedCruiseId ? 'Selected cruise' : `All (${allCruises.length})`}
           </p>
         </div>
         {state.selectedCruiseId && (
@@ -147,19 +146,26 @@ const CruisesPage = () => {
 
       <div className="flex items-center justify-between gap-4">
         <VisibilityFilter
-          activeFilter={state.visibilityFilter}
+          activeFilter={cruiseFilter}
           onFilterChange={handleFilterChange}
           visibleCount={visibleCount}
           hiddenCount={hiddenCount}
+          currentItemCount={displayCruises.length}
         />
-        <BulkVisibilityButton
-          filter={state.visibilityFilter}
-          onToggleBulk={handleBulkVisibility}
-        />
+        {displayCruises.length > 1 && (
+          <BulkVisibilityButton
+            filter={cruiseFilter}
+            onToggleBulk={handleBulkVisibility}
+          />
+        )}
       </div>
 
       <div className="rounded border border-[#17171724] overflow-hidden">
-        {currentPageCruises.length > 0 ? (
+        {loading ? (
+          <div className="px-4 py-8 text-center text-sm text-[#17171799]">
+            Loading cruises...
+          </div>
+        ) : currentPageCruises.length > 0 ? (
           <>
             <CruisesTable
               cruises={currentPageCruises}

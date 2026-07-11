@@ -7,15 +7,15 @@ interface VisibilityToggleProps {
 }
 
 export const VisibilityToggle = ({ isVisible, onToggle, loading }: VisibilityToggleProps) => {
-  const buttonText = isVisible ? 'Remove' : 'Show';
-  const buttonColor = isVisible ? 'text-[#DC143C]' : 'text-green-600';
-  const hoverBg = 'hover:bg-[#f7f5f0]';
+  const buttonText = isVisible ? 'Visible' : 'Hidden';
+  const bgColor = isVisible ? 'bg-green-100' : 'bg-red-100';
+  const textColor = isVisible ? 'text-green-700' : 'text-red-700';
 
   return (
     <button
       onClick={onToggle}
       disabled={loading}
-      className={`rounded px-3 py-1 text-sm font-medium ${buttonColor} ${hoverBg} transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+      className={`rounded px-3 py-1 text-sm font-medium ${bgColor} ${textColor} hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed`}
     >
       {loading ? '...' : buttonText}
     </button>

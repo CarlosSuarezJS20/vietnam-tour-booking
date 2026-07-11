@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
 import { ToursTable } from '@/components/admin/tours/ToursTable';
@@ -12,7 +13,6 @@ import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
   searchQuery: string;
-  visibilityFilter: 'ALL' | 'VISIBLE' | 'HIDDEN';
   currentPage: number;
   selectedTourId?: string;
   loadingIds: Set<string>;
@@ -21,9 +21,9 @@ interface ToursListState {
 const TOURS_PER_PAGE = 7;
 
 const ToursPage = () => {
+  const { tourFilter, setTourFilter } = useVisibilityFilter();
   const [state, setState] = useState<ToursListState>({
     searchQuery: '',
-    visibilityFilter: 'ALL',
     currentPage: 1,
     loadingIds: new Set(),
   });
@@ -31,9 +31,9 @@ const ToursPage = () => {
   // Always fetch ALL for accurate counts
   const { data: allTours } = useGetAllToursQuery('ALL');
   // Fetch filtered data for display
-  const { data: tours, loading, error } = useGetAllToursQuery(state.visibilityFilter);
-  const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation(state.visibilityFilter);
-  const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation(state.visibilityFilter);
+  const { data: tours, loading, error } = useGetAllToursQuery(tourFilter);
+  const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
+  const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
 
   const { filteredTours: searchResults } = useAdminTourSearch(tours as Tour[], state.searchQuery);
 
@@ -80,9 +80,9 @@ const ToursPage = () => {
   };
 
   const handleFilterChange = (filter: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
+    setTourFilter(filter);
     setState((prev) => ({
       ...prev,
-      visibilityFilter: filter,
       currentPage: 1,
       selectedTourId: undefined,
     }));
@@ -116,7 +116,6 @@ const ToursPage = () => {
   const visibleCount = allTours.filter((t: Tour) => t.isVisible).length;
   const hiddenCount = allTours.filter((t: Tour) => !t.isVisible).length;
 
-  if (loading) return <div className="text-sm text-[#17171799]">Loading tours...</div>;
   if (error) return <div className="text-sm text-red-600">Error loading tours</div>;
 
   return (
@@ -125,7 +124,7 @@ const ToursPage = () => {
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Tours</h1>
           <p className="mt-1 text-sm text-[#17171799]">
-            {state.selectedTourId ? 'Selected tour' : `All (${tours.length})`}
+            {state.selectedTourId ? 'Selected tour' : `All (${allTours.length})`}
           </p>
         </div>
         {state.selectedTourId && (
@@ -147,19 +146,26 @@ const ToursPage = () => {
 
       <div className="flex items-center justify-between gap-4">
         <VisibilityFilter
-          activeFilter={state.visibilityFilter}
+          activeFilter={tourFilter}
           onFilterChange={handleFilterChange}
           visibleCount={visibleCount}
           hiddenCount={hiddenCount}
+          currentItemCount={displayTours.length}
         />
-        <BulkVisibilityButton
-          filter={state.visibilityFilter}
-          onToggleBulk={handleBulkVisibility}
-        />
+        {displayTours.length > 1 && (
+          <BulkVisibilityButton
+            filter={tourFilter}
+            onToggleBulk={handleBulkVisibility}
+          />
+        )}
       </div>
 
       <div className="rounded border border-[#17171724] overflow-hidden">
-        {currentPageTours.length > 0 ? (
+        {loading ? (
+          <div className="px-4 py-8 text-center text-sm text-[#17171799]">
+            Loading tours...
+          </div>
+        ) : currentPageTours.length > 0 ? (
           <>
             <ToursTable
               tours={currentPageTours}
