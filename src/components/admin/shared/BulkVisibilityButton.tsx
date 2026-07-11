@@ -13,7 +13,7 @@ export const BulkVisibilityButton = ({ filter, onToggleBulk, loading }: BulkVisi
 
   const isDisabled = filter === 'ALL';
   const shouldShowAll = filter === 'HIDDEN';
-  const buttonText = shouldShowAll ? 'All Visible' : 'Remove All';
+  const buttonText = shouldShowAll ? 'Show All' : 'Remove All';
   const buttonColor = shouldShowAll ? 'text-green-600' : 'text-[#DC143C]';
 
   const handleClick = () => {

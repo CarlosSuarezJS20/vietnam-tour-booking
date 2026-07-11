@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCruisesVisibilityMutation } from '@/graphql/hooks';
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
@@ -69,8 +69,7 @@ const CruisesPage = () => {
     }));
   };
 
-  const handleFilterChange = (filter: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
-    setCruiseFilter(filter);
+  useEffect(() => {
     setState((prev) => ({
       ...prev,
       currentCursor: undefined,
@@ -79,7 +78,17 @@ const CruisesPage = () => {
       visibleCountCache: 0,
       hiddenCountCache: 0,
     }));
-  };
+  }, [cruiseFilter]);
+
+  useEffect(() => {
+    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
+      setState(prev => ({
+        ...prev,
+        visibleCountCache: cruisesConnection.visibleCount,
+        hiddenCountCache: cruisesConnection.hiddenCount,
+      }));
+    }
+  }, [cruisesConnection.visibleCount, cruisesConnection.hiddenCount]);
 
   const handleToggleVisibility = async (id: string) => {
     setState((prev) => ({
@@ -144,18 +153,7 @@ const CruisesPage = () => {
     });
   };
 
-  // Cache counts when filter changes or on initial load, not during pagination
-  if (cruisesConnection.visibleCount > 0 || cruisesConnection.hiddenCount > 0) {
-    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
-      setState(prev => ({
-        ...prev,
-        visibleCountCache: cruisesConnection.visibleCount,
-        hiddenCountCache: cruisesConnection.hiddenCount,
-      }));
-    }
-  }
-
-  const visibleCount = state.visibleCountCache || cruisesConnection.visibleCount;
+  const visibleCount = state.visibleCountCache !== 0 ? state.visibleCountCache : cruisesConnection.visibleCount;
   const hiddenCount = state.hiddenCountCache || cruisesConnection.hiddenCount;
 
   const pageNumber = state.cursorStack.length + 1;
@@ -193,12 +191,12 @@ const CruisesPage = () => {
       <div className="flex items-center justify-between gap-4">
         <VisibilityFilter
           activeFilter={cruiseFilter}
-          onFilterChange={handleFilterChange}
+          onFilterChange={setCruiseFilter}
           visibleCount={visibleCount}
           hiddenCount={hiddenCount}
           currentItemCount={displayCruises.length}
         />
-        {displayCruises.length > 1 && (
+        {cruiseFilter !== 'ALL' && ((cruiseFilter === 'VISIBLE' && visibleCount > 1) || (cruiseFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
           <BulkVisibilityButton
             filter={cruiseFilter}
             onToggleBulk={handleBulkVisibility}

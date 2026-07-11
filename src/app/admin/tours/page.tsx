@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
@@ -69,8 +69,7 @@ const ToursPage = () => {
     }));
   };
 
-  const handleFilterChange = (filter: 'ALL' | 'VISIBLE' | 'HIDDEN') => {
-    setTourFilter(filter);
+  useEffect(() => {
     setState((prev) => ({
       ...prev,
       currentCursor: undefined,
@@ -79,7 +78,17 @@ const ToursPage = () => {
       visibleCountCache: 0,
       hiddenCountCache: 0,
     }));
-  };
+  }, [tourFilter]);
+
+  useEffect(() => {
+    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
+      setState(prev => ({
+        ...prev,
+        visibleCountCache: toursConnection.visibleCount,
+        hiddenCountCache: toursConnection.hiddenCount,
+      }));
+    }
+  }, [toursConnection.visibleCount, toursConnection.hiddenCount]);
 
   const handleToggleVisibility = async (id: string) => {
     setState((prev) => ({
@@ -144,18 +153,7 @@ const ToursPage = () => {
     });
   };
 
-  // Cache counts when filter changes or on initial load, not during pagination
-  if (toursConnection.visibleCount > 0 || toursConnection.hiddenCount > 0) {
-    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
-      setState(prev => ({
-        ...prev,
-        visibleCountCache: toursConnection.visibleCount,
-        hiddenCountCache: toursConnection.hiddenCount,
-      }));
-    }
-  }
-
-  const visibleCount = state.visibleCountCache || toursConnection.visibleCount;
+  const visibleCount = state.visibleCountCache !== 0 ? state.visibleCountCache : toursConnection.visibleCount;
   const hiddenCount = state.hiddenCountCache || toursConnection.hiddenCount;
 
   const pageNumber = state.cursorStack.length + 1;
@@ -193,12 +191,12 @@ const ToursPage = () => {
       <div className="flex items-center justify-between gap-4">
         <VisibilityFilter
           activeFilter={tourFilter}
-          onFilterChange={handleFilterChange}
+          onFilterChange={setTourFilter}
           visibleCount={visibleCount}
           hiddenCount={hiddenCount}
           currentItemCount={displayTours.length}
         />
-        {displayTours.length > 1 && (
+        {tourFilter !== 'ALL' && ((tourFilter === 'VISIBLE' && visibleCount > 1) || (tourFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
           <BulkVisibilityButton
             filter={tourFilter}
             onToggleBulk={handleBulkVisibility}
