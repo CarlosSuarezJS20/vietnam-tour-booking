@@ -144,15 +144,18 @@ const ToursPage = () => {
     });
   };
 
-  // Cache counts when filter changes or on initial load, not during pagination
-  if (toursConnection.visibleCount > 0 || toursConnection.hiddenCount > 0) {
-    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
-      setState(prev => ({
-        ...prev,
-        visibleCountCache: toursConnection.visibleCount,
-        hiddenCountCache: toursConnection.hiddenCount,
-      }));
-    }
+  // Keep last known counts to avoid a 0-0 flash while a new page/cursor is loading,
+  // but always take fresh data when it arrives (e.g. after a visibility toggle).
+  if (
+    (toursConnection.visibleCount > 0 || toursConnection.hiddenCount > 0) &&
+    (state.visibleCountCache !== toursConnection.visibleCount ||
+      state.hiddenCountCache !== toursConnection.hiddenCount)
+  ) {
+    setState(prev => ({
+      ...prev,
+      visibleCountCache: toursConnection.visibleCount,
+      hiddenCountCache: toursConnection.hiddenCount,
+    }));
   }
 
   const visibleCount = state.visibleCountCache || toursConnection.visibleCount;

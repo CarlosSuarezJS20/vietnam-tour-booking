@@ -144,15 +144,18 @@ const CruisesPage = () => {
     });
   };
 
-  // Cache counts when filter changes or on initial load, not during pagination
-  if (cruisesConnection.visibleCount > 0 || cruisesConnection.hiddenCount > 0) {
-    if (state.visibleCountCache === 0 && state.hiddenCountCache === 0) {
-      setState(prev => ({
-        ...prev,
-        visibleCountCache: cruisesConnection.visibleCount,
-        hiddenCountCache: cruisesConnection.hiddenCount,
-      }));
-    }
+  // Keep last known counts to avoid a 0-0 flash while a new page/cursor is loading,
+  // but always take fresh data when it arrives (e.g. after a visibility toggle).
+  if (
+    (cruisesConnection.visibleCount > 0 || cruisesConnection.hiddenCount > 0) &&
+    (state.visibleCountCache !== cruisesConnection.visibleCount ||
+      state.hiddenCountCache !== cruisesConnection.hiddenCount)
+  ) {
+    setState(prev => ({
+      ...prev,
+      visibleCountCache: cruisesConnection.visibleCount,
+      hiddenCountCache: cruisesConnection.hiddenCount,
+    }));
   }
 
   const visibleCount = state.visibleCountCache || cruisesConnection.visibleCount;
