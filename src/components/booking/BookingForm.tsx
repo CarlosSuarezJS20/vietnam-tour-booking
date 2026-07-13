@@ -74,8 +74,8 @@ const BookingForm = () => {
   const stepProps = { formData, onChange: update };
 
   return (
-    <section className="w-full overflow-hidden bg-stone-50 py-24">
-      <div className="max-w-3xl mx-auto px-6 w-full">
+    <section className="bg-stone-50 py-24">
+      <div className="max-w-3xl mx-auto px-6">
 
         <div className="text-center mb-12">
           <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-brand leading-tight mb-4">
