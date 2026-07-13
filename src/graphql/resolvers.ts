@@ -430,6 +430,10 @@ export const resolvers = {
   },
 
   Cruise: {
+    imageUrl: (cruise: { id: string }) =>
+      prisma.cruiseImage
+        .findFirst({ where: { cruiseId: cruise.id }, orderBy: { position: "asc" } })
+        .then(img => img?.url ?? null),
     images: (cruise: { id: string }) => prisma.cruiseImage.findMany({ where: { cruiseId: cruise.id }, orderBy: { position: "asc" } }),
   },
   Region: {

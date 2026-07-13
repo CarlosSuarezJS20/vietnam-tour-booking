@@ -95,7 +95,6 @@ async function main() {
       where:  { id: cruise.id },
       update: {
         title:                  cruise.title,
-        imageUrl:               cruise.imageUrl,
         description:            cruise.description,
         itinerary:              cruise.itinerary,
         duration:               cruise.duration,
@@ -107,7 +106,6 @@ async function main() {
       create: {
         id:                     cruise.id,
         title:                  cruise.title,
-        imageUrl:               cruise.imageUrl,
         description:            cruise.description,
         itinerary:              cruise.itinerary,
         duration:               cruise.duration,
@@ -116,6 +114,13 @@ async function main() {
         onSale:                 cruise.onSale,
         saleDiscountPercentage: cruise.saleDiscountPercentage ?? null,
       },
+    });
+
+    // Hero image
+    await prisma.cruiseImage.upsert({
+      where:  { id: `img-${cruise.id}` },
+      update: { url: cruise.imageUrl, position: 0 },
+      create: { id: `img-${cruise.id}`, cruiseId: cruise.id, url: cruise.imageUrl, position: 0 },
     });
   }
 

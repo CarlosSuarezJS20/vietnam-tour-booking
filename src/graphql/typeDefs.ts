@@ -36,7 +36,7 @@ const typeDefs = `
     title:        String!
     description:  String!
     itinerary:    String!
-    imageUrl:     String!
+    imageUrl:     String
     duration:     String!
     price:        Float!
     cities:       [City!]!
@@ -58,7 +58,7 @@ const typeDefs = `
   type Cruise {
     id:          ID!
     title:       String!
-    imageUrl:    String!
+    imageUrl:    String
     description: String!
     itinerary:   String!
     duration:    String!

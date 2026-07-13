@@ -81,7 +81,6 @@ model TourImage {
 model Cruise {
   id                     String  @id
   title                  String
-  imageUrl               String
   description            String
   itinerary              String
   duration               String
