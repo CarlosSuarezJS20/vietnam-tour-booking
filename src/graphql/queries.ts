@@ -83,6 +83,7 @@ export const ALL_CRUISES_QUERY = gql`
         cursor
         node {
           id title description itinerary duration price sourceUrl isVisible
+          images { id url isPrimary }
         }
       }
       pageInfo {
@@ -105,8 +106,8 @@ const CART_FIELDS = gql`
       uid date time partySize price
       product {
         __typename
-        ... on Tour   { id title duration price cities { name } }
-        ... on Cruise { id title duration price }
+        ... on Tour   { id title duration price images { id url isPrimary } cities { name } }
+        ... on Cruise { id title duration price images { id url isPrimary } }
       }
     }
   }
@@ -157,6 +158,7 @@ export const GET_TOUR_BY_ID_QUERY = gql`
   query GetTourById($id: ID!) {
     tour(id: $id) {
       id title description itinerary duration price featuredTour onSale saleDiscountPercentage
+      images { id url isPrimary }
       cities     { id name region { id key label } }
       categories { id slug label }
     }
@@ -167,6 +169,7 @@ export const GET_CRUISE_BY_ID_QUERY = gql`
   query GetCruiseById($id: ID!) {
     cruise(id: $id) {
       id title description itinerary duration price sourceUrl onSale saleDiscountPercentage
+      images { id url isPrimary }
     }
   }
 `;
@@ -187,11 +190,13 @@ export const SEARCH_PRODUCTS_QUERY = gql`
           __typename
           ... on Tour {
             id title duration price featuredTour onSale saleDiscountPercentage
+            images { id url isPrimary }
             cities     { id name region { id key label } }
             categories { id slug label }
           }
           ... on Cruise {
             id title duration price description sourceUrl onSale saleDiscountPercentage
+            images { id url isPrimary }
           }
         }
       }
