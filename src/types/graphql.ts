@@ -7,10 +7,10 @@ export interface TourCategory {
 export interface CarouselTour {
   id:         string;
   title:      string;
-  imageUrl:   string;
   duration:   string;
   price:      number;
   categories: TourCategory[];
+  images?:    { id: string; url: string; isPrimary: boolean }[];
 }
 
 export interface City {
@@ -29,12 +29,12 @@ export interface Region {
 export interface Cruise {
   id:          string;
   title:       string;
-  imageUrl:    string;
   description: string;
   itinerary:   string;
   duration:    string;
   price:       number;
   sourceUrl:   string;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 
 export interface SearchTour {
@@ -42,7 +42,6 @@ export interface SearchTour {
   title:        string;
   description:  string;
   itinerary:    string;
-  imageUrl:     string;
   duration:     string;
   price:        number;
   featuredTour: boolean;
@@ -62,13 +61,13 @@ export interface SearchCruise {
   title:       string;
   description: string;
   itinerary:   string;
-  imageUrl:    string;
   duration:    string;
   price:       number;
   sourceUrl:   string;
   onSale:      boolean;
   isVisible:   boolean;
   saleDiscountPercentage?: number;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
   _type:       "cruise";
 }
 
@@ -87,12 +86,12 @@ export interface ListingTour {
   __typename: "Tour";
   id:          string;
   title:       string;
-  imageUrl:    string;
   duration:    string;
   price:       number;
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
 }
@@ -101,13 +100,13 @@ export interface ListingCruise {
   __typename: "Cruise";
   id:          string;
   title:       string;
-  imageUrl:    string;
   duration:    string;
   price:       number;
   description: string;
   sourceUrl:   string;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 
 export type ListingProduct = ListingTour | ListingCruise;
@@ -191,12 +190,12 @@ export interface ProductDetailTour {
   title:       string;
   description: string;
   itinerary:   string;
-  imageUrl:    string;
   duration:    string;
   price:       number;
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
 }
@@ -207,12 +206,12 @@ export interface ProductDetailCruise {
   title:       string;
   description: string;
   itinerary:   string;
-  imageUrl:    string;
   duration:    string;
   price:       number;
   sourceUrl:   string;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 
 export type ProductDetail = ProductDetailTour | ProductDetailCruise;
@@ -254,7 +253,6 @@ export interface FeaturedTour {
   id:           string;
   title:        string;
   description:  string;
-  imageUrl:     string;
   duration:     string;
   price:        number;
   cities:       (City & { region: { label: string } })[];

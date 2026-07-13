@@ -6,13 +6,13 @@ export interface Cruise {
   title: string;
   description: string;
   itinerary: string;
-  imageUrl: string;
   duration: string;
   price: number;
   sourceUrl: string;
   onSale: boolean;
   isVisible: boolean;
   saleDiscountPercentage?: number;
+  images?: { id: string; url: string; isPrimary: boolean }[];
 }
 
 const CRUISES_PER_PAGE = 7;

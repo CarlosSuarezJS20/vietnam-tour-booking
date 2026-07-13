@@ -29,7 +29,7 @@ export const CruisesTable = ({ cruises, onToggleVisibility, loadingIds = new Set
           className="cursor-pointer"
         >
           <td className="px-4 py-3">
-            <img src={cruise.imageUrl} alt={cruise.title} className="h-10 w-10 rounded object-cover" />
+            <img src={cruise.images?.[0]?.url || '/placeholder-image.jpg'} alt={cruise.title} className="h-10 w-10 rounded object-cover" />
           </td>
           <td className="px-4 py-3 text-sm">{cruise.title}</td>
           <td className="px-4 py-3 text-sm">{cruise.duration}</td>

@@ -24,7 +24,7 @@ const TourCard = ({ tour }: { tour: CarouselTour }) => {
     <div className="flex flex-col group cursor-pointer">
       <div className="relative aspect-[3/4] overflow-hidden mb-3">
         <Image
-          src={tour.imageUrl}
+          src={tour.images?.[0]?.url || '/placeholder-image.jpg'}
           alt={tour.title}
           fill
           sizes="260px"

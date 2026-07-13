@@ -6,7 +6,6 @@ export interface Tour {
   title: string;
   description: string;
   itinerary: string;
-  imageUrl: string;
   duration: string;
   price: number;
   createdAt: string;

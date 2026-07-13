@@ -22,7 +22,7 @@ const SearchResultItem = ({ item, onClick }: Props) => {
     >
       <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
         <Image
-          src={item.imageUrl}
+          src={item.images?.[0]?.url || '/placeholder-image.jpg'}
           alt={item.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"

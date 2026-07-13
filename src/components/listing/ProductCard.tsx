@@ -38,7 +38,7 @@ const ProductCard = ({ product }: Props) => {
       {/* Image */}
       <Link href={`/tours/${product.id}?type=${product.__typename.toLowerCase()}`} className="relative aspect-video overflow-hidden flex-shrink-0 block">
         <Image
-          src={product.imageUrl}
+          src={product.images?.[0]?.url || '/placeholder-image.jpg'}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

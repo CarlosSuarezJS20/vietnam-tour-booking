@@ -32,7 +32,7 @@ const StepActivity = ({ item, initialNames, onComplete }: Props) => {
       <div className="flex gap-4">
         <div className="relative w-24 h-16 flex-shrink-0 rounded-lg overflow-hidden">
           <Image
-            src={item.product.imageUrl}
+            src={item.product.images?.[0]?.url || '/placeholder-image.jpg'}
             alt={item.product.title}
             fill
             className="object-cover"

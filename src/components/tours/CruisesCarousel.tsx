@@ -26,7 +26,7 @@ const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
       }`}
     >
       <Image
-        src={cruise.imageUrl}
+        src={cruise.images?.[0]?.url || '/placeholder-image.jpg'}
         alt={cruise.title}
         fill
         sizes="(max-width: 780px) 60vw, 780px"

@@ -41,7 +41,7 @@ export const TourDetailView = ({ tour }: TourDetailViewProps) => (
     </div>
 
     <div className="mb-8 rounded border border-[#17171724] overflow-hidden">
-      <img src={tour.imageUrl} alt={tour.title} className="h-96 w-full object-cover" />
+      <img src={tour.images?.[0]?.url || '/placeholder-image.jpg'} alt={tour.title} className="h-96 w-full object-cover" />
     </div>
 
     <div className="mb-8 grid grid-cols-2 gap-4 rounded border border-[#17171724] p-6 md:grid-cols-4">
