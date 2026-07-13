@@ -53,6 +53,15 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
   const { createTour, loading } = useCreateTourMutation();
   const { addTourImage } = useAddTourImageMutation();
 
+  const handleSetPrimary = (imageId: string) => {
+    setImages((prev) =>
+      prev.map((img) => ({
+        ...img,
+        isPrimary: img.id === imageId,
+      }))
+    );
+  };
+
   useEffect(() => {
     if (pendingPrimaryImageUrl) {
       const matchingImage = images.find((img) => img.url === pendingPrimaryImageUrl);
@@ -103,38 +112,24 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     const imageToDelete = images.find((img) => img.id === imageId);
 
     if (imageToDelete) {
-      // Find the filename in sessionUploads
       const upload = sessionUploads.find((u) => u.url === imageToDelete.url);
 
-      // Delete from Supabase if we have the filename
       if (upload) {
         try {
           await supabase.storage
             .from('tours-images')
             .remove([upload.filename]);
 
-          // Remove from sessionUploads
           setSessionUploads((prev) =>
             prev.filter((u) => u.url !== imageToDelete.url)
           );
         } catch (error) {
           console.error(`Failed to delete file from storage:`, error);
-          // Continue anyway - remove from UI state
         }
       }
     }
 
-    // Remove from images state
     setImages((prev) => prev.filter((img) => img.id !== imageId));
-  };
-
-  const handleSetPrimary = (imageId: string) => {
-    setImages((prev) =>
-      prev.map((img) => ({
-        ...img,
-        isPrimary: img.id === imageId,
-      }))
-    );
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
