@@ -16,6 +16,7 @@ export const FEATURED_TOUR_QUERY = gql`
   query GetFeaturedTour {
     featuredTour {
       id title description duration price featuredTour
+      images { id url isPrimary }
       cities     { id name region { label } }
       categories { id slug label }
     }
@@ -26,6 +27,7 @@ export const TOURS_BY_CATEGORY_QUERY = gql`
   query ToursByCategory($categoryId: ID!, $limit: Int) {
     toursByCategory(categoryId: $categoryId, limit: $limit) {
       id title duration price
+      images { id url isPrimary }
       categories { id slug label }
     }
   }
@@ -35,6 +37,7 @@ export const CRUISES_QUERY = gql`
   query GetCruises {
     cruises {
       id title description itinerary duration price sourceUrl
+      images { id url isPrimary }
     }
   }
 `;
@@ -43,6 +46,7 @@ export const TOURS_BY_CITY_QUERY = gql`
   query ToursByCity($cityId: ID!, $limit: Int) {
     toursByCity(cityId: $cityId, limit: $limit) {
       id title duration price
+      images { id url isPrimary }
       categories { id slug label }
     }
   }
