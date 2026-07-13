@@ -21,8 +21,8 @@ export const UploadModal = ({
 }: UploadModalProps) => {
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
 
-  const handleUpload = (url: string) => {
-    setUploadedUrl(url);
+  const handleUpload = (image: { url: string; filename: string }) => {
+    setUploadedUrl(image.url);
   };
 
   const handleSubmit = () => {
