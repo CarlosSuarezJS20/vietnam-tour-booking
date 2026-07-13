@@ -15,7 +15,7 @@ export const REGIONS_QUERY = gql`
 export const FEATURED_TOUR_QUERY = gql`
   query GetFeaturedTour {
     featuredTour {
-      id title description imageUrl duration price featuredTour
+      id title description duration price featuredTour
       cities     { id name region { label } }
       categories { id slug label }
     }
@@ -25,7 +25,7 @@ export const FEATURED_TOUR_QUERY = gql`
 export const TOURS_BY_CATEGORY_QUERY = gql`
   query ToursByCategory($categoryId: ID!, $limit: Int) {
     toursByCategory(categoryId: $categoryId, limit: $limit) {
-      id title imageUrl duration price
+      id title duration price
       categories { id slug label }
     }
   }
@@ -34,7 +34,7 @@ export const TOURS_BY_CATEGORY_QUERY = gql`
 export const CRUISES_QUERY = gql`
   query GetCruises {
     cruises {
-      id title imageUrl description itinerary duration price sourceUrl
+      id title description itinerary duration price sourceUrl
     }
   }
 `;
@@ -42,7 +42,7 @@ export const CRUISES_QUERY = gql`
 export const TOURS_BY_CITY_QUERY = gql`
   query ToursByCity($cityId: ID!, $limit: Int) {
     toursByCity(cityId: $cityId, limit: $limit) {
-      id title imageUrl duration price
+      id title duration price
       categories { id slug label }
     }
   }
@@ -54,7 +54,7 @@ export const ALL_TOURS_QUERY = gql`
       edges {
         cursor
         node {
-          id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+          id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
           images { id url isPrimary }
           cities     { id name region { id key label } }
           categories { id slug label }
@@ -78,7 +78,7 @@ export const ALL_CRUISES_QUERY = gql`
       edges {
         cursor
         node {
-          id title description itinerary imageUrl duration price sourceUrl isVisible
+          id title description itinerary duration price sourceUrl isVisible
         }
       }
       pageInfo {
@@ -101,8 +101,8 @@ const CART_FIELDS = gql`
       uid date time partySize price
       product {
         __typename
-        ... on Tour   { id title imageUrl duration price cities { name } }
-        ... on Cruise { id title imageUrl duration price }
+        ... on Tour   { id title duration price cities { name } }
+        ... on Cruise { id title duration price }
       }
     }
   }
@@ -152,7 +152,7 @@ export const REMOVE_FROM_CART_MUTATION = gql`
 export const GET_TOUR_BY_ID_QUERY = gql`
   query GetTourById($id: ID!) {
     tour(id: $id) {
-      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage
       cities     { id name region { id key label } }
       categories { id slug label }
     }
@@ -162,7 +162,7 @@ export const GET_TOUR_BY_ID_QUERY = gql`
 export const GET_CRUISE_BY_ID_QUERY = gql`
   query GetCruiseById($id: ID!) {
     cruise(id: $id) {
-      id title description itinerary imageUrl duration price sourceUrl onSale saleDiscountPercentage
+      id title description itinerary duration price sourceUrl onSale saleDiscountPercentage
     }
   }
 `;
@@ -182,12 +182,12 @@ export const SEARCH_PRODUCTS_QUERY = gql`
         node {
           __typename
           ... on Tour {
-            id title imageUrl duration price featuredTour onSale saleDiscountPercentage
+            id title duration price featuredTour onSale saleDiscountPercentage
             cities     { id name region { id key label } }
             categories { id slug label }
           }
           ... on Cruise {
-            id title imageUrl duration price description sourceUrl onSale saleDiscountPercentage
+            id title duration price description sourceUrl onSale saleDiscountPercentage
           }
         }
       }
@@ -198,7 +198,7 @@ export const SEARCH_PRODUCTS_QUERY = gql`
 export const TOGGLE_TOUR_VISIBILITY_MUTATION = gql`
   mutation ToggleTourVisibility($id: String!) {
     toggleTourVisibility(id: $id) {
-      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
       cities     { id name region { id key label } }
       categories { id slug label }
     }
@@ -208,7 +208,7 @@ export const TOGGLE_TOUR_VISIBILITY_MUTATION = gql`
 export const TOGGLE_CRUISE_VISIBILITY_MUTATION = gql`
   mutation ToggleCruiseVisibility($id: String!) {
     toggleCruiseVisibility(id: $id) {
-      id title description itinerary imageUrl duration price sourceUrl isVisible
+      id title description itinerary duration price sourceUrl isVisible
     }
   }
 `;
@@ -216,7 +216,7 @@ export const TOGGLE_CRUISE_VISIBILITY_MUTATION = gql`
 export const SET_ALL_TOURS_VISIBILITY_MUTATION = gql`
   mutation SetAllToursVisibility($visible: Boolean!) {
     setAllToursVisibility(visible: $visible) {
-      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
       cities     { id name region { id key label } }
       categories { id slug label }
     }
@@ -226,7 +226,7 @@ export const SET_ALL_TOURS_VISIBILITY_MUTATION = gql`
 export const SET_ALL_CRUISES_VISIBILITY_MUTATION = gql`
   mutation SetAllCruisesVisibility($visible: Boolean!) {
     setAllCruisesVisibility(visible: $visible) {
-      id title description itinerary imageUrl duration price sourceUrl isVisible
+      id title description itinerary duration price sourceUrl isVisible
     }
   }
 `;
@@ -234,7 +234,7 @@ export const SET_ALL_CRUISES_VISIBILITY_MUTATION = gql`
 export const CREATE_TOUR_MUTATION = gql`
   mutation CreateTour($input: CreateTourInput!) {
     createTour(input: $input) {
-      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
       cities     { id name region { id key label } }
       categories { id slug label }
     }

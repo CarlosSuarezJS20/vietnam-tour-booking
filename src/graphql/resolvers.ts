@@ -419,10 +419,6 @@ export const resolvers = {
   },
 
   Tour: {
-    imageUrl:   (tour: { id: string }) =>
-      prisma.tourImage
-        .findFirst({ where: { tourId: tour.id }, orderBy: { position: "asc" } })
-        .then(img => img?.url ?? null),
     images:     (tour: { id: string }) => prisma.tourImage.findMany({ where: { tourId: tour.id }, orderBy: { position: "asc" } }),
     cities:     (tour: { id: string }) => prisma.city.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
     categories: (tour: { id: string }) => prisma.tourCategory.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
@@ -430,10 +426,6 @@ export const resolvers = {
   },
 
   Cruise: {
-    imageUrl: (cruise: { id: string }) =>
-      prisma.cruiseImage
-        .findFirst({ where: { cruiseId: cruise.id }, orderBy: { position: "asc" } })
-        .then(img => img?.url ?? null),
     images: (cruise: { id: string }) => prisma.cruiseImage.findMany({ where: { cruiseId: cruise.id }, orderBy: { position: "asc" } }),
   },
   Region: {
