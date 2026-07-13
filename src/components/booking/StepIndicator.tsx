@@ -5,7 +5,7 @@ interface Props { step: number; steps: Step[] }
 
 const StepIndicator = ({ step, steps }: Props) => {
   return (
-    <div className="flex items-start">
+    <div className="w-full overflow-hidden flex items-start">
       {steps.map((s, i) => {
         const num = i + 1;
         const isComplete = num < step;
@@ -22,7 +22,7 @@ const StepIndicator = ({ step, steps }: Props) => {
               }`}>
                 {isComplete ? <FiCheck className="w-4 h-4" /> : num}
               </div>
-              <span className={`text-[10px] uppercase tracking-wider font-sans text-center leading-tight transition-colors ${
+              <span className={`text-[8px] md:text-[10px] uppercase tracking-wider font-sans text-center leading-tight transition-colors line-clamp-2 ${
                 isActive   ? "text-gray-700"
                 : isComplete ? "text-brand"
                 :              "text-gray-400"
