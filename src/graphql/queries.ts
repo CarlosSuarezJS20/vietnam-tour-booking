@@ -250,6 +250,14 @@ export const CREATE_TOUR_MUTATION = gql`
   }
 `;
 
+export const CREATE_CRUISE_MUTATION = gql`
+  mutation CreateCruise($input: CreateCruiseInput!) {
+    createCruise(input: $input) {
+      id title description itinerary duration price sourceUrl onSale saleDiscountPercentage isVisible
+    }
+  }
+`;
+
 export const ADD_TOUR_IMAGE_MUTATION = gql`
   mutation AddTourImage($tourId: String!, $url: String!) {
     addTourImage(tourId: $tourId, url: $url) {

@@ -23,6 +23,7 @@ import {
   SET_ALL_TOURS_VISIBILITY_MUTATION,
   SET_ALL_CRUISES_VISIBILITY_MUTATION,
   CREATE_TOUR_MUTATION,
+  CREATE_CRUISE_MUTATION,
   ADD_TOUR_IMAGE_MUTATION,
   DELETE_TOUR_IMAGE_MUTATION,
   SET_PRIMARY_TOUR_IMAGE_MUTATION,
@@ -264,6 +265,43 @@ export const useCreateTourMutation = () => {
       description: string;
       itinerary?: string;
       featuredTour?: boolean;
+      onSale?: boolean;
+      saleDiscountPercentage?: number | null;
+    }) => mutate({ variables: { input } }),
+    loading,
+  };
+};
+
+export const useCreateCruiseMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { createCruise: SearchCruise },
+    {
+      input: {
+        title: string;
+        duration: string;
+        price: number;
+        description: string;
+        itinerary?: string;
+        sourceUrl: string;
+        onSale?: boolean;
+        saleDiscountPercentage?: number | null;
+      };
+    }
+  >(CREATE_CRUISE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
+  return {
+    createCruise: (input: {
+      title: string;
+      duration: string;
+      price: number;
+      description: string;
+      itinerary?: string;
+      sourceUrl: string;
       onSale?: boolean;
       saleDiscountPercentage?: number | null;
     }) => mutate({ variables: { input } }),

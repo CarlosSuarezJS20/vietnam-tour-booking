@@ -8,6 +8,7 @@ import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCrui
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
 import { CruisesTable } from '@/components/admin/cruises/CruisesTable';
 import { CruisesSearchBar } from '@/components/admin/cruises/CruisesSearchBar';
+import { CruiseCreateDrawer } from '@/components/admin/cruises/CruiseCreateDrawer';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
@@ -23,6 +24,7 @@ interface CruisesListState {
   hiddenCountCache: number;
   drawerOpen: boolean;
   drawerCruise?: Cruise;
+  createDrawerOpen: boolean;
 }
 
 const CRUISES_PER_PAGE = 7;
@@ -37,6 +39,7 @@ const CruisesPage = () => {
     hiddenCountCache: 0,
     drawerOpen: false,
     drawerCruise: undefined,
+    createDrawerOpen: false,
   });
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
@@ -173,14 +176,22 @@ const CruisesPage = () => {
             {state.selectedCruiseId ? 'Selected cruise' : `All (${cruisesConnection.total})`}
           </p>
         </div>
-        {state.selectedCruiseId && (
+        <div className="flex gap-2">
           <button
-            onClick={handleClearSelection}
-            className="rounded px-4 py-2 text-sm text-[#DC143C] hover:bg-[#f7f5f0] transition-colors"
+            onClick={() => setState(prev => ({ ...prev, createDrawerOpen: true }))}
+            className="rounded px-4 py-2 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] transition-colors"
           >
-            Clear selection
+            + Create Cruise
           </button>
-        )}
+          {state.selectedCruiseId && (
+            <button
+              onClick={handleClearSelection}
+              className="rounded px-4 py-2 text-sm text-[#DC143C] hover:bg-[#f7f5f0] transition-colors"
+            >
+              Clear selection
+            </button>
+          )}
+        </div>
       </div>
 
       <CruisesSearchBar
@@ -249,6 +260,14 @@ const CruisesPage = () => {
           </div>
         )}
       </div>
+
+      <CruiseCreateDrawer
+        isOpen={state.createDrawerOpen}
+        onClose={() => setState(prev => ({ ...prev, createDrawerOpen: false }))}
+        onCruiseCreated={() => {
+          setState(prev => ({ ...prev, createDrawerOpen: false }));
+        }}
+      />
 
       <EditDrawer
         isOpen={state.drawerOpen}

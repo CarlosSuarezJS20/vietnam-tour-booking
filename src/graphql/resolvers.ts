@@ -335,6 +335,37 @@ export const resolvers = {
       });
     },
 
+    createCruise: async (
+      _: unknown,
+      {
+        input,
+      }: {
+        input: {
+          title: string;
+          duration: string;
+          price: number;
+          description: string;
+          itinerary?: string;
+          sourceUrl: string;
+          onSale?: boolean;
+          saleDiscountPercentage?: number | null;
+        };
+      }
+    ) => {
+      return prisma.cruise.create({
+        data: {
+          title: input.title,
+          duration: input.duration,
+          price: input.price,
+          description: input.description,
+          itinerary: input.itinerary || '',
+          sourceUrl: input.sourceUrl,
+          onSale: input.onSale === true,
+          ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
+        } as any,
+      });
+    },
+
     addTourImage: async (
       _: unknown,
       { tourId, url }: { tourId: string; url: string }

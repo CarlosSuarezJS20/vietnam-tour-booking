@@ -229,6 +229,17 @@ const typeDefs = `
     saleDiscountPercentage: Int
   }
 
+  input CreateCruiseInput {
+    title: String!
+    duration: String!
+    price: Float!
+    description: String!
+    itinerary: String
+    sourceUrl: String!
+    onSale: Boolean
+    saleDiscountPercentage: Int
+  }
+
   extend type Mutation {
     toggleTourVisibility(id: String!): Tour!
     toggleCruiseVisibility(id: String!): Cruise!
@@ -238,6 +249,7 @@ const typeDefs = `
     addTourImage(tourId: String!, url: String!): TourImage!
     deleteTourImage(imageId: String!): Boolean!
     setPrimaryTourImage(imageId: String!): TourImage!
+    createCruise(input: CreateCruiseInput!): Cruise!
     addCruiseImage(cruiseId: String!, url: String!): CruiseImage!
     deleteCruiseImage(imageId: String!): Boolean!
     setPrimaryCruiseImage(imageId: String!): CruiseImage!
