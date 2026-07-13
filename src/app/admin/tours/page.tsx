@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation, useSetFeaturedTourMutation } from '@/graphql/hooks';
