@@ -14,8 +14,8 @@ export const Sidebar = () => {
   const pathname = usePathname();
   const [state, setState] = useState<SidebarState>({
     expandedGroups: {
-      Commerce: true,
-      'Content & Insights': false,
+      'Content & Insights': true,
+      Commerce: false,
     },
   });
 

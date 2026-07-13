@@ -1,7 +1,7 @@
 import { Sidebar } from './Sidebar';
 
 export const AdminLayout = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex min-h-screen min-w-screen bg-white">
+  <div className="flex min-h-screen bg-white">
     <Sidebar />
     <main className="flex-1 flex flex-col">
       {/* TopBar placeholder */}
@@ -9,7 +9,7 @@ export const AdminLayout = ({ children }: { children: React.ReactNode }) => (
         {/* TopBar component will go here */}
       </div>
       {/* Main content */}
-      <div className="flex-1 overflow-auto p-6">{children}</div>
+      <div className="flex-1 overflow-y-scroll p-6">{children}</div>
     </main>
   </div>
 );

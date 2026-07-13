@@ -40,32 +40,6 @@ export const adminNavigation: AdminNavEntry[] = [
     icon: FiHome,
   },
   {
-    label: 'Commerce',
-    icon: FiShoppingBag,
-    children: [
-      {
-        label: 'Bookings',
-        href: '/admin/bookings',
-        icon: FiClipboard,
-      },
-      {
-        label: 'Payments',
-        href: '/admin/payments',
-        icon: FiCreditCard,
-      },
-      {
-        label: 'Inventory',
-        href: '/admin/inventory',
-        icon: FiPackage,
-      },
-      {
-        label: 'Refunds',
-        href: '/admin/refunds',
-        icon: FiRotateCcw,
-      },
-    ],
-  },
-  {
     label: 'Content & Insights',
     icon: FiFileText,
     children: [
@@ -88,6 +62,32 @@ export const adminNavigation: AdminNavEntry[] = [
         label: 'Analytics',
         href: '/admin/analytics',
         icon: FiBarChart2,
+      },
+    ],
+  },
+  {
+    label: 'Commerce',
+    icon: FiShoppingBag,
+    children: [
+      {
+        label: 'Bookings',
+        href: '/admin/bookings',
+        icon: FiClipboard,
+      },
+      {
+        label: 'Payments',
+        href: '/admin/payments',
+        icon: FiCreditCard,
+      },
+      {
+        label: 'Inventory',
+        href: '/admin/inventory',
+        icon: FiPackage,
+      },
+      {
+        label: 'Refunds',
+        href: '/admin/refunds',
+        icon: FiRotateCcw,
       },
     ],
   },

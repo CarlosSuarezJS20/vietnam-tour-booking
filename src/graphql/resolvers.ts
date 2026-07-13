@@ -303,6 +303,119 @@ export const resolvers = {
       });
       return prisma.cruise.findMany();
     },
+
+    createTour: async (
+      _: unknown,
+      {
+        input,
+      }: {
+        input: {
+          title: string;
+          duration: string;
+          price: number;
+          description: string;
+          itinerary?: string;
+          featuredTour?: boolean;
+          onSale?: boolean;
+          saleDiscountPercentage?: number | null;
+        };
+      }
+    ) => {
+      return prisma.tour.create({
+        data: {
+          title: input.title,
+          duration: input.duration,
+          price: input.price,
+          description: input.description,
+          itinerary: input.itinerary || '',
+          featuredTour: input.featuredTour === true,
+          onSale: input.onSale === true,
+          ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
+        } as any,
+      });
+    },
+
+    addTourImage: async (
+      _: unknown,
+      { tourId, url }: { tourId: string; url: string }
+    ) => {
+      return prisma.tourImage.create({
+        data: {
+          tourId,
+          url,
+          isPrimary: false,
+        },
+      });
+    },
+
+    deleteTourImage: async (_: unknown, { imageId }: { imageId: string }) => {
+      await prisma.tourImage.delete({ where: { id: imageId } });
+      return true;
+    },
+
+    setPrimaryTourImage: async (
+      _: unknown,
+      { imageId }: { imageId: string }
+    ) => {
+      const image = await prisma.tourImage.findUnique({ where: { id: imageId } });
+      if (!image) throw new Error('Image not found');
+
+      await prisma.tourImage.updateMany({
+        where: { tourId: image.tourId },
+        data: { isPrimary: false },
+      });
+
+      return prisma.tourImage.update({
+        where: { id: imageId },
+        data: { isPrimary: true },
+      });
+    },
+
+    addCruiseImage: async (
+      _: unknown,
+      { cruiseId, url }: { cruiseId: string; url: string }
+    ) => {
+      return prisma.cruiseImage.create({
+        data: {
+          cruiseId,
+          url,
+          isPrimary: false,
+        },
+      });
+    },
+
+    deleteCruiseImage: async (_: unknown, { imageId }: { imageId: string }) => {
+      await prisma.cruiseImage.delete({ where: { id: imageId } });
+      return true;
+    },
+
+    setPrimaryCruiseImage: async (
+      _: unknown,
+      { imageId }: { imageId: string }
+    ) => {
+      const image = await prisma.cruiseImage.findUnique({ where: { id: imageId } });
+      if (!image) throw new Error('Image not found');
+
+      await prisma.cruiseImage.updateMany({
+        where: { cruiseId: image.cruiseId },
+        data: { isPrimary: false },
+      });
+
+      return prisma.cruiseImage.update({
+        where: { id: imageId },
+        data: { isPrimary: true },
+      });
+    },
+
+    setFeaturedTour: async (_: unknown, { tourId }: { tourId: string }) => {
+      await prisma.tour.updateMany({
+        data: { featuredTour: false },
+      });
+      return prisma.tour.update({
+        where: { id: tourId },
+        data: { featuredTour: true },
+      });
+    },
   },
 
   Tour: {
@@ -310,9 +423,14 @@ export const resolvers = {
       prisma.tourImage
         .findFirst({ where: { tourId: tour.id }, orderBy: { position: "asc" } })
         .then(img => img?.url ?? null),
+    images:     (tour: { id: string }) => prisma.tourImage.findMany({ where: { tourId: tour.id }, orderBy: { position: "asc" } }),
     cities:     (tour: { id: string }) => prisma.city.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
     categories: (tour: { id: string }) => prisma.tourCategory.findMany({ where: { tours: { some: { tourId: tour.id } } } }),
     createdAt:  (tour: { createdAt?: Date }) => tour.createdAt ? new Date(tour.createdAt).toISOString() : null,
+  },
+
+  Cruise: {
+    images: (cruise: { id: string }) => prisma.cruiseImage.findMany({ where: { cruiseId: cruise.id }, orderBy: { position: "asc" } }),
   },
   Region: {
     // Resolver for Region.cities — returns all cities that belong to this region

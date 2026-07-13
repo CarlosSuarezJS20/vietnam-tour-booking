@@ -50,6 +50,7 @@ export interface SearchTour {
   isVisible:    boolean;
   saleDiscountPercentage?: number;
   createdAt:    string;
+  images?:      { id: string; url: string; isPrimary: boolean }[];
   cities:       (City & { region: { id: string; key: string; label: string } })[];
   categories:   TourCategory[];
   _type:        "tour";

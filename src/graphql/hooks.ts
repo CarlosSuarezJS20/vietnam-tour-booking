@@ -22,6 +22,14 @@ import {
   TOGGLE_CRUISE_VISIBILITY_MUTATION,
   SET_ALL_TOURS_VISIBILITY_MUTATION,
   SET_ALL_CRUISES_VISIBILITY_MUTATION,
+  CREATE_TOUR_MUTATION,
+  ADD_TOUR_IMAGE_MUTATION,
+  DELETE_TOUR_IMAGE_MUTATION,
+  SET_PRIMARY_TOUR_IMAGE_MUTATION,
+  ADD_CRUISE_IMAGE_MUTATION,
+  DELETE_CRUISE_IMAGE_MUTATION,
+  SET_PRIMARY_CRUISE_IMAGE_MUTATION,
+  SET_FEATURED_TOUR_MUTATION,
 } from "./queries";
 import { useReactiveVar } from "@apollo/client/react";
 import { sessionIdVar } from "@/lib/sessionVar";
@@ -224,4 +232,116 @@ export const useSetAllCruisesVisibilityMutation = () => {
     ],
   });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
+};
+
+export const useCreateTourMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { createTour: SearchTour },
+    {
+      input: {
+        title: string;
+        duration: string;
+        price: number;
+        description: string;
+        itinerary?: string;
+        featuredTour?: boolean;
+        onSale?: boolean;
+        saleDiscountPercentage?: number | null;
+      };
+    }
+  >(CREATE_TOUR_MUTATION, {
+    refetchQueries: [
+      { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
+  return {
+    createTour: (input: {
+      title: string;
+      duration: string;
+      price: number;
+      description: string;
+      itinerary?: string;
+      featuredTour?: boolean;
+      onSale?: boolean;
+      saleDiscountPercentage?: number | null;
+    }) => mutate({ variables: { input } }),
+    loading,
+  };
+};
+
+export const useAddTourImageMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { addTourImage: { id: string; url: string; isPrimary: boolean } },
+    { tourId: string; url: string }
+  >(ADD_TOUR_IMAGE_MUTATION);
+  return {
+    addTourImage: (tourId: string, url: string) => mutate({ variables: { tourId, url } }),
+    loading,
+  };
+};
+
+export const useDeleteTourImageMutation = () => {
+  const [mutate, { loading }] = useMutation<{ deleteTourImage: boolean }, { imageId: string }>(
+    DELETE_TOUR_IMAGE_MUTATION
+  );
+  return {
+    deleteTourImage: (imageId: string) => mutate({ variables: { imageId } }),
+    loading,
+  };
+};
+
+export const useSetPrimaryTourImageMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { setPrimaryTourImage: { id: string; isPrimary: boolean } },
+    { imageId: string }
+  >(SET_PRIMARY_TOUR_IMAGE_MUTATION);
+  return {
+    setPrimaryTourImage: (imageId: string) => mutate({ variables: { imageId } }),
+    loading,
+  };
+};
+
+export const useAddCruiseImageMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { addCruiseImage: { id: string; url: string; isPrimary: boolean } },
+    { cruiseId: string; url: string }
+  >(ADD_CRUISE_IMAGE_MUTATION);
+  return {
+    addCruiseImage: (cruiseId: string, url: string) => mutate({ variables: { cruiseId, url } }),
+    loading,
+  };
+};
+
+export const useDeleteCruiseImageMutation = () => {
+  const [mutate, { loading }] = useMutation<{ deleteCruiseImage: boolean }, { imageId: string }>(
+    DELETE_CRUISE_IMAGE_MUTATION
+  );
+  return {
+    deleteCruiseImage: (imageId: string) => mutate({ variables: { imageId } }),
+    loading,
+  };
+};
+
+export const useSetPrimaryCruiseImageMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { setPrimaryCruiseImage: { id: string; isPrimary: boolean } },
+    { imageId: string }
+  >(SET_PRIMARY_CRUISE_IMAGE_MUTATION);
+  return {
+    setPrimaryCruiseImage: (imageId: string) => mutate({ variables: { imageId } }),
+    loading,
+  };
+};
+
+export const useSetFeaturedTourMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { setFeaturedTour: { id: string; featuredTour: boolean } },
+    { tourId: string }
+  >(SET_FEATURED_TOUR_MUTATION);
+  return {
+    setFeaturedTour: (tourId: string) => mutate({ variables: { tourId } }),
+    loading,
+  };
 };

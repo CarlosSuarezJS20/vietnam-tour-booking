@@ -14,6 +14,7 @@ export interface Tour {
   onSale: boolean;
   isVisible: boolean;
   saleDiscountPercentage?: number;
+  images?: { id: string; url: string; isPrimary: boolean }[];
   cities?: { id: string; name: string }[];
   categories?: { id: string; label: string }[];
 }

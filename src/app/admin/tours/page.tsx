@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
-import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation } from '@/graphql/hooks';
+import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation, useSetFeaturedTourMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
 import { ToursTable } from '@/components/admin/tours/ToursTable';
 import { ToursSearchBar } from '@/components/admin/tours/ToursSearchBar';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
+import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -16,11 +17,13 @@ interface ToursListState {
   currentCursor?: string;
   selectedTourId?: string;
   loadingIds: Set<string>;
+  featuredLoadingIds: Set<string>;
   cursorStack: string[];
   visibleCountCache: number;
   hiddenCountCache: number;
   drawerOpen: boolean;
   drawerTour?: Tour;
+  createDrawerOpen: boolean;
 }
 
 const TOURS_PER_PAGE = 7;
@@ -30,23 +33,33 @@ const ToursPage = () => {
   const [state, setState] = useState<ToursListState>({
     searchQuery: '',
     loadingIds: new Set(),
+    featuredLoadingIds: new Set(),
     cursorStack: [],
     visibleCountCache: 0,
     hiddenCountCache: 0,
     drawerOpen: false,
     drawerTour: undefined,
+    createDrawerOpen: false,
   });
+  const [displayedTours, setDisplayedTours] = useState<Tour[]>([]);
 
   const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
-  const tours = toursConnection.edges.map(e => e.node) as Tour[];
+  const tours = useMemo(() => toursConnection.edges.map(e => e.node) as Tour[], [toursConnection]);
   const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
   const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
+  const { setFeaturedTour } = useSetFeaturedTourMutation();
+
+  useEffect(() => {
+    if (tours.length > 0) {
+      setDisplayedTours(tours);
+    }
+  }, [tours]);
 
   const { filteredTours: searchResults } = useAdminTourSearch(tours, state.searchQuery);
 
   const displayTours = state.selectedTourId
-    ? tours.filter((t: Tour) => t.id === state.selectedTourId)
-    : tours;
+    ? displayedTours.filter((t: Tour) => t.id === state.selectedTourId)
+    : displayedTours;
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));
@@ -114,6 +127,30 @@ const ToursPage = () => {
     }
   };
 
+  const handleSetFeatured = async (id: string) => {
+    const previouslyFeaturedId = displayedTours.find((t) => t.featuredTour)?.id;
+
+    setState((prev) => ({
+      ...prev,
+      featuredLoadingIds: new Set([...prev.featuredLoadingIds, id]),
+    }));
+    try {
+      await setFeaturedTour(id);
+      setDisplayedTours((prev) =>
+        prev.map((tour) => ({
+          ...tour,
+          featuredTour: tour.id === id,
+        }))
+      );
+    } finally {
+      setState((prev) => {
+        const newFeaturedLoadingIds = new Set(prev.featuredLoadingIds);
+        newFeaturedLoadingIds.delete(id);
+        return { ...prev, featuredLoadingIds: newFeaturedLoadingIds };
+      });
+    }
+  };
+
   const handleRowClick = (tour: Tour) => {
     setState((prev) => ({
       ...prev,
@@ -127,6 +164,28 @@ const ToursPage = () => {
       ...prev,
       drawerOpen: false,
       drawerTour: undefined,
+    }));
+  };
+
+  const handleOpenCreateDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      createDrawerOpen: true,
+    }));
+  };
+
+  const handleCloseCreateDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      createDrawerOpen: false,
+    }));
+  };
+
+  const handleTourCreated = () => {
+    setState((prev) => ({
+      ...prev,
+      currentCursor: undefined,
+      cursorStack: [],
     }));
   };
 
@@ -171,14 +230,26 @@ const ToursPage = () => {
             {state.selectedTourId ? 'Selected tour' : `All (${toursConnection.total})`}
           </p>
         </div>
-        {state.selectedTourId && (
+        <div className="flex items-center gap-4 pr-4">
           <button
-            onClick={handleClearSelection}
-            className="rounded px-4 py-2 text-sm text-[#DC143C] hover:bg-[#f7f5f0] transition-colors"
+            onClick={handleOpenCreateDrawer}
+            className="rounded bg-[#DC143C] text-white px-4 py-2 hover:bg-[#b81132] transition-colors flex-shrink-0 flex items-center gap-2"
+            aria-label="Create new tour"
           >
-            Clear selection
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="text-sm font-medium">Create Tour</span>
           </button>
-        )}
+          {state.selectedTourId && (
+            <button
+              onClick={handleClearSelection}
+              className="rounded px-4 py-2 text-sm text-[#DC143C] hover:bg-[#f7f5f0] transition-colors"
+            >
+              Clear selection
+            </button>
+          )}
+        </div>
       </div>
 
       <ToursSearchBar
@@ -237,7 +308,9 @@ const ToursPage = () => {
             <ToursTable
               tours={displayTours}
               onToggleVisibility={handleToggleVisibility}
+              onSetFeatured={handleSetFeatured}
               loadingIds={state.loadingIds}
+              featuredLoadingIds={state.featuredLoadingIds}
               onRowClick={handleRowClick}
             />
           </>
@@ -253,6 +326,12 @@ const ToursPage = () => {
         item={state.drawerTour}
         title={state.drawerTour?.title || 'Edit Tour'}
         onClose={handleCloseDrawer}
+      />
+
+      <TourCreateDrawer
+        isOpen={state.createDrawerOpen}
+        onClose={handleCloseCreateDrawer}
+        onTourCreated={handleTourCreated}
       />
     </div>
   );

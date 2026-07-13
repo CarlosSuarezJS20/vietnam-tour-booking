@@ -55,6 +55,7 @@ export const ALL_TOURS_QUERY = gql`
         cursor
         node {
           id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+          images { id url isPrimary }
           cities     { id name region { id key label } }
           categories { id slug label }
         }
@@ -226,6 +227,68 @@ export const SET_ALL_CRUISES_VISIBILITY_MUTATION = gql`
   mutation SetAllCruisesVisibility($visible: Boolean!) {
     setAllCruisesVisibility(visible: $visible) {
       id title description itinerary imageUrl duration price sourceUrl isVisible
+    }
+  }
+`;
+
+export const CREATE_TOUR_MUTATION = gql`
+  mutation CreateTour($input: CreateTourInput!) {
+    createTour(input: $input) {
+      id title description itinerary imageUrl duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      cities     { id name region { id key label } }
+      categories { id slug label }
+    }
+  }
+`;
+
+export const ADD_TOUR_IMAGE_MUTATION = gql`
+  mutation AddTourImage($tourId: String!, $url: String!) {
+    addTourImage(tourId: $tourId, url: $url) {
+      id url isPrimary
+    }
+  }
+`;
+
+export const DELETE_TOUR_IMAGE_MUTATION = gql`
+  mutation DeleteTourImage($imageId: String!) {
+    deleteTourImage(imageId: $imageId)
+  }
+`;
+
+export const SET_PRIMARY_TOUR_IMAGE_MUTATION = gql`
+  mutation SetPrimaryTourImage($imageId: String!) {
+    setPrimaryTourImage(imageId: $imageId) {
+      id isPrimary
+    }
+  }
+`;
+
+export const ADD_CRUISE_IMAGE_MUTATION = gql`
+  mutation AddCruiseImage($cruiseId: String!, $url: String!) {
+    addCruiseImage(cruiseId: $cruiseId, url: $url) {
+      id url isPrimary
+    }
+  }
+`;
+
+export const DELETE_CRUISE_IMAGE_MUTATION = gql`
+  mutation DeleteCruiseImage($imageId: String!) {
+    deleteCruiseImage(imageId: $imageId)
+  }
+`;
+
+export const SET_PRIMARY_CRUISE_IMAGE_MUTATION = gql`
+  mutation SetPrimaryCruiseImage($imageId: String!) {
+    setPrimaryCruiseImage(imageId: $imageId) {
+      id isPrimary
+    }
+  }
+`;
+
+export const SET_FEATURED_TOUR_MUTATION = gql`
+  mutation SetFeaturedTour($tourId: ID!) {
+    setFeaturedTour(tourId: $tourId) {
+      id featuredTour
     }
   }
 `;

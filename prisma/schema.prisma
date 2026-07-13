@@ -70,11 +70,12 @@ model Tour {
 }
 
 model TourImage {
-  id       String @id @default(cuid())
-  tourId   String
-  tour     Tour   @relation(fields: [tourId], references: [id])
-  url      String
-  position Int    @default(0)
+  id        String  @id @default(cuid())
+  tourId    String
+  tour      Tour    @relation(fields: [tourId], references: [id])
+  url       String
+  isPrimary Boolean @default(false)
+  position  Int     @default(0)
 }
 
 model Cruise {
@@ -90,7 +91,17 @@ model Cruise {
   saleDiscountPercentage Int?
   createdAt              DateTime @default(now())
   isVisible              Boolean  @default(true)
+  images                 CruiseImage[]
   cartItems              CartItem[]
+}
+
+model CruiseImage {
+  id        String  @id @default(cuid())
+  cruiseId  String
+  cruise    Cruise  @relation(fields: [cruiseId], references: [id])
+  url       String
+  isPrimary Boolean @default(false)
+  position  Int     @default(0)
 }
 
 model Cart {

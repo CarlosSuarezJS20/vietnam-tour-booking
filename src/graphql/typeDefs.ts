@@ -25,6 +25,12 @@ const typeDefs = `
     region: Region!
   }
 
+  type TourImage {
+    id:        ID!
+    url:       String!
+    isPrimary: Boolean
+  }
+
   type Tour {
     id:           ID!
     title:        String!
@@ -35,11 +41,18 @@ const typeDefs = `
     price:        Float!
     cities:       [City!]!
     categories:   [TourCategory!]!
+    images:       [TourImage!]!
     featuredTour: Boolean!
     onSale:                Boolean!
     saleDiscountPercentage: Int
     createdAt:    String!
     isVisible:    Boolean!
+  }
+
+  type CruiseImage {
+    id:        ID!
+    url:       String!
+    isPrimary: Boolean
   }
 
   type Cruise {
@@ -51,6 +64,7 @@ const typeDefs = `
     duration:    String!
     price:       Float!
     sourceUrl:   String!
+    images:      [CruiseImage!]!
     onSale:                Boolean!
     saleDiscountPercentage: Int
     isVisible:   Boolean!
@@ -206,11 +220,30 @@ const typeDefs = `
     submitEnquiry(input: EnquiryInput!): EnquiryResult!
   }
 
+  input CreateTourInput {
+    title: String!
+    duration: String!
+    price: Float!
+    description: String!
+    itinerary: String
+    featuredTour: Boolean
+    onSale: Boolean
+    saleDiscountPercentage: Int
+  }
+
   extend type Mutation {
     toggleTourVisibility(id: String!): Tour!
     toggleCruiseVisibility(id: String!): Cruise!
     setAllToursVisibility(visible: Boolean!): [Tour!]!
     setAllCruisesVisibility(visible: Boolean!): [Cruise!]!
+    createTour(input: CreateTourInput!): Tour!
+    addTourImage(tourId: String!, url: String!): TourImage!
+    deleteTourImage(imageId: String!): Boolean!
+    setPrimaryTourImage(imageId: String!): TourImage!
+    addCruiseImage(cruiseId: String!, url: String!): CruiseImage!
+    deleteCruiseImage(imageId: String!): Boolean!
+    setPrimaryCruiseImage(imageId: String!): CruiseImage!
+    setFeaturedTour(tourId: ID!): Tour!
   }
 `;
 

@@ -5,7 +5,9 @@ import { Tour } from '@/hooks/useAdminTourSearch';
 interface ToursTableProps {
   tours: Tour[];
   onToggleVisibility?: (id: string) => Promise<any>;
+  onSetFeatured?: (id: string) => Promise<any>;
   loadingIds?: Set<string>;
+  featuredLoadingIds?: Set<string>;
   onRowClick?: (tour: Tour) => void;
 }
 
@@ -19,7 +21,7 @@ const formatDate = (dateStr: string) => {
   }
 };
 
-export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set(), onRowClick }: ToursTableProps) => (
+export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingIds = new Set(), featuredLoadingIds = new Set(), onRowClick }: ToursTableProps) => (
   <table className="w-full border-collapse">
     <thead>
       <tr className="border-b border-[#17171724] bg-white">
@@ -29,6 +31,7 @@ export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set(), 
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Duration</th>
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Price</th>
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Date</th>
+        <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Featured</th>
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Status</th>
       </tr>
     </thead>
@@ -46,6 +49,26 @@ export const ToursTable = ({ tours, onToggleVisibility, loadingIds = new Set(), 
           <td className="px-4 py-3 text-sm">{tour.duration}</td>
           <td className="px-4 py-3 text-sm font-medium">${tour.price.toFixed(2)}</td>
           <td className="px-4 py-3 text-sm text-[#17171799]">{formatDate(tour.createdAt)}</td>
+          <td className="px-4 py-3">
+            {onSetFeatured ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSetFeatured(tour.id);
+                }}
+                disabled={featuredLoadingIds.has(tour.id)}
+                className={`rounded px-3 py-1 text-sm font-medium ${
+                  tour.featuredTour
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'bg-gray-100 text-gray-700'
+                } hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {featuredLoadingIds.has(tour.id) ? '...' : tour.featuredTour ? 'Yes' : 'No'}
+              </button>
+            ) : (
+              <span className="text-sm">{tour.featuredTour ? 'Yes' : 'No'}</span>
+            )}
+          </td>
           <td className="px-4 py-3">
             {onToggleVisibility && (
               <VisibilityToggle
