@@ -171,9 +171,9 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
       if (result.data?.createTour?.id) {
         const tourId = result.data.createTour.id;
 
-        for (const image of images) {
-          await addTourImage(tourId, image.url);
-        }
+        await Promise.all(
+          images.map((image) => addTourImage(tourId, image.url))
+        );
       }
 
       setForm(initialFormState);
