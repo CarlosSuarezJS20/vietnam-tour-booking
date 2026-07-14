@@ -153,22 +153,12 @@ const ToursPage = () => {
   };
 
   const handleSetFeatured = async (id: string) => {
-    const tour = displayTours.find((t) => t.id === id);
-    if (tour?.featuredTour) {
-      setState((prev) => ({ ...prev, error: 'This tour is already featured. You must set a different tour as featured first.' }));
-      return;
-    }
-
     setState((prev) => ({
       ...prev,
       featuredLoadingIds: new Set([...prev.featuredLoadingIds, id]),
     }));
     try {
       await setFeaturedTour(id);
-      setState((prev) => ({ ...prev, error: undefined }));
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to set featured tour';
-      setState((prev) => ({ ...prev, error: message }));
     } finally {
       setState((prev) => {
         const newFeaturedLoadingIds = new Set(prev.featuredLoadingIds);
