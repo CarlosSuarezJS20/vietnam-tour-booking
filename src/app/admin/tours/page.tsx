@@ -128,20 +128,12 @@ const ToursPage = () => {
   };
 
   const handleSetFeatured = async (id: string) => {
-    const previouslyFeaturedId = displayedTours.find((t) => t.featuredTour)?.id;
-
     setState((prev) => ({
       ...prev,
       featuredLoadingIds: new Set([...prev.featuredLoadingIds, id]),
     }));
     try {
       await setFeaturedTour(id);
-      setDisplayedTours((prev) =>
-        prev.map((tour) => ({
-          ...tour,
-          featuredTour: tour.id === id,
-        }))
-      );
     } finally {
       setState((prev) => {
         const newFeaturedLoadingIds = new Set(prev.featuredLoadingIds);
