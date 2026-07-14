@@ -62,7 +62,7 @@ const ToursPage = () => {
   const { filteredTours: searchResults } = useAdminTourSearch(allToursForSearch, state.searchQuery);
 
   const displayTours = state.selectedTourId
-    ? displayedTours.filter((t: Tour) => t.id === state.selectedTourId)
+    ? allToursForSearch.filter((t: Tour) => t.id === state.selectedTourId)
     : displayedTours;
 
   const handleSearch = (query: string) => {

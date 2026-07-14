@@ -52,7 +52,7 @@ const CruisesPage = () => {
   const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
   const displayCruises = state.selectedCruiseId
-    ? cruises.filter((c: Cruise) => c.id === state.selectedCruiseId)
+    ? allCruisesForSearch.filter((c: Cruise) => c.id === state.selectedCruiseId)
     : cruises;
 
   const handleSearch = (query: string) => {
