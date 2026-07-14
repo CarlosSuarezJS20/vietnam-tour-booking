@@ -105,21 +105,12 @@ const CruisesPage = () => {
   }, [cruisesConnection.visibleCount, cruisesConnection.hiddenCount]);
 
   const handleToggleVisibility = async (id: string) => {
-    const cruiseToToggle = allCruisesForSearch.find(c => c.id === id);
-    if (!cruiseToToggle) return;
-
     setState((prev) => ({
       ...prev,
       loadingIds: new Set([...prev.loadingIds, id]),
       visibleCountCache: 0,
       hiddenCountCache: 0,
     }));
-
-    setDisplayedCruises((prev) =>
-      prev.map((cruise) =>
-        cruise.id === id ? { ...cruise, isVisible: !cruise.isVisible } : cruise
-      )
-    );
 
     try {
       await toggleCruiseVisibility(id);
