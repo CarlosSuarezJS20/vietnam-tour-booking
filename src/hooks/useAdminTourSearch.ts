@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import Fuse from 'fuse.js';
+import { TOURS_PER_PAGE } from '@/lib/pagination';
 
 export interface Tour {
   id: string;
@@ -17,8 +18,6 @@ export interface Tour {
   cities?: { id: string; name: string }[];
   categories?: { id: string; label: string }[];
 }
-
-const TOURS_PER_PAGE = 7;
 
 export const useAdminTourSearch = (tours: Tour[], searchQuery: string) => {
   const filteredTours = useMemo(() => {

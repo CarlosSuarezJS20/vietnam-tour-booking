@@ -13,6 +13,7 @@ import { CruiseCreateDrawer } from '@/components/admin/cruises/CruiseCreateDrawe
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
+import { CRUISES_PER_PAGE } from '@/lib/pagination';
 import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
@@ -27,8 +28,6 @@ interface CruisesListState {
   drawerCruise?: Cruise;
   createDrawerOpen: boolean;
 }
-
-const CRUISES_PER_PAGE = 7;
 
 const CruisesPage = () => {
   const { cruiseFilter, setCruiseFilter } = useVisibilityFilter();

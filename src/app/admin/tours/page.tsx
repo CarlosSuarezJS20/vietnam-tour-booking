@@ -13,6 +13,7 @@ import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
+import { TOURS_PER_PAGE } from '@/lib/pagination';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -28,8 +29,6 @@ interface ToursListState {
   drawerTour?: Tour;
   createDrawerOpen: boolean;
 }
-
-const TOURS_PER_PAGE = 7;
 
 const ToursPage = () => {
   const { tourFilter, setTourFilter } = useVisibilityFilter();

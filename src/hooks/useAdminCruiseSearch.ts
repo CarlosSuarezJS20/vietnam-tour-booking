@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import Fuse from 'fuse.js';
+import { CRUISES_PER_PAGE } from '@/lib/pagination';
 
 export interface Cruise {
   id: string;
@@ -14,8 +15,6 @@ export interface Cruise {
   saleDiscountPercentage?: number;
   images?: { id: string; url: string; isPrimary: boolean }[];
 }
-
-const CRUISES_PER_PAGE = 7;
 
 export const useAdminCruiseSearch = (cruises: Cruise[], searchQuery: string) => {
   const filteredCruises = useMemo(() => {
