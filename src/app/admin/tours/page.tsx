@@ -55,7 +55,15 @@ const ToursPage = () => {
   const loading = state.showFeaturedOnly ? featuredLoading : toursLoading;
   const tours = useMemo(() => {
     if (state.showFeaturedOnly && featuredTourData) {
-      return [{ ...featuredTourData, isVisible: featuredTourData.isVisible ?? true } as Tour];
+      return [{
+        ...featuredTourData,
+        itinerary: '',
+        createdAt: new Date().toISOString(),
+        onSale: false,
+        isVisible: true,
+        saleDiscountPercentage: undefined,
+        images: [],
+      } as Tour];
     }
     return toursConnection.edges.map(e => e.node) as Tour[];
   }, [state.showFeaturedOnly, featuredTourData, toursConnection]);
@@ -277,25 +285,13 @@ const ToursPage = () => {
       />
 
       <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <VisibilityFilter
-            activeFilter={tourFilter}
-            onFilterChange={setTourFilter}
-            visibleCount={visibleCount}
-            hiddenCount={hiddenCount}
-            currentItemCount={displayTours.length}
-          />
-          <button
-            onClick={() => setState((prev) => ({ ...prev, showFeaturedOnly: !prev.showFeaturedOnly }))}
-            className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
-              state.showFeaturedOnly
-                ? 'bg-yellow-100 text-yellow-700'
-                : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
-            }`}
-          >
-            ★ Featured
-          </button>
-        </div>
+        <VisibilityFilter
+          activeFilter={tourFilter}
+          onFilterChange={setTourFilter}
+          visibleCount={visibleCount}
+          hiddenCount={hiddenCount}
+          currentItemCount={displayTours.length}
+        />
         {!state.showFeaturedOnly && tourFilter !== 'ALL' && ((tourFilter === 'VISIBLE' && visibleCount > 1) || (tourFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
           <BulkVisibilityButton
             filter={tourFilter}
@@ -313,24 +309,36 @@ const ToursPage = () => {
           <>
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#17171724] bg-[#f7f5f0]">
               <span className="text-sm text-[#17171799]">
-                {state.selectedTourId ? 'Selected tour' : `Showing ${startItem}-${endItem} of ${toursConnection.total}`}
+                {state.selectedTourId ? 'Selected tour' : state.showFeaturedOnly ? 'Featured tour' : `Showing ${startItem}-${endItem} of ${toursConnection.total}`}
               </span>
               {!state.selectedTourId && (
-                <div className="flex gap-2">
+                <div className="flex gap-3 items-center">
                   <button
-                    onClick={handlePrevPage}
-                    disabled={!toursConnection.pageInfo.hasPreviousPage}
-                    className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
+                    onClick={() => setState((prev) => ({ ...prev, showFeaturedOnly: !prev.showFeaturedOnly }))}
+                    className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
+                      state.showFeaturedOnly
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-white text-[#171717] hover:bg-[#f7f5f0]'
+                    }`}
                   >
-                    ← Prev
+                    ★ Featured
                   </button>
-                  <button
-                    onClick={handleNextPage}
-                    disabled={!toursConnection.pageInfo.hasNextPage}
-                    className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
-                  >
-                    Next →
-                  </button>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handlePrevPage}
+                      disabled={!toursConnection.pageInfo.hasPreviousPage || state.showFeaturedOnly}
+                      className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
+                    >
+                      ← Prev
+                    </button>
+                    <button
+                      onClick={handleNextPage}
+                      disabled={!toursConnection.pageInfo.hasNextPage || state.showFeaturedOnly}
+                      className="text-[#171717] disabled:text-[#17171799] disabled:cursor-not-allowed hover:text-[#DC143C] transition-colors"
+                    >
+                      Next →
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
