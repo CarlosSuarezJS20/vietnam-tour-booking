@@ -42,7 +42,6 @@ const CruisesPage = () => {
     drawerCruise: undefined,
     createDrawerOpen: false,
   });
-  const [displayedCruises, setDisplayedCruises] = useState<Cruise[]>([]);
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
   const cruises = cruisesConnection.edges.map(e => e.node) as Cruise[];
@@ -50,15 +49,11 @@ const CruisesPage = () => {
   const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation();
   const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
 
-  useEffect(() => {
-    setDisplayedCruises(cruises);
-  }, [cruises, cruiseFilter]);
-
   const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
   const displayCruises = state.selectedCruiseId
     ? allCruisesForSearch.filter((c: Cruise) => c.id === state.selectedCruiseId)
-    : displayedCruises;
+    : cruises;
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));

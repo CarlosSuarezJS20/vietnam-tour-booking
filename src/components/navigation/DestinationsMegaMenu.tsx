@@ -76,15 +76,13 @@ const DestinationsMegaMenu = ({ onClose }: Props) => {
             </p>
             <div className="grid grid-cols-2 gap-x-8 gap-y-3 mb-8">
               {current.cities.map((city) => (
-                <Link
+                <div
                   key={city.id}
-                  href={`/tours?cities=${city.id}`}
-                  onClick={onClose}
-                  className="text-sm text-gray-700 hover:text-brand font-medium flex items-center gap-2 transition-colors font-sans"
+                  className="text-sm text-gray-700 font-medium flex items-center gap-2 font-sans"
                 >
                   <FiMapPin className="w-3.5 h-3.5 text-gray-400" />
                   {city.name}
-                </Link>
+                </div>
               ))}
             </div>
             <Link

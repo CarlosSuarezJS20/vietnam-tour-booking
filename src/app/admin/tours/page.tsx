@@ -44,7 +44,6 @@ const ToursPage = () => {
     drawerTour: undefined,
     createDrawerOpen: false,
   });
-  const [displayedTours, setDisplayedTours] = useState<Tour[]>([]);
 
   const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
   const tours = useMemo(() => toursConnection.edges.map(e => e.node) as Tour[], [toursConnection]);
@@ -53,15 +52,11 @@ const ToursPage = () => {
   const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
   const { setFeaturedTour } = useSetFeaturedTourMutation();
 
-  useEffect(() => {
-    setDisplayedTours(tours);
-  }, [tours, tourFilter]);
-
   const { filteredTours: searchResults } = useAdminTourSearch(allToursForSearch, state.searchQuery);
 
   const displayTours = state.selectedTourId
     ? allToursForSearch.filter((t: Tour) => t.id === state.selectedTourId)
-    : displayedTours;
+    : tours;
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));

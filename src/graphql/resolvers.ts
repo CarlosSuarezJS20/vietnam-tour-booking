@@ -125,7 +125,12 @@ export const resolvers = {
                        prisma.tour.findMany({ where: { categories: { some: { categoryId } }, isVisible: true }, take: limit }),
     cruises:         () => prisma.cruise.findMany({ where: { isVisible: true } }),
     allTours: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
-      const allTours = await prisma.tour.findMany();
+      const allTours = await prisma.tour.findMany({ orderBy: { createdAt: 'desc' } });
+
+      console.log('[allTours] filter param:', filter);
+      console.log('[allTours] total items:', allTours.length);
+      console.log('[allTours] visible items:', allTours.filter(t => t.isVisible).length);
+      console.log('[allTours] hidden items:', allTours.filter(t => !t.isVisible).length);
 
       let filtered = allTours;
       if (filter === 'VISIBLE') {
@@ -133,6 +138,8 @@ export const resolvers = {
       } else if (filter === 'HIDDEN') {
         filtered = allTours.filter(t => t.isVisible === false);
       }
+
+      console.log('[allTours] after filter:', filter, '-> items:', filtered.length);
 
       const cursorIndex = after ? filtered.findIndex(t => t.id === decodeCursor(after).id) : -1;
       const startIdx = after ? cursorIndex + 1 : 0;
@@ -160,7 +167,7 @@ export const resolvers = {
       };
     },
     allCruises: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
-      const allCruises = await prisma.cruise.findMany();
+      const allCruises = await prisma.cruise.findMany({ orderBy: { createdAt: 'desc' } });
 
       let filtered = allCruises;
       if (filter === 'VISIBLE') {
