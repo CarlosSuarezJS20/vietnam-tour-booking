@@ -54,10 +54,8 @@ const ToursPage = () => {
   const { setFeaturedTour } = useSetFeaturedTourMutation();
 
   useEffect(() => {
-    if (tours.length > 0) {
-      setDisplayedTours(tours);
-    }
-  }, [tours]);
+    setDisplayedTours(tours);
+  }, [tours, tourFilter]);
 
   const { filteredTours: searchResults } = useAdminTourSearch(allToursForSearch, state.searchQuery);
 

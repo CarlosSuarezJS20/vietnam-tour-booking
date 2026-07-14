@@ -186,7 +186,11 @@ export const useToggleTourVisibilityMutation = () => {
   >(TOGGLE_TOUR_VISIBILITY_MUTATION, {
     refetchQueries: [
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 1000 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
@@ -199,7 +203,11 @@ export const useToggleCruiseVisibilityMutation = () => {
   >(TOGGLE_CRUISE_VISIBILITY_MUTATION, {
     refetchQueries: [
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 1000 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };

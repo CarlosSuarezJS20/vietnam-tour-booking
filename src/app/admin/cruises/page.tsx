@@ -51,10 +51,8 @@ const CruisesPage = () => {
   const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
 
   useEffect(() => {
-    if (cruises.length > 0) {
-      setDisplayedCruises(cruises);
-    }
-  }, [cruises]);
+    setDisplayedCruises(cruises);
+  }, [cruises, cruiseFilter]);
 
   const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
