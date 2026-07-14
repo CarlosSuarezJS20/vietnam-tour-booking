@@ -290,6 +290,7 @@ const ToursPage = () => {
           visibleCount={visibleCount}
           hiddenCount={hiddenCount}
           currentItemCount={displayTours.length}
+          disabled={state.showFeaturedOnly}
         />
         {!state.showFeaturedOnly && tourFilter !== 'ALL' && ((tourFilter === 'VISIBLE' && visibleCount > 1) || (tourFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
           <BulkVisibilityButton
