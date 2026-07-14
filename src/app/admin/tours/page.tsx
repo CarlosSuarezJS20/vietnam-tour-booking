@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 import { useState, useEffect, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
-import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation, useSetFeaturedTourMutation } from '@/graphql/hooks';
+import { useGetAllToursQuery, useGetFeaturedTourQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation, useSetFeaturedTourMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
 import { useAllToursForSearch } from '@/hooks/useAllToursForSearch';
 import { ToursTable } from '@/components/admin/tours/ToursTable';
@@ -31,6 +31,7 @@ interface ToursListState {
   drawerTour?: Tour;
   createDrawerOpen: boolean;
   error?: string;
+  showFeaturedOnly: boolean;
 }
 
 const ToursPage = () => {
@@ -45,10 +46,19 @@ const ToursPage = () => {
     drawerOpen: false,
     drawerTour: undefined,
     createDrawerOpen: false,
+    showFeaturedOnly: false,
   });
 
-  const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
-  const tours = useMemo(() => toursConnection.edges.map(e => e.node) as Tour[], [toursConnection]);
+  const { data: featuredTourData, loading: featuredLoading } = useGetFeaturedTourQuery();
+  const { data: toursConnection, loading: toursLoading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
+
+  const loading = state.showFeaturedOnly ? featuredLoading : toursLoading;
+  const tours = useMemo(() => {
+    if (state.showFeaturedOnly && featuredTourData) {
+      return [{ ...featuredTourData, isVisible: featuredTourData.isVisible ?? true } as Tour];
+    }
+    return toursConnection.edges.map(e => e.node) as Tour[];
+  }, [state.showFeaturedOnly, featuredTourData, toursConnection]);
   const { tours: allToursForSearch } = useAllToursForSearch(tourFilter);
   const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
   const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
@@ -234,7 +244,7 @@ const ToursPage = () => {
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Tours</h1>
           <p className="mt-1 text-sm text-[#17171799]">
-            {state.selectedTourId ? 'Selected tour' : `All (${toursConnection.total})`}
+            {state.selectedTourId ? 'Selected tour' : state.showFeaturedOnly ? 'Featured tour' : `All (${toursConnection.total})`}
           </p>
         </div>
         <div className="flex items-center gap-4 pr-4">
@@ -267,14 +277,26 @@ const ToursPage = () => {
       />
 
       <div className="flex items-center justify-between gap-4">
-        <VisibilityFilter
-          activeFilter={tourFilter}
-          onFilterChange={setTourFilter}
-          visibleCount={visibleCount}
-          hiddenCount={hiddenCount}
-          currentItemCount={displayTours.length}
-        />
-        {tourFilter !== 'ALL' && ((tourFilter === 'VISIBLE' && visibleCount > 1) || (tourFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
+        <div className="flex items-center gap-2">
+          <VisibilityFilter
+            activeFilter={tourFilter}
+            onFilterChange={setTourFilter}
+            visibleCount={visibleCount}
+            hiddenCount={hiddenCount}
+            currentItemCount={displayTours.length}
+          />
+          <button
+            onClick={() => setState((prev) => ({ ...prev, showFeaturedOnly: !prev.showFeaturedOnly }))}
+            className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+              state.showFeaturedOnly
+                ? 'bg-yellow-100 text-yellow-700'
+                : 'bg-[#f7f5f0] text-[#171717] hover:bg-[#e8e5dd]'
+            }`}
+          >
+            ★ Featured
+          </button>
+        </div>
+        {!state.showFeaturedOnly && tourFilter !== 'ALL' && ((tourFilter === 'VISIBLE' && visibleCount > 1) || (tourFilter === 'HIDDEN' && hiddenCount > 1)) && !state.drawerOpen && (
           <BulkVisibilityButton
             filter={tourFilter}
             onToggleBulk={handleBulkVisibility}

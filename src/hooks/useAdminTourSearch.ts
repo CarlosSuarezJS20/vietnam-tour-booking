@@ -31,6 +31,8 @@ export const useAdminTourSearch = (tours: Tour[], searchQuery: string) => {
     return fuse.search(searchQuery).map((result) => result.item);
   }, [tours, searchQuery]);
 
+  //This is in case we need pagination, but the return is only one. 
+
   const totalPages = Math.ceil(filteredTours.length / TOURS_PER_PAGE);
 
   const getPageTours = (page: number) => {
