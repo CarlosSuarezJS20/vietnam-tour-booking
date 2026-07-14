@@ -1,9 +1,11 @@
+import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import type { CartItemInput, EnquiryInput } from "@/types/graphql";
 import type { Tour, Cruise } from "@/generated/prisma/client";
+import { parseItinerary } from "@/lib/parseItinerary";
 import {
   buildCartFromDb, encodeCursor, decodeCursor,
-  buildTourWhere, buildCruiseWhere,
+  buildTourWhere, buildCruiseWhere, generateUniqueSlug,
   type PoolItem, type ProductFilters,
 } from "./helpers";
 
@@ -325,20 +327,92 @@ export const resolvers = {
           featuredTour?: boolean;
           onSale?: boolean;
           saleDiscountPercentage?: number | null;
+          cityIds?: string[];
+          categoryIds?: string[];
+          newCities?: Array<{ name: string; regionId: string }>;
+          newCategories?: Array<{ label: string }>;
         };
       }
     ) => {
-      return prisma.tour.create({
-        data: {
-          title: input.title,
-          duration: input.duration,
-          price: input.price,
-          description: input.description,
-          itinerary: input.itinerary || '',
-          featuredTour: input.featuredTour === true,
-          onSale: input.onSale === true,
-          ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
-        } as any,
+      const totalCities = (input.cityIds?.length ?? 0) + (input.newCities?.length ?? 0);
+      const totalCategories = (input.categoryIds?.length ?? 0) + (input.newCategories?.length ?? 0);
+
+      if (totalCities === 0 || totalCategories === 0) {
+        throw new Error('Tour must have at least one city and one category');
+      }
+      // Starts multiple transactions. 
+      return prisma.$transaction(async (tx) => {
+        const createdCityIds: string[] = [];
+        const createdCategoryIds: string[] = [];
+
+        // Create new cities
+        for (const newCity of input.newCities ?? []) {
+          const city = await tx.city.create({
+            data: {
+              id: randomUUID(),
+              name: newCity.name,
+              regionId: newCity.regionId,
+            },
+          });
+          createdCityIds.push(city.id);
+        }
+
+        // Create new categories
+        for (const newCat of input.newCategories ?? []) {
+          const slug = await generateUniqueSlug(tx, newCat.label);
+          const category = await tx.tourCategory.create({
+            data: {
+              id: randomUUID(),
+              label: newCat.label,
+              slug,
+            },
+          });
+          createdCategoryIds.push(category.id);
+        }
+
+        // Create tour
+        const itineraryJson = input.itinerary
+          ? JSON.stringify(parseItinerary(input.itinerary))
+          : '';
+
+        const tour = await tx.tour.create({
+          data: {
+            id: randomUUID(),
+            title: input.title,
+            duration: input.duration,
+            price: input.price,
+            description: input.description,
+            itinerary: itineraryJson,
+            featuredTour: input.featuredTour === true,
+            onSale: input.onSale === true,
+            ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
+          },
+        });
+        const tourId = tour.id;
+
+        // Link cities
+        const allCityIds = [...(input.cityIds ?? []), ...createdCityIds];
+        if (allCityIds.length > 0) {
+          await tx.tourCity.createMany({
+            data: allCityIds.map((cityId) => ({
+              tourId,
+              cityId,
+            })),
+          });
+        }
+
+        // Link categories
+        const allCategoryIds = [...(input.categoryIds ?? []), ...createdCategoryIds];
+        if (allCategoryIds.length > 0) {
+          await tx.tourCategoryOnTour.createMany({
+            data: allCategoryIds.map((categoryId) => ({
+              tourId,
+              categoryId,
+            })),
+          });
+        }
+
+        return tour;
       });
     },
 

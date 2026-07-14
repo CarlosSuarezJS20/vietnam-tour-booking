@@ -137,6 +137,7 @@ export interface ListingFilters {
   minPrice:   number | null;
   maxPrice:   number | null;
   deals:      boolean;
+  search:     string;
 }
 
 export interface GqlProductFilters {
@@ -147,6 +148,7 @@ export interface GqlProductFilters {
   minPrice?:   number;
   maxPrice?:   number;
   deals?:      boolean;
+  search?:     string;
 }
 
 export const DEFAULT_LISTING_FILTERS: ListingFilters = {
@@ -157,6 +159,7 @@ export const DEFAULT_LISTING_FILTERS: ListingFilters = {
   minPrice:   null,
   maxPrice:   null,
   deals:      false,
+  search:     "",
 };
 
 export interface GqlCartItem {

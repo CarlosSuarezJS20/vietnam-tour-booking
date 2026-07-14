@@ -5,11 +5,11 @@ export interface ItineraryDay {
 }
 
 export const parseItinerary = (text: string): ItineraryDay[] => {
-  const chunks = text.split(/(?=Day \d+:)/);
+  const chunks = text.split(/(?=Day \d+[–\-]?)/);
   const days: ItineraryDay[] = [];
 
   for (const chunk of chunks) {
-    const match = chunk.match(/^Day (\d+):\s*(.+?)(?:\n|$)([\s\S]*)/);
+    const match = chunk.match(/^Day (\d+)[–\-]?\d*:\s*(.+?)(?:\n|$)([\s\S]*)/);
     if (!match) continue;
     days.push({
       day:   parseInt(match[1], 10),

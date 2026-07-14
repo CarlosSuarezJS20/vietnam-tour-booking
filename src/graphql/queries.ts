@@ -36,7 +36,7 @@ export const TOURS_BY_CATEGORY_QUERY = gql`
 export const CRUISES_QUERY = gql`
   query GetCruises {
     cruises {
-      id title description itinerary duration price sourceUrl
+      id title description itinerary duration price
       images { id url isPrimary }
     }
   }
@@ -82,7 +82,7 @@ export const ALL_CRUISES_QUERY = gql`
       edges {
         cursor
         node {
-          id title description itinerary duration price sourceUrl isVisible
+          id title description itinerary duration price isVisible
           images { id url isPrimary }
         }
       }
@@ -168,7 +168,7 @@ export const GET_TOUR_BY_ID_QUERY = gql`
 export const GET_CRUISE_BY_ID_QUERY = gql`
   query GetCruiseById($id: ID!) {
     cruise(id: $id) {
-      id title description itinerary duration price sourceUrl onSale saleDiscountPercentage
+      id title description itinerary duration price onSale saleDiscountPercentage
       images { id url isPrimary }
     }
   }
@@ -195,7 +195,7 @@ export const SEARCH_PRODUCTS_QUERY = gql`
             categories { id slug label }
           }
           ... on Cruise {
-            id title duration price description sourceUrl onSale saleDiscountPercentage
+            id title duration price description onSale saleDiscountPercentage
             images { id url isPrimary }
           }
         }
@@ -217,7 +217,7 @@ export const TOGGLE_TOUR_VISIBILITY_MUTATION = gql`
 export const TOGGLE_CRUISE_VISIBILITY_MUTATION = gql`
   mutation ToggleCruiseVisibility($id: String!) {
     toggleCruiseVisibility(id: $id) {
-      id title description itinerary duration price sourceUrl isVisible
+      id title description itinerary duration price isVisible
     }
   }
 `;
@@ -235,7 +235,7 @@ export const SET_ALL_TOURS_VISIBILITY_MUTATION = gql`
 export const SET_ALL_CRUISES_VISIBILITY_MUTATION = gql`
   mutation SetAllCruisesVisibility($visible: Boolean!) {
     setAllCruisesVisibility(visible: $visible) {
-      id title description itinerary duration price sourceUrl isVisible
+      id title description itinerary duration price isVisible
     }
   }
 `;
@@ -253,7 +253,7 @@ export const CREATE_TOUR_MUTATION = gql`
 export const CREATE_CRUISE_MUTATION = gql`
   mutation CreateCruise($input: CreateCruiseInput!) {
     createCruise(input: $input) {
-      id title description itinerary duration price sourceUrl onSale saleDiscountPercentage isVisible
+      id title description itinerary duration price onSale saleDiscountPercentage isVisible
     }
   }
 `;

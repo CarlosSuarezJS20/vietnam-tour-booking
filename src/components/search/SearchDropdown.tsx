@@ -69,7 +69,7 @@ const SearchDropdown = ({ query, onClose }: Props) => {
       {!loading && !isEmpty && (
         <div className="border-t border-gray-100 px-4 py-3 text-center bg-white">
           <a
-            href="/tours"
+            href={`/tours?search=${encodeURIComponent(query)}`}
             onClick={onClose}
             className="text-xs font-semibold text-brand hover:underline font-sans"
           >

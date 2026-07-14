@@ -1,6 +1,7 @@
 'use client';
 
 import { DrawerShell } from './DrawerShell';
+import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 
 interface EditDrawerProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface EditDrawerProps {
 }
 
 export const EditDrawer = ({ isOpen, item, title, onClose, renderImages }: EditDrawerProps) => {
+  useBodyOverflow(isOpen);
+
   if (!isOpen || !item) return null;
 
   return (

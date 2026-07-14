@@ -2,14 +2,19 @@
 
 import { useState } from "react";
 import { FiChevronUp } from "react-icons/fi";
-import { parseItinerary } from "@/lib/parseItinerary";
+import type { ItineraryDay } from "@/lib/parseItinerary";
 
 interface Props {
   itinerary: string;
 }
 
 const ItineraryAccordion = ({ itinerary }: Props) => {
-  const days = parseItinerary(itinerary);
+  let days: ItineraryDay[] = [];
+  try {
+    days = JSON.parse(itinerary);
+  } catch {
+    days = [];
+  }
   const [open, setOpen] = useState<Set<number>>(new Set([0]));
 
   if (days.length === 0) return null;

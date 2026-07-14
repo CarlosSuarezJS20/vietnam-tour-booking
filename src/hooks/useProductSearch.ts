@@ -16,6 +16,7 @@ function toGqlFilters(f: ListingFilters): GqlProductFilters {
   if (f.minPrice != null)  out.minPrice   = f.minPrice;
   if (f.maxPrice != null)  out.maxPrice   = f.maxPrice;
   if (f.deals)             out.deals      = true;
+  if (f.search)            out.search     = f.search;
   return out;
 }
 

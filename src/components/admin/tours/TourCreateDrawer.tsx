@@ -3,10 +3,14 @@
 import { useState, useEffect } from 'react';
 import { DrawerShell } from '../shared/DrawerShell';
 import { UploadImagesPopup } from '../shared/UploadImagesPopup';
+import { EntitySelectPopup } from '../shared/EntitySelectPopup';
+import { ItineraryBuilder } from './ItineraryBuilder';
 import { TourImagePreview } from './TourImagePreview';
-import { useCreateTourMutation, useAddTourImageMutation } from '@/graphql/hooks';
+import { useCreateTourMutation, useAddTourImageMutation, useGetRegionsQuery, useGetTourCategoriesQuery } from '@/graphql/hooks';
+import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 import { ButtonSpinner } from '@/components/loading';
 import { supabase } from '@/lib/supabase';
+import type { ItineraryDay } from '@/types/itinerary';
 
 interface TourCreateDrawerProps {
   isOpen: boolean;
@@ -19,7 +23,6 @@ interface CreateTourFormState {
   duration: string;
   price: string;
   description: string;
-  itinerary: string;
   onSale: boolean;
   saleDiscountPercentage: string;
 }
@@ -35,12 +38,22 @@ interface SessionUpload {
   filename: string;
 }
 
+interface PendingNewCity {
+  tempId: string;
+  name: string;
+  regionId: string;
+}
+
+interface PendingNewCategory {
+  tempId: string;
+  label: string;
+}
+
 const initialFormState: CreateTourFormState = {
   title: '',
   duration: '',
   price: '',
   description: '',
-  itinerary: '',
   onSale: false,
   saleDiscountPercentage: '',
 };
@@ -51,8 +64,23 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [sessionUploads, setSessionUploads] = useState<SessionUpload[]>([]);
   const [pendingPrimaryImageUrl, setPendingPrimaryImageUrl] = useState<string | null>(null);
+
+  const [selectedCityIds, setSelectedCityIds] = useState<string[]>([]);
+  const [pendingNewCities, setPendingNewCities] = useState<PendingNewCity[]>([]);
+  const [showCityPopup, setShowCityPopup] = useState(false);
+
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+  const [pendingNewCategories, setPendingNewCategories] = useState<PendingNewCategory[]>([]);
+  const [showCategoryPopup, setShowCategoryPopup] = useState(false);
+
+  const [itineraryDays, setItineraryDays] = useState<ItineraryDay[]>([]);
+
   const { createTour, loading } = useCreateTourMutation();
   const { addTourImage } = useAddTourImageMutation();
+  const { data: regions } = useGetRegionsQuery();
+  const { data: categories } = useGetTourCategoriesQuery();
+
+  useBodyOverflow(isOpen);
 
   const handleSetPrimary = (imageId: string) => {
     setImages((prev) =>
@@ -91,6 +119,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     setForm(initialFormState);
     setImages([]);
     setShowImagePopup(false);
+    setItineraryDays([]);
     onClose();
   };
 
@@ -142,12 +171,17 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
   };
 
   const isFormValid = () => {
+    const hasCities = selectedCityIds.length + pendingNewCities.length > 0;
+    const hasCategories = selectedCategoryIds.length + pendingNewCategories.length > 0;
+
     return (
       form.title.trim() !== '' &&
       form.duration.trim() !== '' &&
       form.price.trim() !== '' &&
       images.length > 0 &&
-      images.some((img) => img.isPrimary)
+      images.some((img) => img.isPrimary) &&
+      hasCities &&
+      hasCategories
     );
   };
 
@@ -159,14 +193,25 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     }
 
     try {
+      const itineraryJson = JSON.stringify(itineraryDays);
+
       const result = await createTour({
         title: form.title,
         duration: form.duration,
         price: parseFloat(form.price),
         description: form.description,
-        itinerary: form.itinerary,
+        itinerary: itineraryJson,
         onSale: form.onSale,
         saleDiscountPercentage: form.saleDiscountPercentage ? parseInt(form.saleDiscountPercentage, 10) : null,
+        cityIds: selectedCityIds,
+        categoryIds: selectedCategoryIds,
+        newCities: pendingNewCities.map((city) => ({
+          name: city.name,
+          regionId: city.regionId,
+        })),
+        newCategories: pendingNewCategories.map((cat) => ({
+          label: cat.label,
+        })),
       });
 
       if (result.data?.createTour?.id) {
@@ -181,11 +226,69 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
       setImages([]);
       setSessionUploads([]);
       setShowImagePopup(false);
+      setSelectedCityIds([]);
+      setPendingNewCities([]);
+      setSelectedCategoryIds([]);
+      setPendingNewCategories([]);
       onClose();
       onTourCreated?.();
     } catch (error) {
       console.error('Failed to create tour:', error);
     }
+  };
+
+  const handleToggleCitySelection = (cityId: string) => {
+    setSelectedCityIds((prev) =>
+      prev.includes(cityId) ? prev.filter((id) => id !== cityId) : [...prev, cityId]
+    );
+  };
+
+  const handleAddNewCity = (name: string, regionId: string) => {
+    setPendingNewCities((prev) => [
+      ...prev,
+      { tempId: `temp-${Date.now()}`, name, regionId },
+    ]);
+  };
+
+  const handleRemoveNewCity = (tempId: string) => {
+    setPendingNewCities((prev) => prev.filter((city) => city.tempId !== tempId));
+  };
+
+  const handleToggleCategorySelection = (categoryId: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
+    );
+  };
+
+  const handleAddNewCategory = (label: string) => {
+    setPendingNewCategories((prev) => [
+      ...prev,
+      { tempId: `temp-${Date.now()}`, label },
+    ]);
+  };
+
+  const handleRemoveNewCategory = (tempId: string) => {
+    setPendingNewCategories((prev) => prev.filter((cat) => cat.tempId !== tempId));
+  };
+
+  const handleCloseCityPopup = () => {
+    setShowCityPopup(false);
+    setPendingNewCities([]);
+    setSelectedCityIds([]);
+  };
+
+  const handleConfirmCities = () => {
+    setShowCityPopup(false);
+  };
+
+  const handleCloseCategoryPopup = () => {
+    setShowCategoryPopup(false);
+    setPendingNewCategories([]);
+    setSelectedCategoryIds([]);
+  };
+
+  const handleConfirmCategories = () => {
+    setShowCategoryPopup(false);
   };
 
   return (
@@ -300,18 +403,87 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
           />
         </div>
 
+        <ItineraryBuilder
+          value={itineraryDays}
+          onChange={setItineraryDays}
+        />
+
         <div>
-          <label className="block text-sm font-medium text-[#171717] mb-2">
-            Itinerary
-          </label>
-          <textarea
-            name="itinerary"
-            value={form.itinerary}
-            onChange={handleChange}
-            placeholder="Enter tour itinerary"
-            rows={4}
-            className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-          />
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-medium text-[#171717]">
+              Cities *
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowCityPopup(true)}
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#f7f5f0] text-[#171717] rounded border border-[#17171724] hover:bg-[#e8e5dd] hover:border-[#DC143C] transition-colors"
+            >
+              Select Cities ({selectedCityIds.length + pendingNewCities.length})
+            </button>
+          </div>
+          {(selectedCityIds.length > 0 || pendingNewCities.length > 0) && (
+            <div className="flex flex-wrap gap-2">
+              {selectedCityIds.map((cityId) => {
+                const cityData = regions.flatMap((r) => r.cities).find((c) => c.id === cityId);
+                return cityData ? (
+                  <span
+                    key={cityId}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-[#f7f5f0] text-[#171717] rounded text-sm"
+                  >
+                    {cityData.name}
+                  </span>
+                ) : null;
+              })}
+              {pendingNewCities.map((city) => (
+                <span
+                  key={city.tempId}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-50 text-yellow-800 rounded text-sm border border-yellow-200"
+                >
+                  {city.name}
+                  <span className="text-xs bg-yellow-200 px-1.5 py-0.5 rounded">new</span>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="text-sm font-medium text-[#171717]">
+              Categories *
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowCategoryPopup(true)}
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#f7f5f0] text-[#171717] rounded border border-[#17171724] hover:bg-[#e8e5dd] hover:border-[#DC143C] transition-colors"
+            >
+              Select Categories ({selectedCategoryIds.length + pendingNewCategories.length})
+            </button>
+          </div>
+          {(selectedCategoryIds.length > 0 || pendingNewCategories.length > 0) && (
+            <div className="flex flex-wrap gap-2">
+              {selectedCategoryIds.map((categoryId) => {
+                const categoryData = categories.find((c) => c.id === categoryId);
+                return categoryData ? (
+                  <span
+                    key={categoryId}
+                    className="inline-flex items-center gap-2 px-3 py-1 bg-[#f7f5f0] text-[#171717] rounded text-sm"
+                  >
+                    {categoryData.label}
+                  </span>
+                ) : null;
+              })}
+              {pendingNewCategories.map((cat) => (
+                <span
+                  key={cat.tempId}
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-yellow-50 text-yellow-800 rounded text-sm border border-yellow-200"
+                >
+                  {cat.label}
+                  <span className="text-xs bg-yellow-200 px-1.5 py-0.5 rounded">new</span>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -363,6 +535,55 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
           </button>
         </div>
       </form>
+      {/* Categories and cities pop up */}
+      <>
+            <EntitySelectPopup
+        isOpen={showCityPopup}
+          title="Select Cities"
+          existingItems={regions.flatMap((region) =>
+            region.cities.map((city) => ({
+              id: city.id,
+              label: city.name,
+              groupLabel: region.label,
+            }))
+          )}
+          selectedIds={selectedCityIds}
+          pendingNewItems={pendingNewCities.map((city) => ({
+            tempId: city.tempId,
+            label: city.name,
+            extraValue: regions.find((r) => r.id === city.regionId)?.label,
+          }))}
+          extraFieldLabel="Region"
+          extraFieldOptions={regions.map((region) => ({
+            label: region.label,
+            value: region.id,
+          }))}
+          onToggleExisting={handleToggleCitySelection}
+          onAddNew={(name, regionId) => handleAddNewCity(name, regionId || '')}
+          onRemoveNew={handleRemoveNewCity}
+          onConfirm={handleConfirmCities}
+          onClose={handleCloseCityPopup}
+        />
+        <EntitySelectPopup
+          isOpen={showCategoryPopup}
+          title="Select Categories"
+          existingItems={categories.map((cat) => ({
+            id: cat.id,
+            label: cat.label,
+          }))}
+          selectedIds={selectedCategoryIds}
+          pendingNewItems={pendingNewCategories.map((cat) => ({
+            tempId: cat.tempId,
+            label: cat.label,
+          }))}
+          onToggleExisting={handleToggleCategorySelection}
+          onAddNew={handleAddNewCategory}
+          onRemoveNew={handleRemoveNewCategory}
+          onConfirm={handleConfirmCategories}
+          onClose={handleCloseCategoryPopup}
+        />
+      </>
+
     </DrawerShell>
   );
 };

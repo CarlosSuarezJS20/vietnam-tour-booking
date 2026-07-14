@@ -5,6 +5,7 @@ import { DrawerShell } from '../shared/DrawerShell';
 import { UploadImagesPopup } from '../shared/UploadImagesPopup';
 import { TourImagePreview } from '../tours/TourImagePreview';
 import { useCreateCruiseMutation, useAddCruiseImageMutation } from '@/graphql/hooks';
+import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 import { ButtonSpinner } from '@/components/loading';
 import { supabase } from '@/lib/supabase';
 
@@ -20,7 +21,6 @@ interface CreateCruiseFormState {
   price: string;
   description: string;
   itinerary: string;
-  sourceUrl: string;
   onSale: boolean;
   saleDiscountPercentage: string;
 }
@@ -42,7 +42,6 @@ const initialFormState: CreateCruiseFormState = {
   price: '',
   description: '',
   itinerary: '',
-  sourceUrl: '',
   onSale: false,
   saleDiscountPercentage: '',
 };
@@ -55,6 +54,8 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
   const [pendingPrimaryImageUrl, setPendingPrimaryImageUrl] = useState<string | null>(null);
   const { createCruise, loading } = useCreateCruiseMutation();
   const { addCruiseImage } = useAddCruiseImageMutation();
+
+  useBodyOverflow(isOpen);
 
   const handleSetPrimary = (imageId: string) => {
     setImages((prev) =>
@@ -148,7 +149,6 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
       form.title.trim() !== '' &&
       form.duration.trim() !== '' &&
       form.price.trim() !== '' &&
-      form.sourceUrl.trim() !== '' &&
       images.length > 0 &&
       images.some((img) => img.isPrimary)
     );
@@ -168,7 +168,6 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
         price: parseFloat(form.price),
         description: form.description,
         itinerary: form.itinerary,
-        sourceUrl: form.sourceUrl,
         onSale: form.onSale,
         saleDiscountPercentage: form.saleDiscountPercentage ? parseInt(form.saleDiscountPercentage, 10) : null,
       });
@@ -314,20 +313,6 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
             onChange={handleChange}
             placeholder="Enter cruise itinerary"
             rows={4}
-            className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-[#171717] mb-2">
-            Source URL *
-          </label>
-          <input
-            type="url"
-            name="sourceUrl"
-            value={form.sourceUrl}
-            onChange={handleChange}
-            placeholder="https://..."
             className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
           />
         </div>

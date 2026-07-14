@@ -58,40 +58,41 @@ export function useGetFeaturedTourQuery() {
 export function useGetToursByCategoryQuery(variables: { categoryId: string; limit?: number }) {
   const { data, loading, error } = useQuery<{ toursByCategory: CarouselTour[] }>(
     TOURS_BY_CATEGORY_QUERY,
-    { variables }
+    { variables, fetchPolicy: 'no-cache' }
   );
   return { data: data?.toursByCategory ?? [], loading, error };
 }
 
 export function useGetCruisesQuery() {
-  const { data, loading, error } = useQuery<{ cruises: Cruise[] }>(CRUISES_QUERY);
+  const { data, loading, error } = useQuery<{ cruises: Cruise[] }>(CRUISES_QUERY, { fetchPolicy: 'no-cache' });
   return { data: data?.cruises ?? [], loading, error };
 }
 
 export function useGetToursByCityQuery(variables: { cityId: string; limit?: number }) {
   const { data, loading, error } = useQuery<{ toursByCity: CarouselTour[] }>(
     TOURS_BY_CITY_QUERY,
-    { variables }
+    { variables, fetchPolicy: 'no-cache' }
   );
   return { data: data?.toursByCity ?? [], loading, error };
 }
 
 export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
-  const { data, loading, error } = useQuery<{ allTours: { edges: Array<{ node: Omit<SearchTour, "_type" | "cityNames">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number; visibleCount: number; hiddenCount: number } }>(
+  const { data, loading, error, refetch } = useQuery<{ allTours: { edges: Array<{ node: Omit<SearchTour, "_type" | "cityNames">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number; visibleCount: number; hiddenCount: number } }>(
     ALL_TOURS_QUERY,
-    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'network-only' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'no-cache' }
   );
   return {
     data: data?.allTours ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0, visibleCount: 0, hiddenCount: 0 },
     loading,
     error,
+    refetch,
   };
 }
 
 export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
   const { data, loading, error } = useQuery<{ allCruises: { edges: Array<{ node: Omit<SearchCruise, "_type">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number; visibleCount: number; hiddenCount: number } }>(
     ALL_CRUISES_QUERY,
-    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'network-only' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'no-cache' }
   );
   return {
     data: data?.allCruises ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0, visibleCount: 0, hiddenCount: 0 },
@@ -130,7 +131,7 @@ export const useRemoveFromCartMutation = () => {
 export const useGetTourByIdQuery = (id: string, skip = false) => {
   const { data, loading, error } = useQuery<{ tour: ProductDetailTour }>(
     GET_TOUR_BY_ID_QUERY,
-    { variables: { id }, skip: skip || !id }
+    { variables: { id }, skip: skip || !id, fetchPolicy: 'no-cache' }
   );
   return { data: data?.tour ?? null, loading, error };
 };
@@ -138,7 +139,7 @@ export const useGetTourByIdQuery = (id: string, skip = false) => {
 export const useGetCruiseByIdQuery = (id: string, skip = false) => {
   const { data, loading, error } = useQuery<{ cruise: ProductDetailCruise }>(
     GET_CRUISE_BY_ID_QUERY,
-    { variables: { id }, skip: skip || !id }
+    { variables: { id }, skip: skip || !id, fetchPolicy: 'no-cache' }
   );
   return { data: data?.cruise ?? null, loading, error };
 };
@@ -174,7 +175,7 @@ export function useSearchProductsQuery(variables: {
 }) {
   const { data, loading, error } = useQuery<{ searchProducts: ProductConnection }>(
     SEARCH_PRODUCTS_QUERY,
-    { variables }
+    { variables, fetchPolicy: 'no-cache' }
   );
   return { data: data?.searchProducts, loading, error };
 }
@@ -264,6 +265,10 @@ export const useCreateTourMutation = () => {
         featuredTour?: boolean;
         onSale?: boolean;
         saleDiscountPercentage?: number | null;
+        cityIds?: string[];
+        categoryIds?: string[];
+        newCities?: Array<{ name: string; regionId: string }>;
+        newCategories?: Array<{ label: string }>;
       };
     }
   >(CREATE_TOUR_MUTATION, {
@@ -283,6 +288,10 @@ export const useCreateTourMutation = () => {
       featuredTour?: boolean;
       onSale?: boolean;
       saleDiscountPercentage?: number | null;
+      cityIds?: string[];
+      categoryIds?: string[];
+      newCities?: Array<{ name: string; regionId: string }>;
+      newCategories?: Array<{ label: string }>;
     }) => mutate({ variables: { input } }),
     loading,
   };
@@ -298,7 +307,6 @@ export const useCreateCruiseMutation = () => {
         price: number;
         description: string;
         itinerary?: string;
-        sourceUrl: string;
         onSale?: boolean;
         saleDiscountPercentage?: number | null;
       };
@@ -317,7 +325,6 @@ export const useCreateCruiseMutation = () => {
       price: number;
       description: string;
       itinerary?: string;
-      sourceUrl: string;
       onSale?: boolean;
       saleDiscountPercentage?: number | null;
     }) => mutate({ variables: { input } }),

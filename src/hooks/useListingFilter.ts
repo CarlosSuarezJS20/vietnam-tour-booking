@@ -21,6 +21,7 @@ export function useListingFilter() {
     minPrice:   params.get("minPrice") ? Number(params.get("minPrice")) : null,
     maxPrice:   params.get("maxPrice") ? Number(params.get("maxPrice")) : null,
     deals:      params.get("deals") === "true",
+    search:     params.get("search") || "",
   }), [params]);
 
   const page = useMemo(() => {

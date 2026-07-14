@@ -8,6 +8,7 @@ import ProductDescription from "@/components/product/ProductDescription";
 import ItineraryAccordion from "@/components/product/ItineraryAccordion";
 import PriceInclusions from "@/components/product/PriceInclusions";
 import BookingBar from "@/components/product/BookingBar";
+import { ProductDetailSkeleton } from "@/components/loading/ProductDetailSkeleton";
 
 interface Props {
   params:      Promise<{ id: string }>;
@@ -29,8 +30,8 @@ const ProductDetailPage = ({ params, searchParams }: Props) => {
 
   if (loading) {
     return (
-      <div className="flex min-h-[calc(100vh-65px)] items-center justify-center">
-        <div className="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin" />
+      <div className="container mx-auto px-4 py-12">
+        <ProductDetailSkeleton />
       </div>
     );
   }

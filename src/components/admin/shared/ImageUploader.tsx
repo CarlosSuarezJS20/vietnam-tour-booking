@@ -51,6 +51,7 @@ export const ImageUploader = ({
     accept: {
       'image/jpeg': ['.jpg', '.jpeg'],
       'image/png': ['.png'],
+      'image/webp': ['.webp'],
     },
     maxSize: maxFileSize,
     disabled: uploadingCount > 0,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { FiSliders } from "react-icons/fi";
+import { FiSliders, FiX } from "react-icons/fi";
 import FilterSidebar from "@/components/listing/FilterSidebar";
 import ResultsGrid from "@/components/listing/ResultsGrid";
 import PillButton from "@/components/ui/PillButton";
@@ -12,6 +12,10 @@ const ToursListing = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const { filters, page, activeCount, setFilter, toggleArrayFilter, setPage, clearAll } =
     useListingFilter();
+
+  const clearSearch = () => {
+    setFilter("search", null);
+  };
 
   const { items, total, totalPages, loading, error } = useProductSearch(filters, page);
 
@@ -28,6 +32,25 @@ const ToursListing = () => {
       />
 
       <div className="flex-1 min-w-0">
+        {/* Search term display */}
+        {filters.search && (
+          <div className="sticky top-[65px] z-20 bg-gray-50 border-b border-gray-100 px-4 py-3">
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-gray-600 font-sans">
+                Results for: <span className="font-semibold text-gray-900">"{filters.search}"</span>
+              </p>
+              <button
+                onClick={clearSearch}
+                className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:underline cursor-pointer transition-colors"
+                title="Clear search"
+              >
+                Clear
+                <FiX className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Mobile filter bar */}
         <div className="md:hidden sticky top-[65px] z-30 bg-white border-b border-gray-100 px-4 py-4 flex items-center justify-between">
           <button

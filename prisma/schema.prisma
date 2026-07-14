@@ -8,7 +8,7 @@ datasource db {
 }
 
 model TourCategory {
-  id        String   @id
+  id        String   @id @default(cuid())
   slug      String   @unique
   label     String
   createdAt DateTime @default(now())
@@ -16,7 +16,7 @@ model TourCategory {
 }
 
 model Region {
-  id        String   @id
+  id        String   @id @default(cuid())
   key       String   @unique
   label     String
   image     String
@@ -25,7 +25,7 @@ model Region {
 }
 
 model City {
-  id        String   @id
+  id        String   @id @default(cuid())
   name      String
   regionId  String
   createdAt DateTime @default(now())
@@ -52,7 +52,7 @@ model TourCategoryOnTour {
 }
 
 model Tour {
-  id                     String  @id
+  id                     String  @id @default(cuid())
   title                  String
   description            String
   itinerary              String
@@ -79,13 +79,12 @@ model TourImage {
 }
 
 model Cruise {
-  id                     String  @id
+  id                     String  @id @default(cuid())
   title                  String
   description            String
   itinerary              String
   duration               String
   price                  Float
-  sourceUrl              String
   onSale                 Boolean  @default(false)
   saleDiscountPercentage Int?
   createdAt              DateTime @default(now())

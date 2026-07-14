@@ -8,6 +8,7 @@ export type ProductFilters = {
   minPrice?:   number;
   maxPrice?:   number;
   deals?:      boolean;
+  search?:     string;
 };
 
 export const buildTourWhere = (filters: ProductFilters) => {
@@ -27,6 +28,12 @@ export const buildTourWhere = (filters: ProductFilters) => {
       },
     };
   }
+  if (filters.search) {
+    where.OR = [
+      { title: { contains: filters.search, mode: "insensitive" } },
+      { description: { contains: filters.search, mode: "insensitive" } },
+    ];
+  }
   if (filters.deals)            where.onSale = true;
   if (filters.minPrice != null) where.price = { ...where.price, gte: filters.minPrice };
   if (filters.maxPrice != null) where.price = { ...where.price, lte: filters.maxPrice };
@@ -35,6 +42,12 @@ export const buildTourWhere = (filters: ProductFilters) => {
 
 export const buildCruiseWhere = (filters: ProductFilters) => {
   const where: any = { isVisible: true };
+  if (filters.search) {
+    where.OR = [
+      { title: { contains: filters.search, mode: "insensitive" } },
+      { description: { contains: filters.search, mode: "insensitive" } },
+    ];
+  }
   if (filters.deals)            where.onSale = true;
   if (filters.minPrice != null) where.price = { ...where.price, gte: filters.minPrice };
   if (filters.maxPrice != null) where.price = { ...where.price, lte: filters.maxPrice };
@@ -72,3 +85,24 @@ export const buildCartFromDb = (cart: {
 
 // Module-level union type for items in the merged tour+cruise pool
 export type PoolItem = (Tour & { __typename: "Tour" }) | (Cruise & { __typename: "Cruise" });
+
+export const generateUniqueSlug = async (
+  prisma: any,
+  baseLabel: string
+): Promise<string> => {
+  const baseSlug = baseLabel
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+
+  let slug = baseSlug;
+  let counter = 2;
+
+  while (await prisma.tourCategory.findUnique({ where: { slug } })) {
+    slug = `${baseSlug}-${counter}`;
+    counter++;
+  }
+
+  return slug;
+};

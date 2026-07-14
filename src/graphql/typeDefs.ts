@@ -61,7 +61,6 @@ const typeDefs = `
     itinerary:   String!
     duration:    String!
     price:       Float!
-    sourceUrl:   String!
     images:      [CruiseImage!]!
     onSale:                Boolean!
     saleDiscountPercentage: Int
@@ -117,6 +116,7 @@ const typeDefs = `
     minPrice:   Int
     maxPrice:   Int
     deals:      Boolean
+    search:     String
   }
 
   union Product = Tour | Cruise
@@ -218,6 +218,15 @@ const typeDefs = `
     submitEnquiry(input: EnquiryInput!): EnquiryResult!
   }
 
+  input NewCityInput {
+    name: String!
+    regionId: String!
+  }
+
+  input NewCategoryInput {
+    label: String!
+  }
+
   input CreateTourInput {
     title: String!
     duration: String!
@@ -227,6 +236,10 @@ const typeDefs = `
     featuredTour: Boolean
     onSale: Boolean
     saleDiscountPercentage: Int
+    cityIds: [String!]
+    categoryIds: [String!]
+    newCities: [NewCityInput!]
+    newCategories: [NewCategoryInput!]
   }
 
   input CreateCruiseInput {
@@ -235,7 +248,6 @@ const typeDefs = `
     price: Float!
     description: String!
     itinerary: String
-    sourceUrl: String!
     onSale: Boolean
     saleDiscountPercentage: Int
   }

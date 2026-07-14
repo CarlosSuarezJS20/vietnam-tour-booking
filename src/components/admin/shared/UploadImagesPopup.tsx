@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ImageUploader } from './ImageUploader';
+import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 import { supabase } from '@/lib/supabase';
 
 interface UploadedImage {
@@ -28,6 +29,8 @@ export const UploadImagesPopup = ({
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const maxImages = 4;
   const canUploadMore = currentImageCount + uploadedImages.length < maxImages;
+
+  useBodyOverflow(isOpen);
 
   if (!isOpen) return null;
 
