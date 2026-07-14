@@ -181,9 +181,13 @@ const CruisesPage = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setState(prev => ({ ...prev, createDrawerOpen: true }))}
-            className="rounded px-4 py-2 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] transition-colors"
+            className="rounded bg-[#DC143C] text-white px-4 py-2 hover:bg-[#b81132] transition-colors flex-shrink-0 flex items-center gap-2"
+            aria-label="Create new cruise"
           >
-            + Create Cruise
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span className="text-sm font-medium">Create Cruise</span>
           </button>
           {state.selectedCruiseId && (
             <button
