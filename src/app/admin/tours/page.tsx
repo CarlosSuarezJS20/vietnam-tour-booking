@@ -62,7 +62,6 @@ const ToursPage = () => {
         onSale: false,
         isVisible: true,
         saleDiscountPercentage: undefined,
-        images: [],
       } as Tour];
     }
     return toursConnection.edges.map(e => e.node) as Tour[];
