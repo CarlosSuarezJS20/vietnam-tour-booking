@@ -56,17 +56,17 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingId
                   e.stopPropagation();
                   onSetFeatured(tour.id);
                 }}
-                disabled={featuredLoadingIds.has(tour.id)}
-                className={`rounded px-3 py-1 text-sm font-medium ${
+                disabled={featuredLoadingIds.has(tour.id) || tour.featuredTour}
+                className={`rounded px-3 py-1 text-sm font-medium transition-opacity ${
                   tour.featuredTour
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-gray-100 text-gray-700'
-                } hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed`}
+                    ? 'bg-blue-100 text-blue-700 cursor-not-allowed opacity-50'
+                    : 'bg-gray-100 text-gray-700 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed'
+                }`}
               >
-                {featuredLoadingIds.has(tour.id) ? '...' : tour.featuredTour ? 'Yes' : 'No'}
+                {featuredLoadingIds.has(tour.id) ? '...' : tour.featuredTour ? 'Yes (featured)' : 'No'}
               </button>
             ) : (
-              <span className="text-sm">{tour.featuredTour ? 'Yes' : 'No'}</span>
+              <span className="text-sm">{tour.featuredTour ? 'Yes (featured)' : 'No'}</span>
             )}
           </td>
           <td className="px-4 py-3">
