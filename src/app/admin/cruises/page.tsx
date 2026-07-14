@@ -14,6 +14,7 @@ import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { CRUISES_PER_PAGE } from '@/lib/pagination';
+import { LoadingTableSkeleton } from '@/components/loading';
 import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
@@ -227,8 +228,8 @@ const CruisesPage = () => {
 
       <div className="rounded border border-[#17171724] overflow-hidden">
         {loading ? (
-          <div className="px-4 py-8 text-center text-sm text-[#17171799]">
-            Loading cruises...
+          <div className="p-4">
+            <LoadingTableSkeleton />
           </div>
         ) : displayCruises.length > 0 ? (
           <>

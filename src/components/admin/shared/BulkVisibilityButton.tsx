@@ -1,5 +1,7 @@
 'use client';
 
+import { ButtonSpinner } from '@/components/loading';
+
 interface BulkVisibilityButtonProps {
   filter: 'ALL' | 'VISIBLE' | 'HIDDEN';
   onToggleBulk: (visible: boolean) => Promise<any>;
@@ -26,7 +28,7 @@ export const BulkVisibilityButton = ({ filter, onToggleBulk, loading }: BulkVisi
       disabled={isDisabled || loading}
       className={`rounded px-4 py-2 text-sm font-medium ${buttonColor} hover:bg-[#f7f5f0] transition-colors disabled:opacity-40 disabled:cursor-not-allowed`}
     >
-      {loading ? '...' : buttonText}
+      {loading ? <ButtonSpinner /> : buttonText}
     </button>
   );
 };

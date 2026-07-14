@@ -1,5 +1,7 @@
 'use client';
 
+import { ButtonSpinner } from '@/components/loading';
+
 interface VisibilityToggleProps {
   isVisible: boolean;
   onToggle: () => Promise<any>;
@@ -20,7 +22,7 @@ export const VisibilityToggle = ({ isVisible, onToggle, loading }: VisibilityTog
       disabled={loading}
       className={`rounded px-3 py-1 text-sm font-medium ${bgColor} ${textColor} hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed`}
     >
-      {loading ? '...' : buttonText}
+      {loading ? <ButtonSpinner /> : buttonText}
     </button>
   );
 };

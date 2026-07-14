@@ -5,6 +5,7 @@ import { DrawerShell } from '../shared/DrawerShell';
 import { UploadImagesPopup } from '../shared/UploadImagesPopup';
 import { TourImagePreview } from '../tours/TourImagePreview';
 import { useCreateCruiseMutation, useAddCruiseImageMutation } from '@/graphql/hooks';
+import { ButtonSpinner } from '@/components/loading';
 import { supabase } from '@/lib/supabase';
 
 interface CruiseCreateDrawerProps {
@@ -373,8 +374,9 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
           <button
             type="submit"
             disabled={loading || !isFormValid()}
-            className="flex-1 rounded px-4 py-2 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 rounded px-4 py-2 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
+            {loading && <ButtonSpinner />}
             {loading ? 'Creating...' : 'Create Cruise'}
           </button>
         </div>

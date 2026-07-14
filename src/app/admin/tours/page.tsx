@@ -14,6 +14,7 @@ import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityBu
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
 import { TOURS_PER_PAGE } from '@/lib/pagination';
+import { LoadingTableSkeleton } from '@/components/loading';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -268,8 +269,8 @@ const ToursPage = () => {
 
       <div className="rounded border border-[#17171724] overflow-hidden">
         {loading ? (
-          <div className="px-4 py-8 text-center text-sm text-[#17171799]">
-            Loading tours...
+          <div className="p-4">
+            <LoadingTableSkeleton />
           </div>
         ) : displayTours.length > 0 ? (
           <>
