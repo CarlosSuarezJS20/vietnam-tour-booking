@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCruisesVisibilityMutation } from '@/graphql/hooks';
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
+import { useAllCruisesForSearch } from '@/hooks/useAllCruisesForSearch';
 import { CruisesTable } from '@/components/admin/cruises/CruisesTable';
 import { CruisesSearchBar } from '@/components/admin/cruises/CruisesSearchBar';
 import { CruiseCreateDrawer } from '@/components/admin/cruises/CruiseCreateDrawer';
@@ -44,10 +45,11 @@ const CruisesPage = () => {
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
   const cruises = cruisesConnection.edges.map(e => e.node) as Cruise[];
+  const { cruises: allCruisesForSearch } = useAllCruisesForSearch(cruiseFilter);
   const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation();
   const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
 
-  const { filteredCruises: searchResults } = useAdminCruiseSearch(cruises, state.searchQuery);
+  const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
   const displayCruises = state.selectedCruiseId
     ? cruises.filter((c: Cruise) => c.id === state.selectedCruiseId)

@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllToursQuery, useToggleTourVisibilityMutation, useSetAllToursVisibilityMutation, useSetFeaturedTourMutation } from '@/graphql/hooks';
 import { useAdminTourSearch } from '@/hooks/useAdminTourSearch';
+import { useAllToursForSearch } from '@/hooks/useAllToursForSearch';
 import { ToursTable } from '@/components/admin/tours/ToursTable';
 import { ToursSearchBar } from '@/components/admin/tours/ToursSearchBar';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
@@ -47,6 +48,7 @@ const ToursPage = () => {
 
   const { data: toursConnection, loading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
   const tours = useMemo(() => toursConnection.edges.map(e => e.node) as Tour[], [toursConnection]);
+  const { tours: allToursForSearch } = useAllToursForSearch(tourFilter);
   const { toggle: toggleTourVisibility } = useToggleTourVisibilityMutation();
   const { setVisibility: setAllToursVisibility } = useSetAllToursVisibilityMutation();
   const { setFeaturedTour } = useSetFeaturedTourMutation();
@@ -57,7 +59,7 @@ const ToursPage = () => {
     }
   }, [tours]);
 
-  const { filteredTours: searchResults } = useAdminTourSearch(tours, state.searchQuery);
+  const { filteredTours: searchResults } = useAdminTourSearch(allToursForSearch, state.searchQuery);
 
   const displayTours = state.selectedTourId
     ? displayedTours.filter((t: Tour) => t.id === state.selectedTourId)
