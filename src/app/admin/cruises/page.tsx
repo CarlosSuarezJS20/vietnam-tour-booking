@@ -15,6 +15,7 @@ import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityBu
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { CRUISES_PER_PAGE } from '@/lib/pagination';
 import { LoadingTableSkeleton } from '@/components/loading';
+import { ErrorPage, ErrorAlert } from '@/components/error';
 import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
@@ -28,6 +29,7 @@ interface CruisesListState {
   drawerOpen: boolean;
   drawerCruise?: Cruise;
   createDrawerOpen: boolean;
+  error?: string;
 }
 
 const CruisesPage = () => {
@@ -107,6 +109,10 @@ const CruisesPage = () => {
 
     try {
       await toggleCruiseVisibility(id);
+      setState((prev) => ({ ...prev, error: undefined }));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to update visibility';
+      setState((prev) => ({ ...prev, error: message }));
     } finally {
       setState((prev) => {
         const newLoadingIds = new Set(prev.loadingIds);
@@ -119,8 +125,10 @@ const CruisesPage = () => {
   const handleBulkVisibility = async (visible: boolean) => {
     try {
       await setAllCruisesVisibility(visible);
+      setState((prev) => ({ ...prev, error: undefined }));
     } catch (err) {
-      console.error('Failed to set visibility:', err);
+      const message = err instanceof Error ? err.message : 'Failed to update visibility';
+      setState((prev) => ({ ...prev, error: message }));
     }
   };
 
@@ -170,10 +178,17 @@ const CruisesPage = () => {
   const startItem = (pageNumber - 1) * CRUISES_PER_PAGE + 1;
   const endItem = Math.min(startItem + cruises.length - 1, cruisesConnection.total);
 
-  if (error) return <div className="text-sm text-red-600">Error loading cruises</div>;
+  if (error) return <ErrorPage title="Failed to load cruises" message="Could not fetch the cruises list. Please try again." />;
 
   return (
     <div className="space-y-6">
+      {state.error && (
+        <ErrorAlert
+          title="Error"
+          message={state.error}
+          isDismissible
+        />
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Cruises</h1>

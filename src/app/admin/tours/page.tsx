@@ -15,6 +15,7 @@ import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
 import { TOURS_PER_PAGE } from '@/lib/pagination';
 import { LoadingTableSkeleton } from '@/components/loading';
+import { ErrorPage, ErrorAlert } from '@/components/error';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -29,6 +30,7 @@ interface ToursListState {
   drawerOpen: boolean;
   drawerTour?: Tour;
   createDrawerOpen: boolean;
+  error?: string;
 }
 
 const ToursPage = () => {
@@ -110,6 +112,10 @@ const ToursPage = () => {
 
     try {
       await toggleTourVisibility(id);
+      setState((prev) => ({ ...prev, error: undefined }));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to update visibility';
+      setState((prev) => ({ ...prev, error: message }));
     } finally {
       setState((prev) => {
         const newLoadingIds = new Set(prev.loadingIds);
@@ -122,8 +128,10 @@ const ToursPage = () => {
   const handleBulkVisibility = async (visible: boolean) => {
     try {
       await setAllToursVisibility(visible);
+      setState((prev) => ({ ...prev, error: undefined }));
     } catch (err) {
-      console.error('Failed to set visibility:', err);
+      const message = err instanceof Error ? err.message : 'Failed to update visibility';
+      setState((prev) => ({ ...prev, error: message }));
     }
   };
 
@@ -211,10 +219,17 @@ const ToursPage = () => {
   const startItem = (pageNumber - 1) * TOURS_PER_PAGE + 1;
   const endItem = Math.min(startItem + tours.length - 1, toursConnection.total);
 
-  if (error) return <div className="text-sm text-red-600">Error loading tours</div>;
+  if (error) return <ErrorPage title="Failed to load tours" message="Could not fetch the tours list. Please try again." />;
 
   return (
     <div className="space-y-6">
+      {state.error && (
+        <ErrorAlert
+          title="Error"
+          message={state.error}
+          isDismissible
+        />
+      )}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-[#171717]">Tours</h1>
