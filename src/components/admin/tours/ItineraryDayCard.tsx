@@ -25,7 +25,7 @@ export const ItineraryDayCard = ({
   return (
     <div className="border border-[#17171724] rounded-lg overflow-hidden">
       {/* Header */}
-      <button
+      <div
         onClick={onToggleExpand}
         className="w-full flex items-center justify-between px-4 py-3 bg-white hover:bg-[#f7f5f0] transition-colors text-left"
       >
@@ -49,7 +49,7 @@ export const ItineraryDayCard = ({
         >
           <FiTrash2 className="w-4 h-4" />
         </button>
-      </button>
+      </div>
 
       {/* Body */}
       {isExpanded && (
