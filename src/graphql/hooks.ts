@@ -393,7 +393,12 @@ export const useSetFeaturedTourMutation = () => {
   const [mutate, { loading }] = useMutation<
     { setFeaturedTour: { id: string; featuredTour: boolean } },
     { tourId: string }
-  >(SET_FEATURED_TOUR_MUTATION);
+  >(SET_FEATURED_TOUR_MUTATION, {
+    refetchQueries: [
+      { query: FEATURED_TOUR_QUERY },
+    ],
+    awaitRefetchQueries: true,
+  });
   return {
     setFeaturedTour: (tourId: string) => mutate({ variables: { tourId } }),
     loading,
