@@ -14,7 +14,7 @@ export function useAllCruisesForSearch(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
     ALL_CRUISES_QUERY,
     {
       variables: { filter: filter || 'ALL', first: 1000 },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'network-only'
     }
   );
 

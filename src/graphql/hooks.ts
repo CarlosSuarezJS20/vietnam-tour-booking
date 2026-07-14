@@ -79,7 +79,7 @@ export function useGetToursByCityQuery(variables: { cityId: string; limit?: numb
 export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
   const { data, loading, error } = useQuery<{ allTours: { edges: Array<{ node: Omit<SearchTour, "_type" | "cityNames">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number; visibleCount: number; hiddenCount: number } }>(
     ALL_TOURS_QUERY,
-    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'cache-and-network' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'network-only' }
   );
   return {
     data: data?.allTours ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0, visibleCount: 0, hiddenCount: 0 },
@@ -91,7 +91,7 @@ export function useGetAllToursQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first
 export function useGetAllCruisesQuery(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN', first: number = 7, after?: string) {
   const { data, loading, error } = useQuery<{ allCruises: { edges: Array<{ node: Omit<SearchCruise, "_type">; cursor: string }>; pageInfo: { hasNextPage: boolean; hasPreviousPage: boolean; endCursor: string | null }; total: number; visibleCount: number; hiddenCount: number } }>(
     ALL_CRUISES_QUERY,
-    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'cache-and-network' }
+    { variables: { filter: filter || 'ALL', first, after }, fetchPolicy: 'network-only' }
   );
   return {
     data: data?.allCruises ?? { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: null }, total: 0, visibleCount: 0, hiddenCount: 0 },
@@ -186,11 +186,7 @@ export const useToggleTourVisibilityMutation = () => {
   >(TOGGLE_TOUR_VISIBILITY_MUTATION, {
     refetchQueries: [
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 1000 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
@@ -203,11 +199,7 @@ export const useToggleCruiseVisibilityMutation = () => {
   >(TOGGLE_CRUISE_VISIBILITY_MUTATION, {
     refetchQueries: [
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 1000 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { toggle: (id: string) => mutate({ variables: { id } }), loading };
@@ -223,8 +215,6 @@ export const useSetAllToursVisibilityMutation = () => {
       { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 1000 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
-      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };
@@ -240,8 +230,6 @@ export const useSetAllCruisesVisibilityMutation = () => {
       { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 1000 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 1000 } },
-      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 1000 } },
     ],
   });
   return { setVisibility: (visible: boolean) => mutate({ variables: { visible } }), loading };

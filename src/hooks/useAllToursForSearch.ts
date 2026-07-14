@@ -14,7 +14,7 @@ export function useAllToursForSearch(filter?: 'ALL' | 'VISIBLE' | 'HIDDEN') {
     ALL_TOURS_QUERY,
     {
       variables: { filter: filter || 'ALL', first: 1000 },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'network-only'
     }
   );
 
