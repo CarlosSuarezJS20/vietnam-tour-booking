@@ -108,10 +108,22 @@ const ToursPage = () => {
   }, [toursConnection.visibleCount, toursConnection.hiddenCount]);
 
   const handleToggleVisibility = async (id: string) => {
+    const tourToToggle = allToursForSearch.find(t => t.id === id);
+    if (!tourToToggle) return;
+
     setState((prev) => ({
       ...prev,
       loadingIds: new Set([...prev.loadingIds, id]),
+      visibleCountCache: 0,
+      hiddenCountCache: 0,
     }));
+
+    setDisplayedTours((prev) =>
+      prev.map((tour) =>
+        tour.id === id ? { ...tour, isVisible: !tour.isVisible } : tour
+      )
+    );
+
     try {
       await toggleTourVisibility(id);
     } finally {

@@ -42,6 +42,7 @@ const CruisesPage = () => {
     drawerCruise: undefined,
     createDrawerOpen: false,
   });
+  const [displayedCruises, setDisplayedCruises] = useState<Cruise[]>([]);
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
   const cruises = cruisesConnection.edges.map(e => e.node) as Cruise[];
@@ -49,11 +50,17 @@ const CruisesPage = () => {
   const { toggle: toggleCruiseVisibility } = useToggleCruiseVisibilityMutation();
   const { setVisibility: setAllCruisesVisibility } = useSetAllCruisesVisibilityMutation();
 
+  useEffect(() => {
+    if (cruises.length > 0) {
+      setDisplayedCruises(cruises);
+    }
+  }, [cruises]);
+
   const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
   const displayCruises = state.selectedCruiseId
     ? allCruisesForSearch.filter((c: Cruise) => c.id === state.selectedCruiseId)
-    : cruises;
+    : displayedCruises;
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));
@@ -98,10 +105,22 @@ const CruisesPage = () => {
   }, [cruisesConnection.visibleCount, cruisesConnection.hiddenCount]);
 
   const handleToggleVisibility = async (id: string) => {
+    const cruiseToToggle = allCruisesForSearch.find(c => c.id === id);
+    if (!cruiseToToggle) return;
+
     setState((prev) => ({
       ...prev,
       loadingIds: new Set([...prev.loadingIds, id]),
+      visibleCountCache: 0,
+      hiddenCountCache: 0,
     }));
+
+    setDisplayedCruises((prev) =>
+      prev.map((cruise) =>
+        cruise.id === id ? { ...cruise, isVisible: !cruise.isVisible } : cruise
+      )
+    );
+
     try {
       await toggleCruiseVisibility(id);
     } finally {
