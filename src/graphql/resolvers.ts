@@ -371,10 +371,6 @@ export const resolvers = {
         }
 
         // Create tour
-        const itineraryJson = input.itinerary
-          ? JSON.stringify(parseItinerary(input.itinerary))
-          : '';
-
         const tour = await tx.tour.create({
           data: {
             id: randomUUID(),
@@ -382,7 +378,7 @@ export const resolvers = {
             duration: input.duration,
             price: input.price,
             description: input.description,
-            itinerary: itineraryJson,
+            itinerary: input.itinerary || '',
             featuredTour: input.featuredTour === true,
             onSale: input.onSale === true,
             ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
