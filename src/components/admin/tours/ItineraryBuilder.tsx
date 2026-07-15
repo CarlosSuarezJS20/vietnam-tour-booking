@@ -73,6 +73,12 @@ export const ItineraryBuilder = ({
     });
   }, []);
 
+  const isLastDayValid = useCallback(() => {
+    if (days.length === 0) return true;
+    const lastDay = days[days.length - 1];
+    return lastDay.activity.trim() !== '' && lastDay.description.trim() !== '';
+  }, [days]);
+
   const handleUpdateDay = useCallback(
     (id: string, field: keyof ItineraryDay, value: string) => {
       const updated = days.map((d) =>
@@ -112,7 +118,13 @@ export const ItineraryBuilder = ({
         {/* Add Day Button */}
         <button
           onClick={handleAddDay}
-          className="mt-4 w-full flex items-center justify-center gap-2 rounded border-2 border-dashed border-[#17171724] px-4 py-3 text-sm font-medium text-gray-600 hover:border-[#DC143C] hover:text-[#DC143C] hover:bg-red-50 transition-colors"
+          disabled={!isLastDayValid()}
+          className={`mt-4 w-full flex items-center justify-center gap-2 rounded border-2 border-dashed px-4 py-3 text-sm font-medium transition-colors ${
+            isLastDayValid()
+              ? 'border-[#17171724] text-gray-600 hover:border-[#DC143C] hover:text-[#DC143C] hover:bg-red-50'
+              : 'border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50'
+          }`}
+          title={!isLastDayValid() ? 'Please fill in activity and description for the current day' : ''}
         >
           <FiPlus className="w-4 h-4" />
           <span>Add Day</span>
