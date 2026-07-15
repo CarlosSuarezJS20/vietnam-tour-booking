@@ -21,9 +21,11 @@ export const TourImagePreview = ({
 }: TourImagePreviewProps) => {
   if (images.length === 0) return null;
 
+  const sortedImages = [...images].sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
+
   return (
     <div className="flex gap-2 flex-wrap">
-      {images.map((image) => (
+      {sortedImages.map((image) => (
         <div
           key={image.id}
           className="relative group cursor-pointer"
@@ -39,7 +41,7 @@ export const TourImagePreview = ({
             }`}
           />
           {image.isPrimary && (
-            <div className="absolute top-1 left-1 bg-[#DC143C] text-white px-1.5 py-0.5 rounded text-xs font-medium">
+            <div className="absolute top-1 left-1 bg-[#DC143C] text-white px-1.5 py-0.5 rounded text-xs font-medium z-10">
               Primary
             </div>
           )}
@@ -49,7 +51,7 @@ export const TourImagePreview = ({
               e.stopPropagation();
               onDeleteImage(image.id);
             }}
-            className="absolute top-1 right-1 bg-red-600 text-white p-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute top-1 right-1 bg-red-600 text-white p-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10"
           >
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
               <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
