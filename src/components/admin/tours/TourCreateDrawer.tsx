@@ -16,7 +16,6 @@ interface TourCreateDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onTourCreated?: () => void;
-  onRefetch?: () => void | Promise<void>;
 }
 
 interface CreateTourFormState {
@@ -59,7 +58,7 @@ const initialFormState: CreateTourFormState = {
   saleDiscountPercentage: '',
 };
 
-export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated, onRefetch }: TourCreateDrawerProps) => {
+export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateDrawerProps) => {
   const [form, setForm] = useState<CreateTourFormState>(initialFormState);
   const [images, setImages] = useState<PendingImage[]>([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
@@ -235,7 +234,6 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated, onRefetch }: 
       setPendingNewCities([]);
       setSelectedCategoryIds([]);
       setPendingNewCategories([]);
-      await onRefetch?.();
       onClose();
       onTourCreated?.();
     } catch (error) {

@@ -378,7 +378,6 @@ const ToursPage = () => {
         isOpen={state.createDrawerOpen}
         onClose={handleCloseCreateDrawer}
         onTourCreated={handleTourCreated}
-        onRefetch={async () => { await refetch(); }}
       />
     </div>
   );
