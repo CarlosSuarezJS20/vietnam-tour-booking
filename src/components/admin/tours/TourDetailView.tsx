@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Tour } from '@/hooks/useAdminTourSearch';
+import type { ItineraryDay } from '@/types/itinerary';
 
 interface TourDetailViewProps {
   tour: Tour;
@@ -13,6 +14,16 @@ const formatDate = (dateStr: string) => {
     return date.toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: 'numeric' });
   } catch {
     return dateStr;
+  }
+};
+
+const parseItinerary = (itineraryStr: string): ItineraryDay[] => {
+  try {
+    if (!itineraryStr || itineraryStr === '[]') return [];
+    const parsed = JSON.parse(itineraryStr);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
 };
 
@@ -70,9 +81,31 @@ export const TourDetailView = ({ tour }: TourDetailViewProps) => (
 
     <div className="mb-8">
       <h2 className="mb-3 text-lg font-semibold text-[#171717]">Itinerary</h2>
-      <div className="rounded border border-[#17171724] bg-[#f7f5f0] p-6">
-        <p className="whitespace-pre-wrap text-sm text-[#171717]">{tour.itinerary}</p>
-      </div>
+      {(() => {
+        const days = parseItinerary(tour.itinerary);
+        if (days.length === 0) {
+          return (
+            <div className="rounded border border-[#17171724] bg-[#f7f5f0] p-6">
+              <p className="text-sm text-[#17171799]">No itinerary details</p>
+            </div>
+          );
+        }
+        return (
+          <div className="space-y-3">
+            {days.map((day) => (
+              <div key={day.id} className="rounded border border-[#17171724] bg-white p-4">
+                <h3 className="font-semibold text-[#171717] mb-2">Day {day.day}{day.activity && `: ${day.activity}`}</h3>
+                {day.description && (
+                  <p className="text-sm text-[#171717] whitespace-pre-wrap mb-2">{day.description}</p>
+                )}
+                {day.duration && (
+                  <p className="text-xs text-[#17171799]">Duration: {day.duration}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        );
+      })()}
     </div>
 
     {tour.categories && tour.categories.length > 0 && (

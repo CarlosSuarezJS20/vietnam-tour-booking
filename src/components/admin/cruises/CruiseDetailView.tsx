@@ -1,10 +1,21 @@
 import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Cruise } from '@/hooks/useAdminCruiseSearch';
+import type { ItineraryDay } from '@/types/itinerary';
 
 interface CruiseDetailViewProps {
   cruise: Cruise;
 }
+
+const parseItinerary = (itineraryStr: string): ItineraryDay[] => {
+  try {
+    if (!itineraryStr || itineraryStr === '[]') return [];
+    const parsed = JSON.parse(itineraryStr);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
 
 export const CruiseDetailView = ({ cruise }: CruiseDetailViewProps) => (
   <div className="max-w-4xl">
@@ -54,9 +65,31 @@ export const CruiseDetailView = ({ cruise }: CruiseDetailViewProps) => (
 
     <div className="mb-8">
       <h2 className="mb-3 text-lg font-semibold text-[#171717]">Itinerary</h2>
-      <div className="rounded border border-[#17171724] bg-[#f7f5f0] p-6">
-        <p className="whitespace-pre-wrap text-sm text-[#171717]">{cruise.itinerary}</p>
-      </div>
+      {(() => {
+        const days = parseItinerary(cruise.itinerary);
+        if (days.length === 0) {
+          return (
+            <div className="rounded border border-[#17171724] bg-[#f7f5f0] p-6">
+              <p className="text-sm text-[#17171799]">No itinerary details</p>
+            </div>
+          );
+        }
+        return (
+          <div className="space-y-3">
+            {days.map((day) => (
+              <div key={day.id} className="rounded border border-[#17171724] bg-white p-4">
+                <h3 className="font-semibold text-[#171717] mb-2">Day {day.day}{day.activity && `: ${day.activity}`}</h3>
+                {day.description && (
+                  <p className="text-sm text-[#171717] whitespace-pre-wrap mb-2">{day.description}</p>
+                )}
+                {day.duration && (
+                  <p className="text-xs text-[#17171799]">Duration: {day.duration}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        );
+      })()}
     </div>
   </div>
 );
