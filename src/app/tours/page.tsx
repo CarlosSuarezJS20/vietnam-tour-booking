@@ -1,12 +1,13 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { FiSliders, FiX } from "react-icons/fi";
 import FilterSidebar from "@/components/listing/FilterSidebar";
 import ResultsGrid from "@/components/listing/ResultsGrid";
 import PillButton from "@/components/ui/PillButton";
 import { useListingFilter } from "@/hooks/useListingFilter";
 import { useProductSearch } from "@/hooks/useProductSearch";
+import { useTourSearch, DEFAULT_FILTERS } from "@/hooks/useTourSearch";
 
 const ToursListing = () => {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -17,7 +18,24 @@ const ToursListing = () => {
     setFilter("search", null);
   };
 
-  const { items, total, totalPages, loading, error } = useProductSearch(filters, page);
+  const hasSearch = !!filters.search?.trim();
+  const tourSearchResult = useTourSearch(filters.search || "", DEFAULT_FILTERS);
+  const productSearchResult = useProductSearch(filters, page);
+
+  const items: any[] = useMemo(() => {
+    if (hasSearch) {
+      return [
+        ...tourSearchResult.tours,
+        ...tourSearchResult.cruises,
+      ];
+    }
+    return productSearchResult.items;
+  }, [hasSearch, tourSearchResult.tours, tourSearchResult.cruises, productSearchResult.items]);
+
+  const total = hasSearch ? tourSearchResult.total : productSearchResult.total;
+  const totalPages = hasSearch ? 1 : productSearchResult.totalPages;
+  const loading = hasSearch ? tourSearchResult.loading : productSearchResult.loading;
+  const error = hasSearch ? undefined : productSearchResult.error;
 
   return (
     <div className="flex min-h-screen">
