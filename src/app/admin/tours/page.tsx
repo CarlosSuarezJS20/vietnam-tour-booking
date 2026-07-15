@@ -50,7 +50,7 @@ const ToursPage = () => {
   });
 
   const { data: featuredTourData, loading: featuredLoading } = useGetFeaturedTourQuery();
-  const { data: toursConnection, loading: toursLoading, error, refetch } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
+  const { data: toursConnection, loading: toursLoading, error } = useGetAllToursQuery(tourFilter, TOURS_PER_PAGE, state.currentCursor);
 
   const loading = state.showFeaturedOnly ? featuredLoading : toursLoading;
   const tours = useMemo(() => {
@@ -255,15 +255,6 @@ const ToursPage = () => {
           </p>
         </div>
         <div className="flex items-center gap-4 pr-4">
-          <button
-            onClick={() => refetch()}
-            className="rounded border border-[#17171724] px-3 py-2 text-sm text-[#171717] hover:bg-[#f7f5f0] transition-colors"
-            title="Refresh data from database"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-          </button>
           <button
             onClick={handleOpenCreateDrawer}
             className="rounded bg-[#DC143C] text-white px-4 py-2 hover:bg-[#b81132] transition-colors flex-shrink-0 flex items-center gap-2"
