@@ -29,7 +29,7 @@ export const ItineraryBuilder = ({
   );
 
   const [expandedDays, setExpandedDays] = useState<Set<string>>(
-    new Set(["1"])
+    value.length > 0 ? new Set(value.map(d => d.id)) : new Set(["1"])
   );
 
   const handleAddDay = useCallback(() => {
