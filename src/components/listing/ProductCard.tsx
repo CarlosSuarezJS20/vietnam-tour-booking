@@ -9,6 +9,13 @@ interface Props {
   product: ListingProduct;
 }
 
+const formatDuration = (days: number | string): string => {
+  if (!days) return '';
+  const numDays = typeof days === 'string' ? parseInt(days, 10) : days;
+  if (numDays === 0) return '';
+  return `${numDays} day${numDays !== 1 ? 's' : ''}`;
+};
+
 const SkeletonCard = () => {
   return (
     <div className="bg-white border border-gray-200 overflow-hidden animate-pulse">
@@ -57,7 +64,7 @@ const ProductCard = ({ product }: Props) => {
         </div>
         <div className="absolute top-3 right-3">
           <span className="bg-black/55 text-white text-[10px] font-medium px-2 py-1 font-sans">
-            {product.duration}
+            {formatDuration(product.duration)}
           </span>
         </div>
         {!isTour && (

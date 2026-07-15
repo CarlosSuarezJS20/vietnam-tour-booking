@@ -8,6 +8,13 @@ interface Props {
   product: ProductDetail;
 }
 
+const formatDuration = (days: number | string): string => {
+  if (!days) return '';
+  const numDays = typeof days === 'string' ? parseInt(days, 10) : days;
+  if (numDays === 0) return '';
+  return `${numDays} day${numDays !== 1 ? 's' : ''}`;
+};
+
 const ProductHero = ({ product }: Props) => {
   const isTour = (product as { cities?: unknown }).cities !== undefined;
   const tour = isTour ? (product as import("@/types/graphql").ProductDetailTour) : null;
@@ -50,7 +57,7 @@ const ProductHero = ({ product }: Props) => {
             <FiClock className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
             <div>
               <p className="text-[10px] uppercase tracking-wide text-gray-400 font-sans">Duration</p>
-              <p className="text-sm font-semibold text-gray-900 font-sans">{product.duration}</p>
+              <p className="text-sm font-semibold text-gray-900 font-sans">{formatDuration(product.duration)}</p>
             </div>
           </div>
 
