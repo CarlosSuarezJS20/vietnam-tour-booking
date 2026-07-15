@@ -101,6 +101,10 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     }
   }, [images, pendingPrimaryImageUrl]);
 
+    useEffect(() => {
+    console.log(itineraryDays)
+  }, [itineraryDays]);
+
   const cleanupOrphanedImages = async () => {
     for (const upload of sessionUploads) {
       try {

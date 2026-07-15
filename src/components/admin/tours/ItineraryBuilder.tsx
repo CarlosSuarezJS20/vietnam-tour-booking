@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { FiPlus } from "react-icons/fi";
 import { ItineraryDayCard } from "./ItineraryDayCard";
 import type { ItineraryDay } from "@/types/itinerary";
@@ -21,14 +21,13 @@ export const ItineraryBuilder = ({
           {
             id: "1",
             day: 1,
-            time: "",
             activity: "",
-            location: "",
             description: "",
             duration: "",
           },
         ]
   );
+
   const [expandedDays, setExpandedDays] = useState<Set<string>>(
     new Set(["1"])
   );
@@ -39,9 +38,7 @@ export const ItineraryBuilder = ({
     const newDay: ItineraryDay = {
       id: newId,
       day: nextDay,
-      time: "",
       activity: "",
-      location: "",
       description: "",
       duration: "",
     };

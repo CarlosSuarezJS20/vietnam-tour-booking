@@ -54,20 +54,6 @@ export const ItineraryDayCard = ({
       {/* Body */}
       {isExpanded && (
         <div className="px-4 py-4 bg-white border-t border-[#17171724] space-y-4">
-          {/* Time */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
-              Time
-            </label>
-            <input
-              type="text"
-              value={day.time}
-              onChange={(e) => onUpdate("time", e.target.value)}
-              placeholder="09:00 AM"
-              className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-            />
-          </div>
-
           {/* Activity */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
@@ -82,20 +68,6 @@ export const ItineraryDayCard = ({
             />
           </div>
 
-          {/* Location */}
-          <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
-              Location
-            </label>
-            <input
-              type="text"
-              value={day.location}
-              onChange={(e) => onUpdate("location", e.target.value)}
-              placeholder="e.g., Mountain Peak"
-              className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-            />
-          </div>
-
           {/* Duration */}
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">
@@ -105,7 +77,7 @@ export const ItineraryDayCard = ({
               type="text"
               value={day.duration}
               onChange={(e) => onUpdate("duration", e.target.value)}
-              placeholder="e.g., 2 hours"
+              placeholder="Only for one day tour. e.g. 2 hours"
               className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
             />
           </div>
