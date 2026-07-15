@@ -1,12 +1,12 @@
 "use client";
 
-import { Suspense, useState, useMemo } from "react";
+import { Suspense, useState } from "react";
 import { FiSliders, FiX } from "react-icons/fi";
 import FilterSidebar from "@/components/listing/FilterSidebar";
 import ResultsGrid from "@/components/listing/ResultsGrid";
 import PillButton from "@/components/ui/PillButton";
 import { useListingFilter } from "@/hooks/useListingFilter";
-import { useTourSearch, DEFAULT_FILTERS } from "@/hooks/useTourSearch";
+import { useProductSearch } from "@/hooks/useProductSearch";
 
 const ToursListing = () => {
   const [filterOpen, setFilterOpen] = useState(false);
@@ -17,12 +17,7 @@ const ToursListing = () => {
     setFilter("search", null);
   };
 
-  const { tours, cruises, total, loading } = useTourSearch(filters.search || "", DEFAULT_FILTERS, true);
-
-  const items: any[] = useMemo(() => [
-    ...tours,
-    ...cruises,
-  ], [tours, cruises]);
+  const { items, total, totalPages, loading, error } = useProductSearch(filters, page);
 
   return (
     <div className="flex min-h-screen">
@@ -73,15 +68,21 @@ const ToursListing = () => {
           <PillButton variant="brand">My Bookings</PillButton>
         </div>
 
-        <ResultsGrid
-          items={items}
-          total={total}
-          totalPages={1}
-          page={1}
-          loading={loading}
-          onPage={() => {}}
-          onClear={clearAll}
-        />
+        {error ? (
+          <div className="flex-1 flex items-center justify-center p-8">
+            <p className="text-sm text-gray-400 font-sans">Failed to load products. Please refresh.</p>
+          </div>
+        ) : (
+          <ResultsGrid
+            items={items}
+            total={total}
+            totalPages={totalPages}
+            page={page}
+            loading={loading}
+            onPage={setPage}
+            onClear={clearAll}
+          />
+        )}
       </div>
     </div>
   );
