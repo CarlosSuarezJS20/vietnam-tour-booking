@@ -132,6 +132,28 @@ const CruisesPage = () => {
     }
   };
 
+  const handleOpenCreateDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      createDrawerOpen: true,
+    }));
+  };
+
+  const handleCloseCreateDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      createDrawerOpen: false,
+    }));
+  };
+
+  const handleCruiseCreated = () => {
+    setState((prev) => ({
+      ...prev,
+      currentCursor: undefined,
+      cursorStack: [],
+    }));
+  };
+
   const handleRowClick = (cruise: Cruise) => {
     setState((prev) => ({
       ...prev,
@@ -198,7 +220,7 @@ const CruisesPage = () => {
         </div>
         <div className="flex gap-2">
           <button
-            onClick={() => setState(prev => ({ ...prev, createDrawerOpen: true }))}
+            onClick={handleOpenCreateDrawer}
             className="rounded bg-[#DC143C] text-white px-4 py-2 hover:bg-[#b81132] transition-colors flex-shrink-0 flex items-center gap-2"
             aria-label="Create new cruise"
           >
@@ -287,10 +309,8 @@ const CruisesPage = () => {
 
       <CruiseCreateDrawer
         isOpen={state.createDrawerOpen}
-        onClose={() => setState(prev => ({ ...prev, createDrawerOpen: false }))}
-        onCruiseCreated={() => {
-          setState(prev => ({ ...prev, createDrawerOpen: false }));
-        }}
+        onClose={handleCloseCreateDrawer}
+        onCruiseCreated={handleCruiseCreated}
       />
 
       <EditDrawer
