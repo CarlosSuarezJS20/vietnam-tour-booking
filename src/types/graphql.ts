@@ -192,7 +192,7 @@ export interface ProductDetailTour {
   title:       string;
   description: string;
   itinerary:   string;
-  duration:    string;
+  duration:    number;
   price:       number;
   featuredTour: boolean;
   onSale:      boolean;
@@ -208,9 +208,8 @@ export interface ProductDetailCruise {
   title:       string;
   description: string;
   itinerary:   string;
-  duration:    string;
+  duration:    number;
   price:       number;
-  sourceUrl:   string;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
   images?:     { id: string; url: string; isPrimary: boolean }[];
