@@ -320,7 +320,7 @@ export const resolvers = {
       }: {
         input: {
           title: string;
-          duration: string;
+          duration: number;
           price: number;
           description: string;
           itinerary?: string;
@@ -419,11 +419,10 @@ export const resolvers = {
       }: {
         input: {
           title: string;
-          duration: string;
+          duration: number;
           price: number;
           description: string;
           itinerary?: string;
-          sourceUrl: string;
           onSale?: boolean;
           saleDiscountPercentage?: number | null;
         };
@@ -436,10 +435,9 @@ export const resolvers = {
           price: input.price,
           description: input.description,
           itinerary: input.itinerary || '',
-          sourceUrl: input.sourceUrl,
           onSale: input.onSale === true,
           ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
-        } as any,
+        },
       });
     },
 

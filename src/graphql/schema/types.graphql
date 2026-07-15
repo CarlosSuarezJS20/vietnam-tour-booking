@@ -24,8 +24,8 @@ type Tour {
   description:  String!
   itinerary:    String!
   imageUrl:     String!
-  duration:     String!
-  price:        String!
+  duration:     Int!
+  price:        Float!
   cities:       [City!]!
   categories:   [TourCategory!]!
   featuredTour: Boolean!
@@ -39,9 +39,8 @@ type Cruise {
   imageUrl:    String!
   description: String!
   itinerary:   String!
-  duration:    String!
-  price:       String!
-  sourceUrl:   String!
+  duration:    Int!
+  price:       Float!
   onSale:                Boolean!
   saleDiscountPercentage: Int
 }

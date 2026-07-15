@@ -7,9 +7,8 @@ export interface Cruise {
   title: string;
   description: string;
   itinerary: string;
-  duration: string;
+  duration: number;
   price: number;
-  sourceUrl: string;
   onSale: boolean;
   isVisible: boolean;
   saleDiscountPercentage?: number;

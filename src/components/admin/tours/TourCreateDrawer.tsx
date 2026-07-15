@@ -20,7 +20,7 @@ interface TourCreateDrawerProps {
 
 interface CreateTourFormState {
   title: string;
-  duration: string;
+  duration: number | '';
   price: string;
   description: string;
   onSale: boolean;
@@ -170,7 +170,9 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     const { name, value, type } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: name === 'duration' && type === 'number'
+        ? (value === '' ? '' : parseInt(value, 10))
+        : type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -180,7 +182,6 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
 
     return (
       form.title.trim() !== '' &&
-      form.duration.trim() !== '' &&
       form.price.trim() !== '' &&
       images.length > 0 &&
       images.some((img) => img.isPrimary) &&
@@ -201,7 +202,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
 
       const result = await createTour({
         title: form.title,
-        duration: form.duration,
+        duration: form.duration === '' ? 0 : (form.duration as number),
         price: parseFloat(form.price),
         description: form.description,
         itinerary: itineraryJson,
@@ -366,14 +367,15 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
 
         <div>
           <label className="block text-sm font-medium text-[#171717] mb-2">
-            Duration *
+            Duration (days, optional)
           </label>
           <input
-            type="text"
+            type="number"
             name="duration"
             value={form.duration}
             onChange={handleChange}
-            placeholder="e.g., 5 days"
+            placeholder="e.g., 5"
+            min="1"
             className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
           />
         </div>

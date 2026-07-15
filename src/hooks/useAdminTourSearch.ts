@@ -7,7 +7,7 @@ export interface Tour {
   title: string;
   description: string;
   itinerary: string;
-  duration: string;
+  duration: number;
   price: number;
   createdAt: string;
   featuredTour: boolean;

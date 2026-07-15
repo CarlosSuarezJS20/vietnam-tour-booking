@@ -36,7 +36,7 @@ const typeDefs = `
     title:        String!
     description:  String!
     itinerary:    String!
-    duration:     String!
+    duration:     Int!
     price:        Float!
     cities:       [City!]!
     categories:   [TourCategory!]!
@@ -59,7 +59,7 @@ const typeDefs = `
     title:       String!
     description: String!
     itinerary:   String!
-    duration:    String!
+    duration:    Int!
     price:       Float!
     images:      [CruiseImage!]!
     onSale:                Boolean!
@@ -229,7 +229,7 @@ const typeDefs = `
 
   input CreateTourInput {
     title: String!
-    duration: String!
+    duration: Int!
     price: Float!
     description: String!
     itinerary: String
@@ -244,7 +244,7 @@ const typeDefs = `
 
   input CreateCruiseInput {
     title: String!
-    duration: String!
+    duration: Int!
     price: Float!
     description: String!
     itinerary: String

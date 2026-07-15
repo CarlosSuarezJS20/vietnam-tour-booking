@@ -58,19 +58,5 @@ export const CruiseDetailView = ({ cruise }: CruiseDetailViewProps) => (
         <p className="whitespace-pre-wrap text-sm text-[#171717]">{cruise.itinerary}</p>
       </div>
     </div>
-
-    {cruise.sourceUrl && (
-      <div>
-        <h2 className="mb-3 text-lg font-semibold text-[#171717]">Source</h2>
-        <a
-          href={cruise.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-[#DC143C] hover:underline"
-        >
-          View source →
-        </a>
-      </div>
-    )}
   </div>
 );

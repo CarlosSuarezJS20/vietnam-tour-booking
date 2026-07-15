@@ -8,6 +8,12 @@ import { tourCategories, regions, cities, tours, cruises } from "../src/data/db"
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
+const parseDuration = (duration: string | number): number => {
+  if (typeof duration === 'number') return duration;
+  const match = duration.match(/\d+/);
+  return match ? parseInt(match[0], 10) : 0;
+};
+
 async function main() {
   console.log("Seeding tour categories...");
   for (const category of tourCategories) {
@@ -44,7 +50,7 @@ async function main() {
         title:                  tour.title,
         description:            tour.description,
         itinerary:              tour.itinerary,
-        duration:               tour.duration,
+        duration:               parseDuration(tour.duration),
         price:                  tour.price,
         featuredTour:           tour.featuredTour,
         onSale:                 tour.onSale,
@@ -55,7 +61,7 @@ async function main() {
         title:                  tour.title,
         description:            tour.description,
         itinerary:              tour.itinerary,
-        duration:               tour.duration,
+        duration:               parseDuration(tour.duration),
         price:                  tour.price,
         featuredTour:           tour.featuredTour,
         onSale:                 tour.onSale,
@@ -97,7 +103,7 @@ async function main() {
         title:                  cruise.title,
         description:            cruise.description,
         itinerary:              cruise.itinerary,
-        duration:               cruise.duration,
+        duration:               parseDuration(cruise.duration),
         price:                  cruise.price,
         onSale:                 cruise.onSale,
         saleDiscountPercentage: cruise.saleDiscountPercentage ?? null,
@@ -107,7 +113,7 @@ async function main() {
         title:                  cruise.title,
         description:            cruise.description,
         itinerary:              cruise.itinerary,
-        duration:               cruise.duration,
+        duration:               parseDuration(cruise.duration),
         price:                  cruise.price,
         onSale:                 cruise.onSale,
         saleDiscountPercentage: cruise.saleDiscountPercentage ?? null,

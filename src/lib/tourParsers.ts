@@ -8,8 +8,8 @@ export function parseDurationDays(duration: string): number {
 
 export type DurationBucket = "half-day" | "1-7" | "8-14" | "15+";
 
-export function durationBucket(duration: string): DurationBucket {
-  const days = parseDurationDays(duration);
+export function durationBucket(duration: string | number): DurationBucket {
+  const days = typeof duration === 'number' ? duration : parseDurationDays(duration);
   if (days <= 0.5) return "half-day";
   if (days <= 7)   return "1-7";
   if (days <= 14)  return "8-14";

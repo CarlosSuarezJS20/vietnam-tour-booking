@@ -7,7 +7,7 @@ export interface TourCategory {
 export interface CarouselTour {
   id:         string;
   title:      string;
-  duration:   string;
+  duration:   number;
   price:      number;
   categories: TourCategory[];
   images?:    { id: string; url: string; isPrimary: boolean }[];
@@ -42,7 +42,7 @@ export interface SearchTour {
   title:        string;
   description:  string;
   itinerary:    string;
-  duration:     string;
+  duration:     number;
   price:        number;
   featuredTour: boolean;
   onSale:       boolean;
@@ -61,9 +61,8 @@ export interface SearchCruise {
   title:       string;
   description: string;
   itinerary:   string;
-  duration:    string;
+  duration:    number;
   price:       number;
-  sourceUrl:   string;
   onSale:      boolean;
   isVisible:   boolean;
   saleDiscountPercentage?: number;
@@ -256,7 +255,7 @@ export interface FeaturedTour {
   id:           string;
   title:        string;
   description:  string;
-  duration:     string;
+  duration:     number;
   price:        number;
   cities:       (City & { region: { label: string } })[];
   categories:   TourCategory[];

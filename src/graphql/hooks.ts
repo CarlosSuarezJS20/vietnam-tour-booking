@@ -258,7 +258,7 @@ export const useCreateTourMutation = () => {
     {
       input: {
         title: string;
-        duration: string;
+        duration: number;
         price: number;
         description: string;
         itinerary?: string;
@@ -281,7 +281,7 @@ export const useCreateTourMutation = () => {
   return {
     createTour: (input: {
       title: string;
-      duration: string;
+      duration: number;
       price: number;
       description: string;
       itinerary?: string;
@@ -303,7 +303,7 @@ export const useCreateCruiseMutation = () => {
     {
       input: {
         title: string;
-        duration: string;
+        duration: number;
         price: number;
         description: string;
         itinerary?: string;
@@ -321,7 +321,7 @@ export const useCreateCruiseMutation = () => {
   return {
     createCruise: (input: {
       title: string;
-      duration: string;
+      duration: number;
       price: number;
       description: string;
       itinerary?: string;
