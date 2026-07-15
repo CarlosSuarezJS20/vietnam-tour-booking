@@ -17,7 +17,7 @@ export const DrawerShell = ({ isOpen, title, onClose, children }: DrawerShellPro
         onClick={onClose}
       />
       <div className="fixed right-0 top-0 z-50 h-screen w-1/2 overflow-y-auto overflow-x-hidden bg-white shadow-lg transition-transform">
-        <div className="sticky top-0 border-b border-[#17171724] bg-white px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 z-50 border-b border-[#17171724] bg-white px-6 py-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-[#171717]">{title}</h2>
           <button
             onClick={onClose}

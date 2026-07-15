@@ -24,17 +24,17 @@ export const TourImagePreview = ({
   const sortedImages = [...images].sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
 
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex gap-2 flex-wrap relative z-0">
       {sortedImages.map((image) => (
         <div
           key={image.id}
-          className="relative group cursor-pointer"
+          className="relative group cursor-pointer z-0"
           onClick={() => images.length > 1 && onSetPrimary(image.id)}
         >
           <img
             src={image.url}
             alt="upload"
-            className={`h-20 w-20 rounded object-cover transition-all ${
+            className={`h-20 w-20 rounded object-cover transition-all z-0 ${
               image.isPrimary
                 ? 'border-2 border-[#DC143C] ring-2 ring-[#DC143C]'
                 : 'border border-[#17171724] group-hover:border-[#DC143C]'
