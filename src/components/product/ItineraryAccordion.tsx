@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { FiChevronUp } from "react-icons/fi";
-import type { ItineraryDay } from "@/lib/parseItinerary";
+import type { ItineraryDay } from "@/types/itinerary";
 
 interface Props {
   itinerary: string;
@@ -37,7 +37,7 @@ const ItineraryAccordion = ({ itinerary }: Props) => {
 
         <div className="space-y-0">
           {days.map((day, i) => (
-            <div key={i} className="relative pl-10">
+            <div key={day.id || i} className="relative pl-10">
               {/* Circle bullet */}
               <div className="absolute left-0 top-[14px] w-4 h-4 rounded-full border-2 border-gray-400 bg-white flex-shrink-0" />
 
@@ -47,16 +47,16 @@ const ItineraryAccordion = ({ itinerary }: Props) => {
                   className="w-full flex items-center justify-between py-4 text-left group"
                 >
                   <span className="text-sm font-semibold text-gray-900 font-sans pr-4">
-                    Day {day.day}: {day.title}
+                    Day {day.day}: {day.activity || `Day ${day.day}`}
                   </span>
                   <FiChevronUp
                     className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${open.has(i) ? "" : "rotate-180"}`}
                   />
                 </button>
 
-                {open.has(i) && day.body && (
+                {open.has(i) && day.description && (
                   <div className="pb-5">
-                    {day.body.split(/\n\n+/).filter(Boolean).map((para, j) => (
+                    {day.description.split(/\n\n+/).filter(Boolean).map((para, j) => (
                       <p key={j} className="text-sm text-gray-600 font-sans leading-relaxed mb-3 last:mb-0">
                         {para.trim()}
                       </p>
