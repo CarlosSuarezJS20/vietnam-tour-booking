@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { DrawerShell } from '../shared/DrawerShell';
 import { UploadImagesPopup } from '../shared/UploadImagesPopup';
+import { ItineraryBuilder } from '../tours/ItineraryBuilder';
 import { TourImagePreview } from '../tours/TourImagePreview';
 import { useCreateCruiseMutation, useAddCruiseImageMutation } from '@/graphql/hooks';
 import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 import { ButtonSpinner } from '@/components/loading';
 import { supabase } from '@/lib/supabase';
+import type { ItineraryDay } from '@/types/itinerary';
 
 interface CruiseCreateDrawerProps {
   isOpen: boolean;
@@ -20,7 +22,6 @@ interface CreateCruiseFormState {
   duration: string;
   price: string;
   description: string;
-  itinerary: string;
   onSale: boolean;
   saleDiscountPercentage: string;
 }
@@ -41,7 +42,6 @@ const initialFormState: CreateCruiseFormState = {
   duration: '',
   price: '',
   description: '',
-  itinerary: '',
   onSale: false,
   saleDiscountPercentage: '',
 };
@@ -52,6 +52,7 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [sessionUploads, setSessionUploads] = useState<SessionUpload[]>([]);
   const [pendingPrimaryImageUrl, setPendingPrimaryImageUrl] = useState<string | null>(null);
+  const [itineraryDays, setItineraryDays] = useState<ItineraryDay[]>([]);
   const { createCruise, loading } = useCreateCruiseMutation();
   const { addCruiseImage } = useAddCruiseImageMutation();
 
@@ -94,6 +95,7 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
     setForm(initialFormState);
     setImages([]);
     setShowImagePopup(false);
+    setItineraryDays([]);
     onClose();
   };
 
@@ -162,12 +164,14 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
     }
 
     try {
+      const itineraryJson = JSON.stringify(itineraryDays);
+
       const result = await createCruise({
         title: form.title,
         duration: form.duration,
         price: parseFloat(form.price),
         description: form.description,
-        itinerary: form.itinerary,
+        itinerary: itineraryJson,
         onSale: form.onSale,
         saleDiscountPercentage: form.saleDiscountPercentage ? parseInt(form.saleDiscountPercentage, 10) : null,
       });
@@ -184,6 +188,7 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
       setImages([]);
       setSessionUploads([]);
       setShowImagePopup(false);
+      setItineraryDays([]);
       onClose();
       onCruiseCreated?.();
     } catch (error) {
@@ -303,19 +308,10 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-[#171717] mb-2">
-            Itinerary
-          </label>
-          <textarea
-            name="itinerary"
-            value={form.itinerary}
-            onChange={handleChange}
-            placeholder="Enter cruise itinerary"
-            rows={4}
-            className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
-          />
-        </div>
+        <ItineraryBuilder
+          value={itineraryDays}
+          onChange={setItineraryDays}
+        />
 
         <div className="flex items-center gap-2">
           <input
