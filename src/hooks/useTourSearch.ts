@@ -15,7 +15,7 @@ export const DEFAULT_FILTERS: SearchFilters = {
   duration:   "any",
 };
 
-export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FILTERS) {
+export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FILTERS, showAllWhenEmpty = false) {
   const { data: toursConnection,   loading: toursLoading   } = useGetAllToursQuery('VISIBLE');
   const { data: cruisesConnection, loading: cruisesLoading } = useGetAllCruisesQuery('VISIBLE');
 
@@ -47,7 +47,12 @@ export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FI
   }), [allItems]);
 
   const results = useMemo<SearchItem[]>(() => {
-    let pool: SearchItem[] = query.trim() ? fuse.search(query).map(r => r.item) : allItems;
+    let pool: SearchItem[];
+    if (!query.trim()) {
+      pool = showAllWhenEmpty ? allItems : [];
+    } else {
+      pool = fuse.search(query).map(r => r.item);
+    }
 
     if (filters.type !== "all") {
       pool = pool.filter(i => i._type === filters.type);
@@ -72,7 +77,7 @@ export function useTourSearch(query: string, filters: SearchFilters = DEFAULT_FI
     }
 
     return pool;
-  }, [fuse, allItems, query, filters]);
+  }, [fuse, allItems, query, filters, showAllWhenEmpty]);
 
   const tours   = useMemo(() => results.filter((i): i is Extract<SearchItem, { _type: "tour" }>   => i._type === "tour"),   [results]);
   const cruises = useMemo(() => results.filter((i): i is Extract<SearchItem, { _type: "cruise" }> => i._type === "cruise"), [results]);

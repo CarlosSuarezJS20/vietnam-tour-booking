@@ -17,7 +17,7 @@ const ToursListing = () => {
     setFilter("search", null);
   };
 
-  const { tours, cruises, total, loading } = useTourSearch(filters.search || "", DEFAULT_FILTERS);
+  const { tours, cruises, total, loading } = useTourSearch(filters.search || "", DEFAULT_FILTERS, true);
 
   const items: any[] = useMemo(() => [
     ...tours,
