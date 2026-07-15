@@ -2,6 +2,7 @@
 
 import { DrawerShell } from './DrawerShell';
 import { useBodyOverflow } from '@/hooks/useBodyOverflow';
+import { getPrimaryImage } from '@/lib/imageHelpers';
 
 interface EditDrawerProps {
   isOpen: boolean;
@@ -24,13 +25,13 @@ export const EditDrawer = ({ isOpen, item, title, onClose, renderImages }: EditD
             {renderImages}
           </div>
         )}
-        {item.images?.[0]?.url && (
+        {getPrimaryImage(item.images) && (
           <div>
             <label className="block text-sm font-medium text-[#171717] mb-2">
               Image
             </label>
             <img
-              src={item.images?.[0]?.url || '/placeholder-image.jpg'}
+              src={getPrimaryImage(item.images) || '/placeholder-image.jpg'}
               alt={item.title}
               className="w-full h-48 rounded object-cover"
             />

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FiClock, FiAnchor } from "react-icons/fi";
 import PillTag from "@/components/ui/PillTag";
 import type { SearchItem } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 interface Props {
   item: SearchItem;
@@ -22,7 +23,7 @@ const SearchResultItem = ({ item, onClick }: Props) => {
     >
       <div className="relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
         <Image
-          src={item.images?.[0]?.url || '/placeholder-image.jpg'}
+          src={getPrimaryImage(item.images) || '/placeholder-image.jpg'}
           alt={item.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"

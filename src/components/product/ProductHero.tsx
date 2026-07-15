@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { FiMapPin, FiClock, FiTag } from "react-icons/fi";
 import type { ProductDetail } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 interface Props {
   product: ProductDetail;
@@ -24,7 +25,7 @@ const ProductHero = ({ product }: Props) => {
       {/* Image — full width on mobile, sticky half on desktop */}
       <div className="relative w-full h-[56vw] md:h-auto md:w-1/2 md:sticky md:top-[65px] md:h-[calc(100vh-65px)] flex-shrink-0">
         <Image
-          src={product.images?.[0]?.url || '/placeholder-image.jpg'}
+          src={getPrimaryImage(product.images) || '/placeholder-image.jpg'}
           alt={product.title}
           fill
           priority

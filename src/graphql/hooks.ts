@@ -288,6 +288,7 @@ export const useCreateTourMutation = () => {
       featuredTour?: boolean;
       onSale?: boolean;
       saleDiscountPercentage?: number | null;
+      isVisible?: boolean;
       cityIds?: string[];
       categoryIds?: string[];
       newCities?: Array<{ name: string; regionId: string }>;
@@ -309,6 +310,7 @@ export const useCreateCruiseMutation = () => {
         itinerary?: string;
         onSale?: boolean;
         saleDiscountPercentage?: number | null;
+        isVisible?: boolean;
       };
     }
   >(CREATE_CRUISE_MUTATION, {
@@ -327,6 +329,7 @@ export const useCreateCruiseMutation = () => {
       itinerary?: string;
       onSale?: boolean;
       saleDiscountPercentage?: number | null;
+      isVisible?: boolean;
     }) => mutate({ variables: { input } }),
     loading,
   };

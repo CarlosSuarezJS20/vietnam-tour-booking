@@ -7,6 +7,7 @@ import { FiX, FiTrash2 } from "react-icons/fi";
 import { useReactiveVar } from "@apollo/client/react";
 import { cartDrawerOpenVar } from "@/lib/cartDrawerVar";
 import { useGetCartQuery, useRemoveFromCartMutation } from "@/graphql/hooks";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 const CartDrawer = () => {
   const isOpen  = useReactiveVar(cartDrawerOpenVar);
@@ -59,7 +60,7 @@ const CartDrawer = () => {
             items.map(item => (
               <div key={item.uid}>
                 <div className="relative w-full aspect-video mb-3 overflow-hidden">
-                  <Image src={item.product.images?.[0]?.url || '/placeholder-image.jpg'} alt={item.product.title} fill className="object-cover" sizes="380px" />
+                  <Image src={getPrimaryImage(item.product.images) || '/placeholder-image.jpg'} alt={item.product.title} fill className="object-cover" sizes="380px" />
                 </div>
 
                 <h3 className="text-sm font-bold text-gray-900 font-sans mb-3">{item.product.title}</h3>

@@ -327,6 +327,7 @@ export const resolvers = {
           featuredTour?: boolean;
           onSale?: boolean;
           saleDiscountPercentage?: number | null;
+          isVisible?: boolean;
           cityIds?: string[];
           categoryIds?: string[];
           newCities?: Array<{ name: string; regionId: string }>;
@@ -381,6 +382,7 @@ export const resolvers = {
             itinerary: input.itinerary || '',
             featuredTour: input.featuredTour === true,
             onSale: input.onSale === true,
+            isVisible: input.isVisible !== false,
             ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
           },
         });
@@ -425,6 +427,7 @@ export const resolvers = {
           itinerary?: string;
           onSale?: boolean;
           saleDiscountPercentage?: number | null;
+          isVisible?: boolean;
         };
       }
     ) => {
@@ -436,6 +439,7 @@ export const resolvers = {
           description: input.description,
           itinerary: input.itinerary || '',
           onSale: input.onSale === true,
+          isVisible: input.isVisible !== false,
           ...(input.saleDiscountPercentage !== undefined && input.saleDiscountPercentage !== null && { saleDiscountPercentage: input.saleDiscountPercentage }),
         },
       });

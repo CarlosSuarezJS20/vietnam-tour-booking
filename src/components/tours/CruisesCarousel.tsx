@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetCruisesQuery } from "@/graphql/hooks";
 import type { Cruise } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 interface CruiseCardProps {
   cruise: Cruise;
@@ -26,7 +27,7 @@ const CruiseCard = ({ cruise, isActive }: CruiseCardProps) => {
       }`}
     >
       <Image
-        src={cruise.images?.[0]?.url || '/placeholder-image.jpg'}
+        src={getPrimaryImage(cruise.images) || '/placeholder-image.jpg'}
         alt={cruise.title}
         fill
         sizes="(max-width: 780px) 60vw, 780px"

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { GqlCartItem } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 type Props = {
   items:      GqlCartItem[];
@@ -12,7 +13,7 @@ const OrderSummary = ({ items, totalPrice }: Props) => (
       <div key={item.uid} className="space-y-5">
         <div className="relative w-full aspect-video rounded-xl overflow-hidden">
           <Image
-            src={item.product.images?.[0]?.url || '/placeholder-image.jpg'}
+            src={getPrimaryImage(item.product.images) || '/placeholder-image.jpg'}
             alt={item.product.title}
             fill
             className="object-cover"

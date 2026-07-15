@@ -1,6 +1,7 @@
 import { TableRow } from '../shared/TableRow';
 import { VisibilityToggle } from '../shared/VisibilityToggle';
 import { Tour } from '@/hooks/useAdminTourSearch';
+import { getPrimaryImage } from '@/lib/imageHelpers';
 
 interface ToursTableProps {
   tours: Tour[];
@@ -43,7 +44,7 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingId
           className="cursor-pointer"
         >
           <td className="px-4 py-3">
-            <img src={tour.images?.[0]?.url || '/placeholder-image.jpg'} alt={tour.title} className="h-10 w-10 rounded object-cover" />
+            <img src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'} alt={tour.title} className="h-10 w-10 rounded object-cover" />
           </td>
           <td className="px-4 py-3 text-sm">{tour.title}</td>
           <td className="px-4 py-3 text-sm">{tour.duration}</td>

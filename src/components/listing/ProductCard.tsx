@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiMapPin } from "react-icons/fi";
 import type { ListingProduct } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 interface Props {
   product: ListingProduct;
@@ -45,7 +46,7 @@ const ProductCard = ({ product }: Props) => {
       {/* Image */}
       <Link href={`/tours/${product.id}?type=${product.__typename.toLowerCase()}`} className="relative aspect-video overflow-hidden flex-shrink-0 block">
         <Image
-          src={product.images?.[0]?.url || '/placeholder-image.jpg'}
+          src={getPrimaryImage(product.images) || '/placeholder-image.jpg'}
           alt={product.title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

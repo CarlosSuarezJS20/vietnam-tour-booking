@@ -19,11 +19,12 @@ interface CruiseCreateDrawerProps {
 
 interface CreateCruiseFormState {
   title: string;
-  duration: number | '';
+  duration: number | null;
   price: string;
   description: string;
   onSale: boolean;
   saleDiscountPercentage: string;
+  isVisible: boolean;
 }
 
 interface PendingImage {
@@ -39,11 +40,12 @@ interface SessionUpload {
 
 const initialFormState: CreateCruiseFormState = {
   title: '',
-  duration: '',
+  duration: null,
   price: '',
   description: '',
   onSale: false,
   saleDiscountPercentage: '',
+  isVisible: true,
 };
 
 export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseCreateDrawerProps) => {
@@ -143,7 +145,7 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
     setForm(prev => ({
       ...prev,
       [name]: name === 'duration' && type === 'number'
-        ? (value === '' ? '' : parseInt(value, 10))
+        ? (value === '' ? null : parseInt(value, 10))
         : type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
@@ -151,6 +153,8 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
   const isFormValid = () => {
     return (
       form.title.trim() !== '' &&
+      form.duration !== null &&
+      form.duration > 0 &&
       form.price.trim() !== '' &&
       images.length > 0 &&
       images.some((img) => img.isPrimary)
@@ -169,12 +173,13 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
 
       const result = await createCruise({
         title: form.title,
-        duration: form.duration === '' ? 0 : (form.duration as number),
+        duration: form.duration as number,
         price: parseFloat(form.price),
         description: form.description,
         itinerary: itineraryJson,
         onSale: form.onSale,
         saleDiscountPercentage: form.saleDiscountPercentage ? parseInt(form.saleDiscountPercentage, 10) : null,
+        isVisible: form.isVisible,
       });
 
       if (result.data?.createCruise?.id) {
@@ -268,12 +273,12 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
 
         <div>
           <label className="block text-sm font-medium text-[#171717] mb-2">
-            Duration (days, optional)
+            Duration (days) *
           </label>
           <input
             type="number"
             name="duration"
-            value={form.duration}
+            value={form.duration ?? ''}
             onChange={handleChange}
             placeholder="e.g., 3"
             min="1"
@@ -294,6 +299,34 @@ export const CruiseCreateDrawer = ({ isOpen, onClose, onCruiseCreated }: CruiseC
             step="0.01"
             className="w-full rounded border border-[#17171724] px-3 py-2 text-sm focus:border-[#DC143C] focus:outline-none"
           />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#171717] mb-2">
+            Status
+          </label>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="isVisible"
+                checked={form.isVisible === true}
+                onChange={() => setForm(prev => ({ ...prev, isVisible: true }))}
+                className="rounded border border-[#17171724]"
+              />
+              <span className="text-sm text-[#171717]">Visible</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                name="isVisible"
+                checked={form.isVisible === false}
+                onChange={() => setForm(prev => ({ ...prev, isVisible: false }))}
+                className="rounded border border-[#17171724]"
+              />
+              <span className="text-sm text-[#171717]">Hidden</span>
+            </label>
+          </div>
         </div>
 
         <div>

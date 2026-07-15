@@ -8,6 +8,7 @@ import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { useGetToursByCategoryQuery } from "@/graphql/hooks";
 import type { CarouselTour } from "@/types/graphql";
 import PillTag from "@/components/ui/PillTag";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 const CATEGORIES = {
   "Luxury":           { categoryId: "3", slug: "luxury"            },
@@ -24,7 +25,7 @@ const TourCard = ({ tour }: { tour: CarouselTour }) => {
     <div className="flex flex-col group cursor-pointer">
       <div className="relative aspect-[3/4] overflow-hidden mb-3">
         <Image
-          src={tour.images?.[0]?.url || '/placeholder-image.jpg'}
+          src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'}
           alt={tour.title}
           fill
           sizes="260px"

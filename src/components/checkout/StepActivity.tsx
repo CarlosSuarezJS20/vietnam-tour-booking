@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import type { GqlCartItem } from "@/types/graphql";
+import { getPrimaryImage } from "@/lib/imageHelpers";
 
 export type TravelerName = { firstName: string; lastName: string };
 
@@ -32,7 +33,7 @@ const StepActivity = ({ item, initialNames, onComplete }: Props) => {
       <div className="flex gap-4">
         <div className="relative w-24 h-16 flex-shrink-0 rounded-lg overflow-hidden">
           <Image
-            src={item.product.images?.[0]?.url || '/placeholder-image.jpg'}
+            src={getPrimaryImage(item.product.images) || '/placeholder-image.jpg'}
             alt={item.product.title}
             fill
             className="object-cover"

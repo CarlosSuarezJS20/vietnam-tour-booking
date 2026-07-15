@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { FiArrowLeft } from 'react-icons/fi';
 import { Tour } from '@/hooks/useAdminTourSearch';
 import type { ItineraryDay } from '@/types/itinerary';
+import { getPrimaryImage } from '@/lib/imageHelpers';
 
 interface TourDetailViewProps {
   tour: Tour;
@@ -52,7 +53,7 @@ export const TourDetailView = ({ tour }: TourDetailViewProps) => (
     </div>
 
     <div className="mb-8 rounded border border-[#17171724] overflow-hidden">
-      <img src={tour.images?.[0]?.url || '/placeholder-image.jpg'} alt={tour.title} className="h-96 w-full object-cover" />
+      <img src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'} alt={tour.title} className="h-96 w-full object-cover" />
     </div>
 
     <div className="mb-8 grid grid-cols-2 gap-4 rounded border border-[#17171724] p-6 md:grid-cols-4">
