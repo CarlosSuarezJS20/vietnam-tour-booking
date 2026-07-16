@@ -3,7 +3,7 @@ import { footerAwards } from "@/data/footer";
 
 const Credentials = () => {
   return (
-    <section className="py-12 md:py-20 bg-white">
+    <section className="py-12 md:py-20 lg:py-28 xl:py-36 bg-white">
       <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-20 flex flex-col md:flex-row items-center gap-12 md:gap-16 lg:gap-20">
 
         {/* Left — title and copy */}

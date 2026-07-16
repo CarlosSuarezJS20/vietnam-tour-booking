@@ -16,7 +16,7 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
       <GlobeArcs />
 
       {/* Mobile + tablet layout — natural flow, no overlap */}
-      <div className="relative z-10 flex flex-col justify-between h-full px-6 pt-28 pb-8 lg:hidden text-white">
+      <div className="relative z-10 flex flex-col justify-between h-full px-6 pt-20 md:pt-24 pb-8 lg:hidden text-white">
         <div className="flex flex-col items-start">
           <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={40} height={40} className="mb-3 opacity-85" />
           <h1 className="text-3xl font-light tracking-wide leading-none mb-3 font-display">
@@ -38,8 +38,8 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
       </div>
 
       {/* Desktop layout — absolute positioning */}
-      <div className="hidden lg:flex absolute inset-0 z-10 items-start text-white px-16 pt-40">
-        <div className="flex flex-col items-start">
+      <div className="hidden lg:flex absolute inset-0 z-10 items-start justify-start text-white px-16 2xl:px-56">
+        <div className="flex flex-col items-start pt-40 xl:pt-48 2xl:pt-56 w-full 2xl:max-w-2xl">
           <Image src="/travel-vietnam-icon-white.svg" alt="Travel Vietnam icon" width={48} height={48} className="mb-3 opacity-85" />
           <h1 className="text-6xl font-light tracking-wide leading-none mb-4 font-display">
             Discover <span className="font-bold">Vietnam</span>
@@ -54,7 +54,7 @@ export default function HeroSection({ children }: { children?: React.ReactNode }
       </div>
 
       {children && (
-        <div className="hidden lg:block absolute bottom-16 right-10 z-20 w-full max-w-lg">
+        <div className="hidden lg:block absolute bottom-16 right-10 2xl:right-56 2xl:bottom-24 z-20 w-full max-w-lg">
           {children}
         </div>
       )}

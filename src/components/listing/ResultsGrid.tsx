@@ -24,9 +24,9 @@ const ResultsGrid = ({
   onClear,
 }: Props) => {
   return (
-    <div className="flex-1 px-6 py-8">
+    <div className="flex-1 px-6 py-8 lg:px-8 lg:py-12 xl:px-10 xl:py-16">
       {/* Count */}
-      <p className="text-sm text-gray-500 font-sans mb-6">
+      <p className="text-sm lg:text-base text-gray-500 font-sans mb-6 lg:mb-8">
         {loading ? (
           <span className="inline-block h-4 w-32 bg-gray-200 rounded animate-pulse" />
         ) : (
@@ -49,7 +49,7 @@ const ResultsGrid = ({
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5">
           {loading
             ? Array.from({ length: 12 }).map((_, i) => <ProductCard.Skeleton key={i} />)
             : items.map(product => (

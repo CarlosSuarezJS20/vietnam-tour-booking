@@ -21,7 +21,7 @@ export const DrawerShell = ({ isOpen, title, onClose, children }: DrawerShellPro
           <h2 className="text-lg font-semibold text-[#171717]">{title}</h2>
           <button
             onClick={onClose}
-            className="text-[#17171799] hover:text-[#171717] transition-colors"
+            className="text-[#17171799] hover:text-[#171717] hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-brand rounded p-1 transition-all"
           >
             ✕
           </button>

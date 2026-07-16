@@ -18,6 +18,12 @@ type City {
   region: Region!
 }
 
+type Image {
+  id: ID!
+  url: String!
+  isPrimary: Boolean!
+}
+
 type Tour {
   id:           ID!
   title:        String!
@@ -29,8 +35,11 @@ type Tour {
   cities:       [City!]!
   categories:   [TourCategory!]!
   featuredTour: Boolean!
-  onSale:                Boolean!
+  onSale:       Boolean!
   saleDiscountPercentage: Int
+  createdAt:    String!
+  isVisible:    Boolean!
+  images:       [Image!]
 }
 
 type Cruise {
@@ -41,8 +50,11 @@ type Cruise {
   itinerary:   String!
   duration:    Int!
   price:       Float!
-  onSale:                Boolean!
+  onSale:      Boolean!
   saleDiscountPercentage: Int
+  createdAt:   String!
+  isVisible:   Boolean!
+  images:      [Image!]
 }
 
 type Query {

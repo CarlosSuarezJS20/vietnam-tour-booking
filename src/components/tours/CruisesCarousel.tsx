@@ -103,7 +103,7 @@ const CruisesCarousel = () => {
   }, [emblaApi]);
 
   return (
-    <section className="py-12 md:py-20 bg-stone-50">
+    <section className="py-12 md:py-20 lg:py-28 xl:py-36 bg-stone-50">
       <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-20 mb-8 md:mb-12">
         <div className="text-center">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-brand mb-3 font-display">

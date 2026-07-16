@@ -4,6 +4,7 @@ import { Suspense, useState, useMemo } from "react";
 import { FiSliders, FiX } from "react-icons/fi";
 import FilterSidebar from "@/components/listing/FilterSidebar";
 import ResultsGrid from "@/components/listing/ResultsGrid";
+import ProductCard from "@/components/listing/ProductCard";
 import PillButton from "@/components/ui/PillButton";
 import { useListingFilter } from "@/hooks/useListingFilter";
 import { useProductSearch } from "@/hooks/useProductSearch";

@@ -19,7 +19,7 @@ const BestSellingTourCard = ({ tour }: Props) => {
 
       <hr className="border-white/20 my-3" />
 
-      <p className="text-white/75 text-sm font-sans">
+      <p className="text-white/75 text-sm font-sans mb-1">
         {tour.title}
       </p>
 
@@ -37,13 +37,13 @@ const BestSellingTourCard = ({ tour }: Props) => {
         <FiMapPin className="w-3.5 h-3.5 flex-shrink-0" />
         <span>{areas.join(" · ")}</span>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 lg:gap-3">
         {tour.cities.map((c) => (
           <PillTag key={c.id} variant="outline-white">{c.name}</PillTag>
         ))}
       </div>
 
-      <hr className="border-white/20 my-3" />
+      <hr className="border-white/20 my-3 lg:my-4" />
 
       <div className="flex items-center justify-between">
         <div>

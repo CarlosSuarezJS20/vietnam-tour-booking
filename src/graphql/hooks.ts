@@ -276,6 +276,7 @@ export const useCreateTourMutation = () => {
       { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
       { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      { query: SEARCH_PRODUCTS_QUERY, variables: { filters: { types: ['tour'] } } },
     ],
   });
   return {
@@ -318,6 +319,7 @@ export const useCreateCruiseMutation = () => {
       { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
       { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      { query: SEARCH_PRODUCTS_QUERY, variables: { filters: { types: ['cruise'] } } },
     ],
   });
   return {

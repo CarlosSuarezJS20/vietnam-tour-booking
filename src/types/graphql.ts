@@ -28,6 +28,7 @@ export interface Region {
 
 export interface Cruise {
   id:          string;
+  createdAt:   string; 
   title:       string;
   description: string;
   itinerary:   string;
@@ -66,6 +67,7 @@ export interface SearchCruise {
   onSale:      boolean;
   isVisible:   boolean;
   saleDiscountPercentage?: number;
+  createdAt:   string;
   images?:     { id: string; url: string; isPrimary: boolean }[];
   _type:       "cruise";
 }
@@ -90,6 +92,7 @@ export interface ListingTour {
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  createdAt:   string;
   images?:     { id: string; url: string; isPrimary: boolean }[];
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
@@ -105,6 +108,7 @@ export interface ListingCruise {
   sourceUrl:   string;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  createdAt:   string;
   images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 
@@ -197,6 +201,7 @@ export interface ProductDetailTour {
   featuredTour: boolean;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  createdAt:   string;
   images?:     { id: string; url: string; isPrimary: boolean }[];
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
@@ -212,6 +217,7 @@ export interface ProductDetailCruise {
   price:       number;
   onSale:      boolean;
   saleDiscountPercentage: number | null;
+  createdAt:   string;
   images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 

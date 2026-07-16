@@ -107,7 +107,7 @@ const Navbar = () => {
       </div>
 
       {/* Layer 4 — navbar, always above everything */}
-      <nav className={`fixed top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 py-7 transition-all duration-200 ${atAbout ? "-translate-y-full" : "translate-y-0"}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-[50] flex items-center justify-between px-6 md:px-10 2xl:px-56 py-7 transition-all duration-200 ${atAbout ? "-translate-y-full" : "translate-y-0"}`}>
         <Image src={pastHero ? "/travel-vietnam-logo-dark.svg" : "/travel-vietnam-logo-white.svg"} alt="Travel Vietnam" width={155} height={46} priority className="hidden lg:block" />
 
         {/* Desktop pill — pushed to the right */}

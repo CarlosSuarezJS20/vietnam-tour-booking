@@ -16,6 +16,7 @@ import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
 import { TOURS_PER_PAGE } from '@/lib/pagination';
 import { LoadingTableSkeleton } from '@/components/loading';
 import { ErrorPage, ErrorAlert } from '@/components/error';
+import { isNewProduct } from '@/lib/newProductHelpers';
 import type { Tour } from '@/hooks/useAdminTourSearch';
 
 interface ToursListState {
@@ -73,9 +74,15 @@ const ToursPage = () => {
 
   const { filteredTours: searchResults } = useAdminTourSearch(allToursForSearch, state.searchQuery);
 
-  const displayTours = state.selectedTourId
+  const unsortedDisplayTours = state.selectedTourId
     ? allToursForSearch.filter((t: Tour) => t.id === state.selectedTourId)
     : tours;
+
+  const displayTours = useMemo(() => {
+    const newTours = unsortedDisplayTours.filter(t => isNewProduct(t.createdAt));
+    const regularTours = unsortedDisplayTours.filter(t => !isNewProduct(t.createdAt));
+    return [...newTours, ...regularTours];
+  }, [unsortedDisplayTours]);
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));

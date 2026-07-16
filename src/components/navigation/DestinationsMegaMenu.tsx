@@ -114,7 +114,7 @@ const DestinationsMegaMenu = ({ onClose }: Props) => {
                 {r.label}
               </h3>
               <Link
-                href={`/tours?regions=${r.key}`}
+                href="/tours"
                 onClick={onClose}
                 className="flex items-center gap-1.5 text-white text-xs font-medium px-3 py-1.5 hover:bg-white/10 transition-colors font-sans"
               >

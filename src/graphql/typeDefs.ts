@@ -64,6 +64,7 @@ const typeDefs = `
     images:      [CruiseImage!]!
     onSale:                Boolean!
     saleDiscountPercentage: Int
+    createdAt:   String!
     isVisible:   Boolean!
   }
 
@@ -236,6 +237,7 @@ const typeDefs = `
     featuredTour: Boolean
     onSale: Boolean
     saleDiscountPercentage: Int
+    isVisible: Boolean
     cityIds: [String!]
     categoryIds: [String!]
     newCities: [NewCityInput!]
@@ -250,6 +252,7 @@ const typeDefs = `
     itinerary: String
     onSale: Boolean
     saleDiscountPercentage: Int
+    isVisible: Boolean
   }
 
   extend type Mutation {

@@ -78,7 +78,7 @@ const CategoriesCarousel = () => {
   });
 
   return (
-    <section className="py-20 px-6 md:px-10 lg:px-16 bg-white">
+    <section className="py-20 md:py-24 lg:py-32 xl:py-40 px-6 md:px-10 lg:px-16 bg-white">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
 
         {/* Left — copy + filter buttons */}

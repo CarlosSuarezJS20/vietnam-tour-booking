@@ -2,6 +2,7 @@ import { TableRow } from '../shared/TableRow';
 import { VisibilityToggle } from '../shared/VisibilityToggle';
 import { Cruise } from '@/hooks/useAdminCruiseSearch';
 import { getPrimaryImage } from '@/lib/imageHelpers';
+import { isNewProduct } from '@/lib/newProductHelpers';
 
 interface CruisesTableProps {
   cruises: Cruise[];
@@ -32,7 +33,12 @@ export const CruisesTable = ({ cruises, onToggleVisibility, loadingIds = new Set
           <td className="px-4 py-3">
             <img src={getPrimaryImage(cruise.images) || '/placeholder-image.jpg'} alt={cruise.title} className="h-10 w-10 rounded object-cover" />
           </td>
-          <td className="px-4 py-3 text-sm">{cruise.title}</td>
+          <td className="px-4 py-3 text-sm">
+            {cruise.title}
+            {isNewProduct(cruise.createdAt) && (
+              <span className="ml-2 text-green-600 font-medium text-xs">(New Listing)</span>
+            )}
+          </td>
           <td className="px-4 py-3 text-sm">{cruise.duration}</td>
           <td className="px-4 py-3 text-sm font-medium">${cruise.price.toFixed(2)}</td>
           <td className="px-4 py-3">

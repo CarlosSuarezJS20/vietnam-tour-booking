@@ -11,8 +11,8 @@ const AboutSection = () => {
   const [active, setActive] = useState(0);
 
   return (
-    <section id="about-section" className="bg-surface py-16 lg:py-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
+    <section id="about-section" className="bg-surface py-16 md:py-20 lg:py-28 xl:py-36 2xl:py-44">
+      <div className="max-w-7xl mx-auto px-6 md:px-10 lg:px-12 2xl:px-0">
 
         {/* Mobile layout */}
         <div className="lg:hidden flex flex-col gap-8">

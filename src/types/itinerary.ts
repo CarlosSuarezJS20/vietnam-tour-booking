@@ -3,5 +3,5 @@ export interface ItineraryDay {
   day: number;
   activity: string;
   description: string;
-  duration: string;
+  duration?: string;
 }

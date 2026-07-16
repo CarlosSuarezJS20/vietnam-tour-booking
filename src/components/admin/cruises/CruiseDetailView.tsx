@@ -3,6 +3,8 @@ import { FiArrowLeft } from 'react-icons/fi';
 import { Cruise } from '@/hooks/useAdminCruiseSearch';
 import type { ItineraryDay } from '@/types/itinerary';
 import { getPrimaryImage } from '@/lib/imageHelpers';
+import { isNewProduct } from '@/lib/newProductHelpers';
+import { NewBadge } from '@/components/ui/NewBadge';
 
 interface CruiseDetailViewProps {
   cruise: Cruise;
@@ -40,8 +42,13 @@ export const CruiseDetailView = ({ cruise }: CruiseDetailViewProps) => (
       </button>
     </div>
 
-    <div className="mb-8 rounded border border-[#17171724] overflow-hidden">
+    <div className="mb-8 rounded border border-[#17171724] overflow-hidden relative">
       <img src={getPrimaryImage(cruise.images) || '/placeholder-image.jpg'} alt={cruise.title} className="h-96 w-full object-cover" />
+      {isNewProduct(cruise.createdAt) && (
+        <div className="absolute top-3 right-3">
+          <NewBadge />
+        </div>
+      )}
     </div>
 
     <div className="mb-8 grid grid-cols-2 gap-4 rounded border border-[#17171724] p-6 md:grid-cols-3">

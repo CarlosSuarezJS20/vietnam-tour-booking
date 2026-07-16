@@ -12,6 +12,7 @@ export interface Cruise {
   onSale: boolean;
   isVisible: boolean;
   saleDiscountPercentage?: number;
+  createdAt: string;
   images?: { id: string; url: string; isPrimary: boolean }[];
 }
 

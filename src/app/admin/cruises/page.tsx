@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useVisibilityFilter } from '@/contexts/VisibilityFilterContext';
 import { useGetAllCruisesQuery, useToggleCruiseVisibilityMutation, useSetAllCruisesVisibilityMutation } from '@/graphql/hooks';
 import { useAdminCruiseSearch } from '@/hooks/useAdminCruiseSearch';
@@ -16,6 +16,7 @@ import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { CRUISES_PER_PAGE } from '@/lib/pagination';
 import { LoadingTableSkeleton } from '@/components/loading';
 import { ErrorPage, ErrorAlert } from '@/components/error';
+import { isNewProduct } from '@/lib/newProductHelpers';
 import type { Cruise } from '@/hooks/useAdminCruiseSearch';
 
 interface CruisesListState {
@@ -53,9 +54,15 @@ const CruisesPage = () => {
 
   const { filteredCruises: searchResults } = useAdminCruiseSearch(allCruisesForSearch, state.searchQuery);
 
-  const displayCruises = state.selectedCruiseId
+  const unsortedDisplayCruises = state.selectedCruiseId
     ? allCruisesForSearch.filter((c: Cruise) => c.id === state.selectedCruiseId)
     : cruises;
+
+  const displayCruises = useMemo(() => {
+    const newCruises = unsortedDisplayCruises.filter(c => isNewProduct(c.createdAt));
+    const regularCruises = unsortedDisplayCruises.filter(c => !isNewProduct(c.createdAt));
+    return [...newCruises, ...regularCruises];
+  }, [unsortedDisplayCruises]);
 
   const handleSearch = (query: string) => {
     setState((prev) => ({ ...prev, searchQuery: query }));

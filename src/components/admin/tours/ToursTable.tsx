@@ -2,6 +2,7 @@ import { TableRow } from '../shared/TableRow';
 import { VisibilityToggle } from '../shared/VisibilityToggle';
 import { Tour } from '@/hooks/useAdminTourSearch';
 import { getPrimaryImage } from '@/lib/imageHelpers';
+import { isNewProduct } from '@/lib/newProductHelpers';
 
 interface ToursTableProps {
   tours: Tour[];
@@ -46,7 +47,12 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingId
           <td className="px-4 py-3">
             <img src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'} alt={tour.title} className="h-10 w-10 rounded object-cover" />
           </td>
-          <td className="px-4 py-3 text-sm">{tour.title}</td>
+          <td className="px-4 py-3 text-sm">
+            {tour.title}
+            {isNewProduct(tour.createdAt) && (
+              <span className="ml-2 text-green-600 font-medium text-xs">(New Listing)</span>
+            )}
+          </td>
           <td className="px-4 py-3 text-sm">{tour.duration}</td>
           <td className="px-4 py-3 text-sm font-medium">${tour.price.toFixed(2)}</td>
           <td className="px-4 py-3 text-sm text-[#17171799]">{formatDate(tour.createdAt)}</td>
