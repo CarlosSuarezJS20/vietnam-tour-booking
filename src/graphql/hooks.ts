@@ -452,7 +452,13 @@ export const useSetPrimaryTourImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { setPrimaryTourImage: { id: string; isPrimary: boolean } },
     { imageId: string }
-  >(SET_PRIMARY_TOUR_IMAGE_MUTATION);
+  >(SET_PRIMARY_TOUR_IMAGE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
   return {
     setPrimaryTourImage: (imageId: string) => mutate({ variables: { imageId } }),
     loading,
@@ -484,7 +490,13 @@ export const useSetPrimaryCruiseImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { setPrimaryCruiseImage: { id: string; isPrimary: boolean } },
     { imageId: string }
-  >(SET_PRIMARY_CRUISE_IMAGE_MUTATION);
+  >(SET_PRIMARY_CRUISE_IMAGE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
   return {
     setPrimaryCruiseImage: (imageId: string) => mutate({ variables: { imageId } }),
     loading,
