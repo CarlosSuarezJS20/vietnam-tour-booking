@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -8,10 +9,10 @@ datasource db {
 }
 
 model TourCategory {
-  id        String   @id @default(cuid())
-  slug      String   @unique
+  id        String               @id @default(cuid())
+  slug      String               @unique
   label     String
-  createdAt DateTime @default(now())
+  createdAt DateTime             @default(now())
   tours     TourCategoryOnTour[]
 }
 
@@ -25,10 +26,10 @@ model Region {
 }
 
 model City {
-  id        String   @id @default(cuid())
+  id        String     @id @default(cuid())
   name      String
   regionId  String
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
   region    Region     @relation(fields: [regionId], references: [id])
   tours     TourCity[]
 }
@@ -52,17 +53,17 @@ model TourCategoryOnTour {
 }
 
 model Tour {
-  id                     String  @id @default(cuid())
+  id                     String               @id @default(cuid())
   title                  String
   description            String
   itinerary              String
   duration               Int
   price                  Float
-  featuredTour           Boolean  @default(false)
-  onSale                 Boolean  @default(false)
+  featuredTour           Boolean              @default(false)
+  onSale                 Boolean              @default(false)
   saleDiscountPercentage Int?
-  createdAt              DateTime @default(now())
-  isVisible              Boolean  @default(true)
+  createdAt              DateTime             @default(now())
+  isVisible              Boolean              @default(true)
   images                 TourImage[]
   cities                 TourCity[]
   categories             TourCategoryOnTour[]
@@ -79,16 +80,16 @@ model TourImage {
 }
 
 model Cruise {
-  id                     String  @id @default(cuid())
+  id                     String        @id @default(cuid())
   title                  String
   description            String
   itinerary              String
   duration               Int
   price                  Float
-  onSale                 Boolean  @default(false)
+  onSale                 Boolean       @default(false)
   saleDiscountPercentage Int?
-  createdAt              DateTime @default(now())
-  isVisible              Boolean  @default(true)
+  createdAt              DateTime      @default(now())
+  isVisible              Boolean       @default(true)
   images                 CruiseImage[]
   cartItems              CartItem[]
 }
@@ -124,7 +125,6 @@ model CartItem {
   price     Float
   createdAt DateTime @default(now())
 }
-
 
 model Order {
   id                    String      @id @default(cuid())
@@ -186,4 +186,67 @@ model Enquiry {
   contactPreference String
   status            String   @default("new")
   createdAt         DateTime @default(now())
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

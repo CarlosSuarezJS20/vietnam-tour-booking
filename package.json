@@ -29,6 +29,7 @@
     "@stripe/react-stripe-js": "^6.6.0",
     "@stripe/stripe-js": "^9.8.0",
     "@supabase/supabase-js": "^2.110.3",
+    "better-auth": "^1.1.0",
     "dotenv": "^17.4.2",
     "embla-carousel": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
@@ -46,6 +47,7 @@
     "stripe": "^22.2.2"
   },
   "devDependencies": {
+    "@better-auth/cli": "^1.1.0",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/jest": "^30.0.0",
