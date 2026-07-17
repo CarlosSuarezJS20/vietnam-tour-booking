@@ -431,7 +431,13 @@ export const useAddTourImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { addTourImage: { id: string; url: string; isPrimary: boolean } },
     { tourId: string; url: string; isPrimary?: boolean }
-  >(ADD_TOUR_IMAGE_MUTATION);
+  >(ADD_TOUR_IMAGE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
   return {
     addTourImage: (tourId: string, url: string, isPrimary?: boolean) => mutate({ variables: { tourId, url, isPrimary } }),
     loading,
@@ -440,7 +446,14 @@ export const useAddTourImageMutation = () => {
 
 export const useDeleteTourImageMutation = () => {
   const [mutate, { loading }] = useMutation<{ deleteTourImage: boolean }, { imageId: string }>(
-    DELETE_TOUR_IMAGE_MUTATION
+    DELETE_TOUR_IMAGE_MUTATION,
+    {
+      refetchQueries: [
+        { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+        { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+        { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      ],
+    }
   );
   return {
     deleteTourImage: (imageId: string) => mutate({ variables: { imageId } }),
@@ -469,7 +482,13 @@ export const useAddCruiseImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { addCruiseImage: { id: string; url: string; isPrimary: boolean } },
     { cruiseId: string; url: string; isPrimary?: boolean }
-  >(ADD_CRUISE_IMAGE_MUTATION);
+  >(ADD_CRUISE_IMAGE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+    ],
+  });
   return {
     addCruiseImage: (cruiseId: string, url: string, isPrimary?: boolean) => mutate({ variables: { cruiseId, url, isPrimary } }),
     loading,
@@ -478,7 +497,14 @@ export const useAddCruiseImageMutation = () => {
 
 export const useDeleteCruiseImageMutation = () => {
   const [mutate, { loading }] = useMutation<{ deleteCruiseImage: boolean }, { imageId: string }>(
-    DELETE_CRUISE_IMAGE_MUTATION
+    DELETE_CRUISE_IMAGE_MUTATION,
+    {
+      refetchQueries: [
+        { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+        { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+        { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      ],
+    }
   );
   return {
     deleteCruiseImage: (imageId: string) => mutate({ variables: { imageId } }),
