@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { TableRow } from '../shared/TableRow';
 import { VisibilityToggle } from '../shared/VisibilityToggle';
 import { Tour } from '@/hooks/useAdminTourSearch';
@@ -52,7 +53,14 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, onEdit, l
             <img src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'} alt={tour.title} className="h-10 w-10 rounded object-cover" />
           </td>
           <td className="px-4 py-3 text-sm">
-            {tour.title}
+            <Link
+              href={`/tours/${tour.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              {tour.title}
+            </Link>
             {isNewProduct(tour.createdAt) && (
               <span className="ml-2 text-green-600 font-medium text-xs">(New Listing)</span>
             )}
