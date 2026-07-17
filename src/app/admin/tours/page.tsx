@@ -13,6 +13,7 @@ import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
 import { TourCreateDrawer } from '@/components/admin/tours/TourCreateDrawer';
+import { TourEditDrawer } from '@/components/admin/tours/TourEditDrawer';
 import { TOURS_PER_PAGE } from '@/lib/pagination';
 import { LoadingTableSkeleton } from '@/components/loading';
 import { ErrorPage, ErrorAlert } from '@/components/error';
@@ -31,6 +32,8 @@ interface ToursListState {
   drawerOpen: boolean;
   drawerTour?: Tour;
   createDrawerOpen: boolean;
+  editDrawerOpen: boolean;
+  editTourId?: string;
   error?: string;
   showFeaturedOnly: boolean;
 }
@@ -47,6 +50,7 @@ const ToursPage = () => {
     drawerOpen: false,
     drawerTour: undefined,
     createDrawerOpen: false,
+    editDrawerOpen: false,
     showFeaturedOnly: false,
   });
 
@@ -175,11 +179,11 @@ const ToursPage = () => {
     }
   };
 
-  const handleRowClick = (tour: Tour) => {
+  const handleEdit = (tourId: string) => {
     setState((prev) => ({
       ...prev,
-      drawerOpen: true,
-      drawerTour: tour,
+      editDrawerOpen: true,
+      editTourId: tourId,
     }));
   };
 
@@ -202,6 +206,14 @@ const ToursPage = () => {
     setState((prev) => ({
       ...prev,
       createDrawerOpen: false,
+    }));
+  };
+
+  const handleCloseEditDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      editDrawerOpen: false,
+      editTourId: undefined,
     }));
   };
 
@@ -355,7 +367,7 @@ const ToursPage = () => {
               onSetFeatured={handleSetFeatured}
               loadingIds={state.loadingIds}
               featuredLoadingIds={state.featuredLoadingIds}
-              onRowClick={handleRowClick}
+              onEdit={handleEdit}
             />
           </>
         ) : (
@@ -371,6 +383,14 @@ const ToursPage = () => {
         title={state.drawerTour?.title || 'Edit Tour'}
         onClose={handleCloseDrawer}
       />
+
+      {state.editTourId && (
+        <TourEditDrawer
+          tourId={state.editTourId}
+          isOpen={state.editDrawerOpen}
+          onClose={handleCloseEditDrawer}
+        />
+      )}
 
       <TourCreateDrawer
         isOpen={state.createDrawerOpen}

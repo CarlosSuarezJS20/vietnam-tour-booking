@@ -32,6 +32,13 @@ export const ItineraryBuilder = ({
     value.length > 0 ? new Set(value.map(d => d.id)) : new Set(["1"])
   );
 
+  useEffect(() => {
+    if (value.length > 0) {
+      setDays(value);
+      setExpandedDays(new Set(value.map(d => d.id)));
+    }
+  }, [value]);
+
   const handleAddDay = useCallback(() => {
     const newId = Math.random().toString(36).slice(2, 11);
     const nextDay = days.length + 1;

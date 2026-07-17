@@ -10,6 +10,7 @@ import { useAllCruisesForSearch } from '@/hooks/useAllCruisesForSearch';
 import { CruisesTable } from '@/components/admin/cruises/CruisesTable';
 import { CruisesSearchBar } from '@/components/admin/cruises/CruisesSearchBar';
 import { CruiseCreateDrawer } from '@/components/admin/cruises/CruiseCreateDrawer';
+import { CruiseEditDrawer } from '@/components/admin/cruises/CruiseEditDrawer';
 import { VisibilityFilter } from '@/components/admin/shared/VisibilityFilter';
 import { BulkVisibilityButton } from '@/components/admin/shared/BulkVisibilityButton';
 import { EditDrawer } from '@/components/admin/shared/EditDrawer';
@@ -30,6 +31,8 @@ interface CruisesListState {
   drawerOpen: boolean;
   drawerCruise?: Cruise;
   createDrawerOpen: boolean;
+  editDrawerOpen: boolean;
+  editCruiseId?: string;
   error?: string;
 }
 
@@ -44,6 +47,7 @@ const CruisesPage = () => {
     drawerOpen: false,
     drawerCruise: undefined,
     createDrawerOpen: false,
+    editDrawerOpen: false,
   });
 
   const { data: cruisesConnection, loading, error } = useGetAllCruisesQuery(cruiseFilter, CRUISES_PER_PAGE, state.currentCursor);
@@ -153,6 +157,14 @@ const CruisesPage = () => {
     }));
   };
 
+  const handleCloseEditDrawer = () => {
+    setState((prev) => ({
+      ...prev,
+      editDrawerOpen: false,
+      editCruiseId: undefined,
+    }));
+  };
+
   const handleCruiseCreated = () => {
     setState((prev) => ({
       ...prev,
@@ -161,11 +173,11 @@ const CruisesPage = () => {
     }));
   };
 
-  const handleRowClick = (cruise: Cruise) => {
+  const handleEdit = (cruiseId: string) => {
     setState((prev) => ({
       ...prev,
-      drawerOpen: true,
-      drawerCruise: cruise,
+      editDrawerOpen: true,
+      editCruiseId: cruiseId,
     }));
   };
 
@@ -304,7 +316,7 @@ const CruisesPage = () => {
               cruises={displayCruises}
               onToggleVisibility={handleToggleVisibility}
               loadingIds={state.loadingIds}
-              onRowClick={handleRowClick}
+              onEdit={handleEdit}
             />
           </>
         ) : (
@@ -319,6 +331,14 @@ const CruisesPage = () => {
         onClose={handleCloseCreateDrawer}
         onCruiseCreated={handleCruiseCreated}
       />
+
+      {state.editCruiseId && (
+        <CruiseEditDrawer
+          cruiseId={state.editCruiseId}
+          isOpen={state.editDrawerOpen}
+          onClose={handleCloseEditDrawer}
+        />
+      )}
 
       <EditDrawer
         isOpen={state.drawerOpen}

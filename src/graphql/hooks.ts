@@ -24,6 +24,8 @@ import {
   SET_ALL_CRUISES_VISIBILITY_MUTATION,
   CREATE_TOUR_MUTATION,
   CREATE_CRUISE_MUTATION,
+  UPDATE_TOUR_MUTATION,
+  UPDATE_CRUISE_MUTATION,
   ADD_TOUR_IMAGE_MUTATION,
   DELETE_TOUR_IMAGE_MUTATION,
   SET_PRIMARY_TOUR_IMAGE_MUTATION,
@@ -337,13 +339,101 @@ export const useCreateCruiseMutation = () => {
   };
 };
 
+export const useUpdateTourMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { updateTour: SearchTour },
+    {
+      id: string;
+      input: {
+        title?: string;
+        duration?: number;
+        price?: number;
+        description?: string;
+        itinerary?: string;
+        featuredTour?: boolean;
+        onSale?: boolean;
+        saleDiscountPercentage?: number | null;
+        isVisible?: boolean;
+        cityIds?: string[];
+        categoryIds?: string[];
+        newCities?: Array<{ name: string; regionId: string }>;
+        newCategories?: Array<{ label: string }>;
+      };
+    }
+  >(UPDATE_TOUR_MUTATION, {
+    refetchQueries: [
+      { query: ALL_TOURS_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_TOURS_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      { query: SEARCH_PRODUCTS_QUERY, variables: { filters: { types: ['tour'] } } },
+    ],
+  });
+  return {
+    updateTour: (id: string, input: {
+      title?: string;
+      duration?: number;
+      price?: number;
+      description?: string;
+      itinerary?: string;
+      featuredTour?: boolean;
+      onSale?: boolean;
+      saleDiscountPercentage?: number | null;
+      isVisible?: boolean;
+      cityIds?: string[];
+      categoryIds?: string[];
+      newCities?: Array<{ name: string; regionId: string }>;
+      newCategories?: Array<{ label: string }>;
+    }) => mutate({ variables: { id, input } }),
+    loading,
+  };
+};
+
+export const useUpdateCruiseMutation = () => {
+  const [mutate, { loading }] = useMutation<
+    { updateCruise: SearchCruise },
+    {
+      id: string;
+      input: {
+        title?: string;
+        duration?: number;
+        price?: number;
+        description?: string;
+        itinerary?: string;
+        onSale?: boolean;
+        saleDiscountPercentage?: number | null;
+        isVisible?: boolean;
+      };
+    }
+  >(UPDATE_CRUISE_MUTATION, {
+    refetchQueries: [
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'ALL', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'VISIBLE', first: 7 } },
+      { query: ALL_CRUISES_QUERY, variables: { filter: 'HIDDEN', first: 7 } },
+      { query: SEARCH_PRODUCTS_QUERY, variables: { filters: { types: ['cruise'] } } },
+    ],
+  });
+  return {
+    updateCruise: (id: string, input: {
+      title?: string;
+      duration?: number;
+      price?: number;
+      description?: string;
+      itinerary?: string;
+      onSale?: boolean;
+      saleDiscountPercentage?: number | null;
+      isVisible?: boolean;
+    }) => mutate({ variables: { id, input } }),
+    loading,
+  };
+};
+
 export const useAddTourImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { addTourImage: { id: string; url: string; isPrimary: boolean } },
-    { tourId: string; url: string }
+    { tourId: string; url: string; isPrimary?: boolean }
   >(ADD_TOUR_IMAGE_MUTATION);
   return {
-    addTourImage: (tourId: string, url: string) => mutate({ variables: { tourId, url } }),
+    addTourImage: (tourId: string, url: string, isPrimary?: boolean) => mutate({ variables: { tourId, url, isPrimary } }),
     loading,
   };
 };
@@ -372,10 +462,10 @@ export const useSetPrimaryTourImageMutation = () => {
 export const useAddCruiseImageMutation = () => {
   const [mutate, { loading }] = useMutation<
     { addCruiseImage: { id: string; url: string; isPrimary: boolean } },
-    { cruiseId: string; url: string }
+    { cruiseId: string; url: string; isPrimary?: boolean }
   >(ADD_CRUISE_IMAGE_MUTATION);
   return {
-    addCruiseImage: (cruiseId: string, url: string) => mutate({ variables: { cruiseId, url } }),
+    addCruiseImage: (cruiseId: string, url: string, isPrimary?: boolean) => mutate({ variables: { cruiseId, url, isPrimary } }),
     loading,
   };
 };

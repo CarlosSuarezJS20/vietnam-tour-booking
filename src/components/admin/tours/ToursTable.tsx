@@ -8,9 +8,9 @@ interface ToursTableProps {
   tours: Tour[];
   onToggleVisibility?: (id: string) => Promise<any>;
   onSetFeatured?: (id: string) => Promise<any>;
+  onEdit?: (id: string) => void;
   loadingIds?: Set<string>;
   featuredLoadingIds?: Set<string>;
-  onRowClick?: (tour: Tour) => void;
 }
 
 const formatDate = (dateStr: string) => {
@@ -23,7 +23,12 @@ const formatDate = (dateStr: string) => {
   }
 };
 
-export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingIds = new Set(), featuredLoadingIds = new Set(), onRowClick }: ToursTableProps) => (
+export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, onEdit, loadingIds = new Set(), featuredLoadingIds = new Set() }: ToursTableProps) => {
+  if (tours.length > 0) {
+    console.log('📊 ToursTable - First tour images:', tours[0].images);
+  }
+
+  return (
   <table className="w-full border-collapse">
     <thead>
       <tr className="border-b border-[#17171724] bg-white">
@@ -35,14 +40,13 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingId
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Date</th>
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Featured</th>
         <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Status</th>
+        <th className="px-4 py-3 text-left text-xs uppercase text-[#17171799] tracking-wide">Actions</th>
       </tr>
     </thead>
     <tbody>
       {tours.map((tour) => (
         <TableRow
           key={tour.id}
-          onClick={() => onRowClick?.(tour)}
-          className="cursor-pointer"
         >
           <td className="px-4 py-3">
             <img src={getPrimaryImage(tour.images) || '/placeholder-image.jpg'} alt={tour.title} className="h-10 w-10 rounded object-cover" />
@@ -85,8 +89,19 @@ export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, loadingId
               />
             )}
           </td>
+          <td className="px-4 py-3">
+            {onEdit && (
+              <button
+                onClick={() => onEdit(tour.id)}
+                className="rounded px-3 py-1.5 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] transition-colors"
+              >
+                Edit
+              </button>
+            )}
+          </td>
         </TableRow>
       ))}
     </tbody>
   </table>
-);
+  );
+};

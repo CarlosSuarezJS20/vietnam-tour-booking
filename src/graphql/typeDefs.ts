@@ -255,20 +255,49 @@ const typeDefs = `
     isVisible: Boolean
   }
 
+  input UpdateTourInput {
+    title: String
+    duration: Int
+    price: Float
+    description: String
+    itinerary: String
+    featuredTour: Boolean
+    onSale: Boolean
+    saleDiscountPercentage: Int
+    isVisible: Boolean
+    cityIds: [String!]
+    categoryIds: [String!]
+    newCities: [NewCityInput!]
+    newCategories: [NewCategoryInput!]
+  }
+
+  input UpdateCruiseInput {
+    title: String
+    duration: Int
+    price: Float
+    description: String
+    itinerary: String
+    onSale: Boolean
+    saleDiscountPercentage: Int
+    isVisible: Boolean
+  }
+
   extend type Mutation {
     toggleTourVisibility(id: String!): Tour!
     toggleCruiseVisibility(id: String!): Cruise!
     setAllToursVisibility(visible: Boolean!): [Tour!]!
     setAllCruisesVisibility(visible: Boolean!): [Cruise!]!
     createTour(input: CreateTourInput!): Tour!
-    addTourImage(tourId: String!, url: String!): TourImage!
+    addTourImage(tourId: String!, url: String!, isPrimary: Boolean): TourImage!
     deleteTourImage(imageId: String!): Boolean!
     setPrimaryTourImage(imageId: String!): TourImage!
     createCruise(input: CreateCruiseInput!): Cruise!
-    addCruiseImage(cruiseId: String!, url: String!): CruiseImage!
+    addCruiseImage(cruiseId: String!, url: String!, isPrimary: Boolean): CruiseImage!
     deleteCruiseImage(imageId: String!): Boolean!
     setPrimaryCruiseImage(imageId: String!): CruiseImage!
     setFeaturedTour(tourId: ID!): Tour!
+    updateTour(id: String!, input: UpdateTourInput!): Tour!
+    updateCruise(id: String!, input: UpdateCruiseInput!): Cruise!
   }
 `;
 

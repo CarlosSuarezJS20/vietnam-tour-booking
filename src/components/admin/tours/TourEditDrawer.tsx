@@ -6,19 +6,29 @@ import { UploadImagesPopup } from '../shared/UploadImagesPopup';
 import { EntitySelectPopup } from '../shared/EntitySelectPopup';
 import { ItineraryBuilder } from './ItineraryBuilder';
 import { TourImagePreview } from './TourImagePreview';
-import { useCreateTourMutation, useAddTourImageMutation, useGetRegionsQuery, useGetTourCategoriesQuery } from '@/graphql/hooks';
+import {
+  useUpdateTourMutation,
+  useGetTourByIdQuery,
+  useAddTourImageMutation,
+  useDeleteTourImageMutation,
+  useSetPrimaryTourImageMutation,
+  useGetRegionsQuery,
+  useGetTourCategoriesQuery,
+} from '@/graphql/hooks';
 import { useBodyOverflow } from '@/hooks/useBodyOverflow';
 import { ButtonSpinner } from '@/components/loading';
 import { supabase } from '@/lib/supabase';
+import { parseItinerary } from '@/lib/parseItinerary';
 import type { ItineraryDay } from '@/types/itinerary';
 
-interface TourCreateDrawerProps {
+interface TourEditDrawerProps {
+  tourId: string;
   isOpen: boolean;
   onClose: () => void;
-  onTourCreated?: () => void;
+  onTourUpdated?: () => void;
 }
 
-interface CreateTourFormState {
+interface EditTourFormState {
   title: string;
   duration: number | null;
   price: string;
@@ -32,6 +42,7 @@ interface PendingImage {
   id: string;
   url: string;
   isPrimary: boolean;
+  isPermanent?: boolean;
 }
 
 interface SessionUpload {
@@ -50,7 +61,7 @@ interface PendingNewCategory {
   label: string;
 }
 
-const initialFormState: CreateTourFormState = {
+const initialFormState: EditTourFormState = {
   title: '',
   duration: null,
   price: '',
@@ -60,8 +71,8 @@ const initialFormState: CreateTourFormState = {
   isVisible: true,
 };
 
-export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateDrawerProps) => {
-  const [form, setForm] = useState<CreateTourFormState>(initialFormState);
+export const TourEditDrawer = ({ tourId, isOpen, onClose, onTourUpdated }: TourEditDrawerProps) => {
+  const [form, setForm] = useState<EditTourFormState>(initialFormState);
   const [images, setImages] = useState<PendingImage[]>([]);
   const [showImagePopup, setShowImagePopup] = useState(false);
   const [sessionUploads, setSessionUploads] = useState<SessionUpload[]>([]);
@@ -76,13 +87,73 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
   const [showCategoryPopup, setShowCategoryPopup] = useState(false);
 
   const [itineraryDays, setItineraryDays] = useState<ItineraryDay[]>([]);
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
 
-  const { createTour, loading } = useCreateTourMutation();
+  const { data: existingTour, loading: tourLoading } = useGetTourByIdQuery(tourId);
+  const { updateTour, loading: updateLoading } = useUpdateTourMutation();
   const { addTourImage } = useAddTourImageMutation();
+  const { deleteTourImage } = useDeleteTourImageMutation();
+  const { setPrimaryTourImage } = useSetPrimaryTourImageMutation();
   const { data: regions } = useGetRegionsQuery();
   const { data: categories } = useGetTourCategoriesQuery();
 
   useBodyOverflow(isOpen);
+
+  // Pre-populate form when tour data loads
+  useEffect(() => {
+    if (existingTour && isOpen) {
+      setForm({
+        title: existingTour.title,
+        duration: existingTour.duration,
+        price: existingTour.price.toString(),
+        description: existingTour.description,
+        onSale: existingTour.onSale,
+        saleDiscountPercentage: existingTour.saleDiscountPercentage?.toString() || '',
+        isVisible: existingTour.isVisible,
+      });
+
+      // Pre-populate cities and categories
+      setSelectedCityIds(existingTour.cities.map((c) => c.id));
+      setSelectedCategoryIds(existingTour.categories.map((c) => c.id));
+
+      // Pre-populate images
+      const existingImages: PendingImage[] = (existingTour.images || []).map((img) => ({
+        id: img.id,
+        url: img.url,
+        isPrimary: img.isPrimary,
+        isPermanent: true,
+      }));
+      setImages(existingImages);
+
+      // Parse itinerary and convert to builder format
+      if (existingTour.itinerary) {
+        let parsed: any[] = [];
+
+        // Try JSON first
+        try {
+          const jsonParsed = JSON.parse(existingTour.itinerary);
+          if (Array.isArray(jsonParsed)) {
+            parsed = jsonParsed;
+          }
+        } catch {
+          // Not JSON, try text format
+          parsed = parseItinerary(existingTour.itinerary);
+        }
+
+        // Convert to builder format
+        if (parsed.length > 0) {
+          const builderDays: ItineraryDay[] = parsed.map((p: any) => ({
+            id: `day-${p.day || p.id}`,
+            day: p.day,
+            activity: p.activity || p.title || '',
+            description: p.description || p.body || '',
+            duration: p.duration || '',
+          }));
+          setItineraryDays(builderDays);
+        }
+      }
+    }
+  }, [existingTour, isOpen]);
 
   const handleSetPrimary = (imageId: string) => {
     setImages((prev) =>
@@ -122,6 +193,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     setImages([]);
     setShowImagePopup(false);
     setItineraryDays([]);
+    setImagesToDelete([]);
     onClose();
   };
 
@@ -135,6 +207,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
         id: `${Date.now()}-${Math.random().toString(36).substring(7)}`,
         url,
         isPrimary: prev.length === 0,
+        isPermanent: false,
       };
       return [...prev, newImage];
     });
@@ -144,19 +217,24 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     const imageToDelete = images.find((img) => img.id === imageId);
 
     if (imageToDelete) {
-      const upload = sessionUploads.find((u) => u.url === imageToDelete.url);
+      // If it's a permanent image (in DB), mark for deletion
+      if (imageToDelete.isPermanent) {
+        setImagesToDelete((prev) => [...prev, imageId]);
+      } else {
+        // If it's a new upload, delete from storage
+        const upload = sessionUploads.find((u) => u.url === imageToDelete.url);
+        if (upload) {
+          try {
+            await supabase.storage
+              .from('tours-images')
+              .remove([upload.filename]);
 
-      if (upload) {
-        try {
-          await supabase.storage
-            .from('tours-images')
-            .remove([upload.filename]);
-
-          setSessionUploads((prev) =>
-            prev.filter((u) => u.url !== imageToDelete.url)
-          );
-        } catch (error) {
-          console.error(`Failed to delete file from storage:`, error);
+            setSessionUploads((prev) =>
+              prev.filter((u) => u.url !== imageToDelete.url)
+            );
+          } catch (error) {
+            console.error(`Failed to delete file from storage:`, error);
+          }
         }
       }
     }
@@ -166,11 +244,16 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      [name]: name === 'duration' && type === 'number'
-        ? (value === '' ? null : parseInt(value, 10))
-        : type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]:
+        name === 'duration' && type === 'number'
+          ? value === ''
+            ? null
+            : parseInt(value, 10)
+          : type === 'checkbox'
+            ? (e.target as HTMLInputElement).checked
+            : value,
     }));
   };
 
@@ -187,16 +270,27 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
   const isFormValid = () => {
     const hasCities = selectedCityIds.length + pendingNewCities.length > 0;
     const hasCategories = selectedCategoryIds.length + pendingNewCategories.length > 0;
+    const hasValidImages = images.length > 0 && images.some((img) => img.isPrimary);
 
     return (
       form.title.trim() !== '' &&
       form.duration !== null &&
       form.duration > 0 &&
       form.price.trim() !== '' &&
-      images.length > 0 &&
-      images.some((img) => img.isPrimary) &&
+      hasValidImages &&
       hasCities &&
       hasCategories
+    );
+  };
+
+  const formatItineraryForSave = (days: ItineraryDay[]): string => {
+    if (!days || days.length === 0) return '[]';
+    return JSON.stringify(
+      days.map(d => ({
+        day: d.day,
+        activity: d.activity || '',
+        description: d.description || '',
+      }))
     );
   };
 
@@ -208,16 +302,19 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     }
 
     try {
-      const itineraryJson = JSON.stringify(itineraryDays);
+      const itineraryJson = formatItineraryForSave(itineraryDays);
 
-      const result = await createTour({
+      // Call updateTour mutation
+      await updateTour(tourId, {
         title: form.title,
         duration: form.duration as number,
         price: parseFloat(form.price),
         description: form.description,
         itinerary: itineraryJson,
         onSale: form.onSale,
-        saleDiscountPercentage: form.saleDiscountPercentage ? parseInt(form.saleDiscountPercentage, 10) : null,
+        saleDiscountPercentage: form.saleDiscountPercentage
+          ? parseInt(form.saleDiscountPercentage, 10)
+          : null,
         isVisible: form.isVisible,
         cityIds: selectedCityIds,
         categoryIds: selectedCategoryIds,
@@ -230,12 +327,29 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
         })),
       });
 
-      if (result.data?.createTour?.id) {
-        const tourId = result.data.createTour.id;
+      // Delete images marked for removal
+      for (const imageId of imagesToDelete) {
+        try {
+          await deleteTourImage(imageId);
+        } catch (error) {
+          console.error(`Failed to delete image ${imageId}:`, error);
+        }
+      }
 
-        await Promise.all(
-          images.map((image) => addTourImage(tourId, image.url, image.isPrimary))
-        );
+      // Add new images with primary flag
+      const newImages = images.filter((img) => !img.isPermanent);
+      for (const image of newImages) {
+        await addTourImage(tourId, image.url, image.isPrimary);
+      }
+
+      // Update primary image if it's an existing image
+      const primaryImage = images.find((img) => img.isPrimary);
+      if (primaryImage && primaryImage.isPermanent) {
+        try {
+          await setPrimaryTourImage(primaryImage.id);
+        } catch (error) {
+          console.error('Failed to set primary image:', error);
+        }
       }
 
       setForm(initialFormState);
@@ -246,10 +360,11 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
       setPendingNewCities([]);
       setSelectedCategoryIds([]);
       setPendingNewCategories([]);
+      setImagesToDelete([]);
       onClose();
-      onTourCreated?.();
+      onTourUpdated?.();
     } catch (error) {
-      console.error('Failed to create tour:', error);
+      console.error('Failed to update tour:', error);
     }
   };
 
@@ -272,7 +387,9 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
 
   const handleToggleCategorySelection = (categoryId: string) => {
     setSelectedCategoryIds((prev) =>
-      prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
     );
   };
 
@@ -307,29 +424,42 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
     setShowCategoryPopup(false);
   };
 
+  if (tourLoading) {
+    return (
+      <DrawerShell isOpen={isOpen} title="Edit Tour" onClose={handleClose}>
+        <div className="flex items-center justify-center py-8">
+          <ButtonSpinner />
+        </div>
+      </DrawerShell>
+    );
+  }
+
   return (
-    <DrawerShell isOpen={isOpen} title="Create New Tour" onClose={handleClose}>
+    <DrawerShell isOpen={isOpen} title="Edit Tour" onClose={handleClose}>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-[#171717]">
-              Images *
-            </label>
+            <label className="text-sm font-medium text-[#171717]">Images *</label>
             <button
-            type="button"
-            onClick={() => setShowImagePopup(true)}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#f7f5f0] text-[#171717] rounded border border-[#17171724] hover:bg-[#e8e5dd] hover:border-[#DC143C] transition-colors"
-            title={`Manage images (${images.length}/4)`}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
-            <span>{images.length}/4</span>
+              type="button"
+              onClick={() => setShowImagePopup(true)}
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium bg-[#f7f5f0] text-[#171717] rounded border border-[#17171724] hover:bg-[#e8e5dd] hover:border-[#DC143C] transition-colors"
+              title={`Manage images (${images.length}/4)`}
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              <span>{images.length}/4</span>
             </button>
           </div>
 
@@ -420,7 +550,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
                 type="radio"
                 name="isVisible"
                 checked={form.isVisible === true}
-                onChange={() => setForm(prev => ({ ...prev, isVisible: true }))}
+                onChange={() => setForm((prev) => ({ ...prev, isVisible: true }))}
                 className="rounded border border-[#17171724]"
               />
               <span className="text-sm text-[#171717]">Visible</span>
@@ -430,7 +560,7 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
                 type="radio"
                 name="isVisible"
                 checked={form.isVisible === false}
-                onChange={() => setForm(prev => ({ ...prev, isVisible: false }))}
+                onChange={() => setForm((prev) => ({ ...prev, isVisible: false }))}
                 className="rounded border border-[#17171724]"
               />
               <span className="text-sm text-[#171717]">Hidden</span>
@@ -452,16 +582,11 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
           />
         </div>
 
-        <ItineraryBuilder
-          value={itineraryDays}
-          onChange={setItineraryDays}
-        />
+        <ItineraryBuilder value={itineraryDays} onChange={setItineraryDays} />
 
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <label className="text-sm font-medium text-[#171717]">
-              Cities *
-            </label>
+            <label className="text-sm font-medium text-[#171717]">Cities *</label>
             <button
               type="button"
               onClick={() => setShowCityPopup(true)}
@@ -473,7 +598,9 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
           {(selectedCityIds.length > 0 || pendingNewCities.length > 0) && (
             <div className="flex flex-wrap gap-2">
               {selectedCityIds.map((cityId) => {
-                const cityData = regions.flatMap((r) => r.cities).find((c) => c.id === cityId);
+                const cityData = regions
+                  .flatMap((r) => r.cities)
+                  .find((c) => c.id === cityId);
                 return cityData ? (
                   <span
                     key={cityId}
@@ -544,7 +671,10 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
             onChange={handleChange}
             className="rounded border border-[#17171724]"
           />
-          <label htmlFor="onSale" className="text-sm font-medium text-[#171717] cursor-pointer">
+          <label
+            htmlFor="onSale"
+            className="text-sm font-medium text-[#171717] cursor-pointer"
+          >
             On Sale
           </label>
         </div>
@@ -576,63 +706,60 @@ export const TourCreateDrawer = ({ isOpen, onClose, onTourCreated }: TourCreateD
           </button>
           <button
             type="submit"
-            disabled={loading || !isFormValid()}
+            disabled={updateLoading || !isFormValid()}
             className="flex-1 rounded px-4 py-2 text-sm font-medium bg-[#DC143C] text-white hover:bg-[#b81132] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
-            {loading && <ButtonSpinner />}
-            {loading ? 'Creating...' : 'Create Tour'}
+            {updateLoading && <ButtonSpinner />}
+            {updateLoading ? 'Updating...' : 'Update Tour'}
           </button>
         </div>
       </form>
-      {/* Categories and cities pop up */}
-      <>
-            <EntitySelectPopup
-        isOpen={showCityPopup}
-          title="Select Cities"
-          existingItems={regions.flatMap((region) =>
-            region.cities.map((city) => ({
-              id: city.id,
-              label: city.name,
-              groupLabel: region.label,
-            }))
-          )}
-          selectedIds={selectedCityIds}
-          pendingNewItems={pendingNewCities.map((city) => ({
-            tempId: city.tempId,
-            label: city.name,
-            extraValue: regions.find((r) => r.id === city.regionId)?.label,
-          }))}
-          extraFieldLabel="Region"
-          extraFieldOptions={regions.map((region) => ({
-            label: region.label,
-            value: region.id,
-          }))}
-          onToggleExisting={handleToggleCitySelection}
-          onAddNew={(name, regionId) => handleAddNewCity(name, regionId || '')}
-          onRemoveNew={handleRemoveNewCity}
-          onConfirm={handleConfirmCities}
-          onClose={handleCloseCityPopup}
-        />
-        <EntitySelectPopup
-          isOpen={showCategoryPopup}
-          title="Select Categories"
-          existingItems={categories.map((cat) => ({
-            id: cat.id,
-            label: cat.label,
-          }))}
-          selectedIds={selectedCategoryIds}
-          pendingNewItems={pendingNewCategories.map((cat) => ({
-            tempId: cat.tempId,
-            label: cat.label,
-          }))}
-          onToggleExisting={handleToggleCategorySelection}
-          onAddNew={handleAddNewCategory}
-          onRemoveNew={handleRemoveNewCategory}
-          onConfirm={handleConfirmCategories}
-          onClose={handleCloseCategoryPopup}
-        />
-      </>
 
+      <EntitySelectPopup
+        isOpen={showCityPopup}
+        title="Select Cities"
+        existingItems={regions.flatMap((region) =>
+          region.cities.map((city) => ({
+            id: city.id,
+            label: city.name,
+            groupLabel: region.label,
+          }))
+        )}
+        selectedIds={selectedCityIds}
+        pendingNewItems={pendingNewCities.map((city) => ({
+          tempId: city.tempId,
+          label: city.name,
+          extraValue: regions.find((r) => r.id === city.regionId)?.label,
+        }))}
+        extraFieldLabel="Region"
+        extraFieldOptions={regions.map((region) => ({
+          label: region.label,
+          value: region.id,
+        }))}
+        onToggleExisting={handleToggleCitySelection}
+        onAddNew={(name, regionId) => handleAddNewCity(name, regionId || '')}
+        onRemoveNew={handleRemoveNewCity}
+        onConfirm={handleConfirmCities}
+        onClose={handleCloseCityPopup}
+      />
+      <EntitySelectPopup
+        isOpen={showCategoryPopup}
+        title="Select Categories"
+        existingItems={categories.map((cat) => ({
+          id: cat.id,
+          label: cat.label,
+        }))}
+        selectedIds={selectedCategoryIds}
+        pendingNewItems={pendingNewCategories.map((cat) => ({
+          tempId: cat.tempId,
+          label: cat.label,
+        }))}
+        onToggleExisting={handleToggleCategorySelection}
+        onAddNew={handleAddNewCategory}
+        onRemoveNew={handleRemoveNewCategory}
+        onConfirm={handleConfirmCategories}
+        onClose={handleCloseCategoryPopup}
+      />
     </DrawerShell>
   );
 };

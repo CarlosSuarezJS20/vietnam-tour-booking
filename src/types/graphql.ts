@@ -202,6 +202,7 @@ export interface ProductDetailTour {
   onSale:      boolean;
   saleDiscountPercentage: number | null;
   createdAt:   string;
+  isVisible:   boolean;
   images?:     { id: string; url: string; isPrimary: boolean }[];
   cities:      { id: string; name: string; region: { id: string; key: string; label: string } }[];
   categories:  { id: string; slug: string; label: string }[];
@@ -218,6 +219,7 @@ export interface ProductDetailCruise {
   onSale:      boolean;
   saleDiscountPercentage: number | null;
   createdAt:   string;
+  isVisible:   boolean;
   images?:     { id: string; url: string; isPrimary: boolean }[];
 }
 

@@ -96,7 +96,7 @@ export const TourDetailView = ({ tour }: TourDetailViewProps) => (
               <div key={day.id} className="rounded border border-[#17171724] bg-white p-4">
                 <h3 className="font-semibold text-[#171717] mb-2">Day {day.day}{day.activity ? `: ${day.activity}` : ''}</h3>
                 {day.description && (
-                  <p className="text-sm text-[#171717] whitespace-pre-wrap mb-2">{day.description}</p>
+                  <p className="text-sm text-[#171717] whitespace-pre-wrap">{day.description}</p>
                 )}
                 {day.duration && (
                   <p className="text-xs text-[#17171799]">Duration: {day.duration}</p>

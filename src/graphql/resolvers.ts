@@ -341,34 +341,38 @@ export const resolvers = {
       if (totalCities === 0 || totalCategories === 0) {
         throw new Error('Tour must have at least one city and one category');
       }
-      // Starts multiple transactions. 
+      // Starts multiple transactions.
       return prisma.$transaction(async (tx) => {
         const createdCityIds: string[] = [];
         const createdCategoryIds: string[] = [];
 
-        // Create new cities
-        for (const newCity of input.newCities ?? []) {
-          const city = await tx.city.create({
-            data: {
-              id: randomUUID(),
-              name: newCity.name,
-              regionId: newCity.regionId,
-            },
-          });
-          createdCityIds.push(city.id);
+        // Create new cities if provided
+        if (input.newCities && input.newCities.length > 0) {
+          for (const newCity of input.newCities) {
+            const city = await tx.city.create({
+              data: {
+                id: randomUUID(),
+                name: newCity.name,
+                regionId: newCity.regionId,
+              },
+            });
+            createdCityIds.push(city.id);
+          }
         }
 
-        // Create new categories
-        for (const newCat of input.newCategories ?? []) {
-          const slug = await generateUniqueSlug(tx, newCat.label);
-          const category = await tx.tourCategory.create({
-            data: {
-              id: randomUUID(),
-              label: newCat.label,
-              slug,
-            },
-          });
-          createdCategoryIds.push(category.id);
+        // Create new categories if provided
+        if (input.newCategories && input.newCategories.length > 0) {
+          for (const newCat of input.newCategories) {
+            const slug = await generateUniqueSlug(tx, newCat.label);
+            const category = await tx.tourCategory.create({
+              data: {
+                id: randomUUID(),
+                label: newCat.label,
+                slug,
+              },
+            });
+            createdCategoryIds.push(category.id);
+          }
         }
 
         // Create tour
@@ -447,19 +451,25 @@ export const resolvers = {
 
     addTourImage: async (
       _: unknown,
-      { tourId, url }: { tourId: string; url: string }
+      { tourId, url, isPrimary }: { tourId: string; url: string; isPrimary?: boolean }
     ) => {
+      if (isPrimary) {
+        await prisma.tourImage.updateMany({
+          where: { tourId },
+          data: { isPrimary: false },
+        });
+      }
       return prisma.tourImage.create({
         data: {
           tourId,
           url,
-          isPrimary: false,
+          isPrimary: isPrimary ?? false,
         },
       });
     },
 
     deleteTourImage: async (_: unknown, { imageId }: { imageId: string }) => {
-      await prisma.tourImage.delete({ where: { id: imageId } });
+      await prisma.tourImage.deleteMany({ where: { id: imageId } });
       return true;
     },
 
@@ -483,19 +493,25 @@ export const resolvers = {
 
     addCruiseImage: async (
       _: unknown,
-      { cruiseId, url }: { cruiseId: string; url: string }
+      { cruiseId, url, isPrimary }: { cruiseId: string; url: string; isPrimary?: boolean }
     ) => {
+      if (isPrimary) {
+        await prisma.cruiseImage.updateMany({
+          where: { cruiseId },
+          data: { isPrimary: false },
+        });
+      }
       return prisma.cruiseImage.create({
         data: {
           cruiseId,
           url,
-          isPrimary: false,
+          isPrimary: isPrimary ?? false,
         },
       });
     },
 
     deleteCruiseImage: async (_: unknown, { imageId }: { imageId: string }) => {
-      await prisma.cruiseImage.delete({ where: { id: imageId } });
+      await prisma.cruiseImage.deleteMany({ where: { id: imageId } });
       return true;
     },
 
@@ -524,6 +540,157 @@ export const resolvers = {
       return prisma.tour.update({
         where: { id: tourId },
         data: { featuredTour: true },
+      });
+    },
+
+    updateTour: async (
+      _: unknown,
+      {
+        id,
+        input,
+      }: {
+        id: string;
+        input: {
+          title?: string;
+          duration?: number;
+          price?: number;
+          description?: string;
+          itinerary?: string;
+          featuredTour?: boolean;
+          onSale?: boolean;
+          saleDiscountPercentage?: number | null;
+          isVisible?: boolean;
+          cityIds?: string[];
+          categoryIds?: string[];
+          newCities?: Array<{ name: string; regionId: string }>;
+          newCategories?: Array<{ label: string }>;
+        };
+      }
+    ) => {
+      return prisma.$transaction(async (tx) => {
+        const createdCityIds: string[] = [];
+        const createdCategoryIds: string[] = [];
+
+        // Create new cities if provided
+        if (input.newCities && input.newCities.length > 0) {
+          for (const newCity of input.newCities) {
+            const city = await tx.city.create({
+              data: {
+                id: randomUUID(),
+                name: newCity.name,
+                regionId: newCity.regionId,
+              },
+            });
+            createdCityIds.push(city.id);
+          }
+        }
+
+        // Create new categories if provided
+        if (input.newCategories && input.newCategories.length > 0) {
+          for (const newCat of input.newCategories) {
+            const slug = await generateUniqueSlug(tx, newCat.label);
+            const category = await tx.tourCategory.create({
+              data: {
+                id: randomUUID(),
+                label: newCat.label,
+                slug,
+              },
+            });
+            createdCategoryIds.push(category.id);
+          }
+        }
+
+        // Build update data (only include fields that were provided)
+        const updateData: any = {};
+        if (input.title !== undefined) updateData.title = input.title;
+        if (input.duration !== undefined) updateData.duration = input.duration;
+        if (input.price !== undefined) updateData.price = input.price;
+        if (input.description !== undefined) updateData.description = input.description;
+        if (input.itinerary !== undefined) updateData.itinerary = input.itinerary;
+        if (input.featuredTour !== undefined) updateData.featuredTour = input.featuredTour;
+        if (input.onSale !== undefined) updateData.onSale = input.onSale;
+        if (input.saleDiscountPercentage !== undefined) {
+          updateData.saleDiscountPercentage = input.saleDiscountPercentage;
+        }
+        if (input.isVisible !== undefined) updateData.isVisible = input.isVisible;
+
+        // Update tour
+        const tour = await tx.tour.update({
+          where: { id },
+          data: updateData,
+        });
+
+        // Update cities if provided
+        if (input.cityIds || createdCityIds.length > 0) {
+          const allCityIds = [...(input.cityIds ?? []), ...createdCityIds];
+          // Delete old city links
+          await tx.tourCity.deleteMany({ where: { tourId: id } });
+          // Create new city links
+          if (allCityIds.length > 0) {
+            await tx.tourCity.createMany({
+              data: allCityIds.map((cityId) => ({
+                tourId: id,
+                cityId,
+              })),
+            });
+          }
+        }
+
+        // Update categories if provided
+        if (input.categoryIds || createdCategoryIds.length > 0) {
+          const allCategoryIds = [...(input.categoryIds ?? []), ...createdCategoryIds];
+          // Delete old category links
+          await tx.tourCategoryOnTour.deleteMany({ where: { tourId: id } });
+          // Create new category links
+          if (allCategoryIds.length > 0) {
+            await tx.tourCategoryOnTour.createMany({
+              data: allCategoryIds.map((categoryId) => ({
+                tourId: id,
+                categoryId,
+              })),
+            });
+          }
+        }
+
+        return tour;
+      });
+    },
+
+    updateCruise: async (
+      _: unknown,
+      {
+        id,
+        input,
+      }: {
+        id: string;
+        input: {
+          title?: string;
+          duration?: number;
+          price?: number;
+          description?: string;
+          itinerary?: string;
+          onSale?: boolean;
+          saleDiscountPercentage?: number | null;
+          isVisible?: boolean;
+        };
+      }
+    ) => {
+      // Build update data (only include fields that were provided)
+      const updateData: any = {};
+      if (input.title !== undefined) updateData.title = input.title;
+      if (input.duration !== undefined) updateData.duration = input.duration;
+      if (input.price !== undefined) updateData.price = input.price;
+      if (input.description !== undefined) updateData.description = input.description;
+      if (input.itinerary !== undefined) updateData.itinerary = input.itinerary;
+      if (input.onSale !== undefined) updateData.onSale = input.onSale;
+      if (input.saleDiscountPercentage !== undefined) {
+        updateData.saleDiscountPercentage = input.saleDiscountPercentage;
+      }
+      if (input.isVisible !== undefined) updateData.isVisible = input.isVisible;
+
+      return prisma.cruise.update({
+        where: { id },
+        data: updateData,
       });
     },
   },

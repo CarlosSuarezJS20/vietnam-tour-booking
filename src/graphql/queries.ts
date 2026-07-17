@@ -157,7 +157,7 @@ export const REMOVE_FROM_CART_MUTATION = gql`
 export const GET_TOUR_BY_ID_QUERY = gql`
   query GetTourById($id: ID!) {
     tour(id: $id) {
-      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
       images { id url isPrimary }
       cities     { id name region { id key label } }
       categories { id slug label }
@@ -259,8 +259,8 @@ export const CREATE_CRUISE_MUTATION = gql`
 `;
 
 export const ADD_TOUR_IMAGE_MUTATION = gql`
-  mutation AddTourImage($tourId: String!, $url: String!) {
-    addTourImage(tourId: $tourId, url: $url) {
+  mutation AddTourImage($tourId: String!, $url: String!, $isPrimary: Boolean) {
+    addTourImage(tourId: $tourId, url: $url, isPrimary: $isPrimary) {
       id url isPrimary
     }
   }
@@ -281,8 +281,8 @@ export const SET_PRIMARY_TOUR_IMAGE_MUTATION = gql`
 `;
 
 export const ADD_CRUISE_IMAGE_MUTATION = gql`
-  mutation AddCruiseImage($cruiseId: String!, $url: String!) {
-    addCruiseImage(cruiseId: $cruiseId, url: $url) {
+  mutation AddCruiseImage($cruiseId: String!, $url: String!, $isPrimary: Boolean) {
+    addCruiseImage(cruiseId: $cruiseId, url: $url, isPrimary: $isPrimary) {
       id url isPrimary
     }
   }
@@ -306,6 +306,24 @@ export const SET_FEATURED_TOUR_MUTATION = gql`
   mutation SetFeaturedTour($tourId: ID!) {
     setFeaturedTour(tourId: $tourId) {
       id featuredTour
+    }
+  }
+`;
+
+export const UPDATE_TOUR_MUTATION = gql`
+  mutation UpdateTour($id: String!, $input: UpdateTourInput!) {
+    updateTour(id: $id, input: $input) {
+      id title description itinerary duration price featuredTour onSale saleDiscountPercentage createdAt isVisible
+      cities     { id name region { id key label } }
+      categories { id slug label }
+    }
+  }
+`;
+
+export const UPDATE_CRUISE_MUTATION = gql`
+  mutation UpdateCruise($id: String!, $input: UpdateCruiseInput!) {
+    updateCruise(id: $id, input: $input) {
+      id title description itinerary duration price onSale saleDiscountPercentage createdAt isVisible
     }
   }
 `;
