@@ -38,13 +38,11 @@ export const UploadImagesPopup = ({
     setUploadedImages((prev) => {
       const totalImages = currentImageCount + prev.length;
       if (totalImages >= maxImages) {
-        console.warn(`Max ${maxImages} images reached`);
         return prev;
       }
 
       const alreadyExists = prev.some((img) => img.url === image.url);
       if (alreadyExists) {
-        console.warn('Image already uploaded');
         return prev;
       }
 
@@ -53,7 +51,6 @@ export const UploadImagesPopup = ({
         filename: image.filename,
         isPrimary: prev.length === 0 && currentImageCount === 0,
       };
-      console.log(`Added image ${prev.length + 1}/${maxImages - currentImageCount}`);
       return [...prev, newImage];
     });
   };

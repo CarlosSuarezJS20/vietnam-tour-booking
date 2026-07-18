@@ -37,8 +37,6 @@ export const resolvers = {
 
       const tourWhere   = buildTourWhere(filters);
       const cruiseWhere = buildCruiseWhere(filters);
-      console.log('searchProducts - tourWhere:', JSON.stringify(tourWhere, null, 2));
-      console.log('searchProducts - cruiseWhere:', JSON.stringify(cruiseWhere, null, 2));
 
       // Decode the cursor to find which table and row we left off at.
       const afterPayload = after ? decodeCursor(after) : null;
@@ -129,19 +127,12 @@ export const resolvers = {
     allTours: async (_: unknown, { filter, first = 7, after }: { filter?: string; first?: number; after?: string }) => {
       const allTours = await prisma.tour.findMany({ orderBy: { createdAt: 'desc' } });
 
-      console.log('[allTours] filter param:', filter);
-      console.log('[allTours] total items:', allTours.length);
-      console.log('[allTours] visible items:', allTours.filter(t => t.isVisible).length);
-      console.log('[allTours] hidden items:', allTours.filter(t => !t.isVisible).length);
-
       let filtered = allTours;
       if (filter === 'VISIBLE') {
         filtered = allTours.filter(t => t.isVisible === true);
       } else if (filter === 'HIDDEN') {
         filtered = allTours.filter(t => t.isVisible === false);
       }
-
-      console.log('[allTours] after filter:', filter, '-> items:', filtered.length);
 
       const cursorIndex = after ? filtered.findIndex(t => t.id === decodeCursor(after).id) : -1;
       const startIdx = after ? cursorIndex + 1 : 0;

@@ -25,10 +25,6 @@ const formatDate = (dateStr: string) => {
 };
 
 export const ToursTable = ({ tours, onToggleVisibility, onSetFeatured, onEdit, loadingIds = new Set(), featuredLoadingIds = new Set() }: ToursTableProps) => {
-  if (tours.length > 0) {
-    console.log('📊 ToursTable - First tour images:', tours[0].images);
-  }
-
   return (
   <table className="w-full border-collapse">
     <thead>
