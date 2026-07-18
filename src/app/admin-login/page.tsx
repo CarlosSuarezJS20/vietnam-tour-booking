@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { signIn } from '@/lib/auth-client';
 import Image from 'next/image';
 
-export default function AdminLoginPage() {
+const AdminLoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,3 +68,5 @@ export default function AdminLoginPage() {
     </div>
   );
 }
+
+export default AdminLoginPage; 
