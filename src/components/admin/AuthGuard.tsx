@@ -1,10 +1,10 @@
-import { getSession } from '@/lib/auth-middleware';
+import { requireAuth } from '@/lib/auth-middleware';
 import { redirect } from 'next/navigation';
 
 export async function AuthGuard({ children }: { children: React.ReactNode }) {
-  const session = await getSession();
-
-  if (!session) {
+  try {
+    await requireAuth();
+  } catch (error) {
     redirect('/admin-login');
   }
 
