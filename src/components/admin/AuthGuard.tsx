@@ -5,7 +5,9 @@ export async function AuthGuard({ children }: { children: React.ReactNode }) {
   try {
     await requireAuth();
   } catch (error) {
-    redirect('/admin-login');
+    const message = error instanceof Error ? error.message : 'Unauthorized';
+    const errorParam = message === 'Not authorized' ? 'unauthorized' : 'unauthorized';
+    redirect(`/admin-login?error=${errorParam}`);
   }
 
   return <>{children}</>;

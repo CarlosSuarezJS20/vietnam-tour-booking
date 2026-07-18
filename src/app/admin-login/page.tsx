@@ -1,12 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { signIn } from '@/lib/auth-client';
 import Image from 'next/image';
 
 const AdminLoginPage = () => {
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam === 'unauthorized') {
+      setError("You don't have access to this workspace. Contact your administrator if you think this is a mistake.");
+    }
+  }, [searchParams]);
 
   const handleGoogleSignIn = async () => {
     try {
